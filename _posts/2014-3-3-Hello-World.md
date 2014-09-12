@@ -1,10 +1,10 @@
 ---
 layout: post
-title: "A Turn-Based Game Loop"
+title: Realtime Wave Simulation
 published: true
 ---
 
-Now that my roguelike written in Dart is open source, I wanted to talk about a piece of it that I put a lot of time into. Well, I actually poured way too much of my life into lots of parts of this game, and maybe I’ll write about those too, but for now let’s start where most games start: with the game loop.
+Traditionally, rendering water uses a hack known as normalmaps. The normalmap represents small variations of the surface normal due to waves. And this works pretty well! Good normalmaps can give a convincing wave effect combined with some clever scrolling techniques. If you want artistic value, this is probably the way to go. For realism? Not so much.
 
 But today we have more computing power in our pants pocket than you need to travel to the moon, so we might as well spend it all on simulating the wave equations in realtime!
 
