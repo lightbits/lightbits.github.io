@@ -29,6 +29,11 @@ body {
   color: $darkGray;
 }
 
+figure {
+	margin: 10px auto;
+    display: block;
+}
+
 .container {
   margin: 0 auto;
   max-width: 640px;
@@ -39,7 +44,7 @@ body {
 h1, h2, h3, h4, h5, h6 {
   font-family: $serif;
   color: $darkerGray;
-  font-weight: bold;
+  font-weight: 700;
   
   line-height: 1.7;
   margin: 1em 0 15px;
