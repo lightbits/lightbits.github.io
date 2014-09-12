@@ -9,6 +9,12 @@
 @import "_variables";
 // Syntax highlighting @import is at the bottom of this file
 
+$serif: 'PT Serif', Georgia, serif;
+$sans:  'Open Sans', 'Lucida Sans Unicode', 'Lucida Grande', sans-serif;
+$mono:  'Source Code Pro', Courier, monospace;
+
+$body-text: 16px/24px $serif;
+
 /**************/
 /* BASE RULES */
 /**************/
@@ -18,8 +24,8 @@ html {
 }
 
 body {
-	background: $white;
-  font: 18px/1.4 $helvetica;
+  background: $white;
+  font: $body-text;
   color: $darkGray;
 }
 
