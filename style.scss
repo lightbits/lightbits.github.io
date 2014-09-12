@@ -29,11 +29,6 @@ body {
   color: $darkGray;
 }
 
-figure {
-	margin: 10px auto;
-    display: block;
-}
-
 .container {
   margin: 0 auto;
   max-width: 640px;
@@ -120,6 +115,8 @@ strong, b {
 
 img {
   max-width: 100%;
+  margin: 10px auto;
+  display: block;
 }
 
 .date {
