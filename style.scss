@@ -42,8 +42,9 @@ figure {
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: $serif;
   color: $darkerGray;
+  font-weight: 700;
+  font: normal 32px/40px "PT Serif", Georgia, serif;
   font-weight: 700;
   
   line-height: 1.7;
