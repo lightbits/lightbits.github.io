@@ -37,7 +37,7 @@ def make_post(name, title, year, month, day):
     </div>
     """
 
-    path = "../%s/%s/%s/%s/index.html" % (year, month, day, '-'.join(comp[3:]))
+    path = "../%s/%s/%s/%s/index.html" % (year, month, day, title.lower())
     if not os.path.exists(os.path.dirname(path)):
         os.makedirs(os.path.dirname(path))
     with open(path, "w+") as f:
