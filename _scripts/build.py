@@ -35,7 +35,22 @@ def make_post(name, title_nice, title_raw, year, month, day):
 
     bottom = """
     </div>
-    """
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        var disqus_shortname = '9bitscience';
+        var disqus_url = 'http://lightbits.github.io/%s/%s/%s/%s';
+        var disqus_identifier = '%s';
+        var disqus_title = '%s';
+
+        (function() {
+            var dsq = document.createElement('script');
+            dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    """ % (year, month, day, title_raw, title_raw, title_nice)
 
     path = "../%s/%s/%s/%s/index.html" % (year, month, day, title_raw)
     if not os.path.exists(os.path.dirname(path)):

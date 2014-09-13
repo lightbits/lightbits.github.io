@@ -35,7 +35,27 @@ body {
 	color: #553325;
 }
 
-#project p, #project h1, #project h2 { padding-left: 10px; padding-right: 10px; }
+#disqus_thread {
+  width: 100%;
+  color: #8f6d3d;
+}
+#disqus_thread .column {
+	padding: 24px 24px; 
+}
+#disqus_thread .column a.dsq-subscribe-email em, #disqus_thread .column a.dsq-subscribe-rss em {
+  text-decoration: none; 
+}
+#disqus_thread a {
+    color: #cc8c33;
+    text-decoration: none; 
+}
+#disqus_thread a:hover {
+    color: #f0bd75; 
+}
+.dsq-comment-text blockquote {
+  padding-left: 16px;
+  color: #777; 
+}
 #project img { max-width: 720px; display: block; margin: 0 auto; }
 #project a { text-decoration: none; color: #fc7c73; }
 #project a:focus { outline: 0; }
