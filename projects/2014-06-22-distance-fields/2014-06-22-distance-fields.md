@@ -13,15 +13,15 @@ Content
 * Introduction
 * The raymarching algorithm
 * Rendering techniques
- * Iteration based coloring
- * Bounding volume
- * Fog
- * Anti-aliasing
- * Lighting
- * Shadows
- * Ambient occlusion
- * Reflections
- * Distortion and repetition
+    * Iteration based coloring
+    * Bounding volume
+    * Fog
+    * Anti-aliasing
+    * Lighting
+    * Shadows
+    * Ambient occlusion
+    * Reflections
+    * Distortion and repetition
 * Other
 * Conclusion
 * Code

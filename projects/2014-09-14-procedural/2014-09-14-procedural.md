@@ -1,3 +1,3 @@
-![Title](/projects/2014-09-14-terrain/terrain_00.png)
+![Title](/projects/2014-09-14-procedural/terrain_00.png)
 
 Creating worlds has always been a pastime hobby of mine. The tools of my craft span from legos to computer code. In this post I'll cover the latter.

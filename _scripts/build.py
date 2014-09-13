@@ -19,7 +19,7 @@ def fix_img_tags(html):
 def make_post(name, title_nice, title_raw, year, month, day):
     path = "../projects/%s/%s.md" % (name, name)
     if not os.path.exists(path):
-        print("%s does not exist" % name)
+        print("%s has no markdown file - skipping!" % name)
         return
         
     with open(path) as f:
