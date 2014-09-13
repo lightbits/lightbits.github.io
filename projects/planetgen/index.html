@@ -1,0 +1,118 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Retrospective 59 minutes</title>
+    <link href='http://fonts.googleapis.com/css?family=PT+Serif:400,700' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="../../style.css">
+    <link rel="shortcut icon" href="http://folk.ntnu.no/simeh/favicon.png" type="image/png" />
+</head>
+
+<body>
+
+    <div id="main">
+        <div id="pages">
+            <a href="http://folk.ntnu.no/simeh/"><h1>**************************** 9bitscience *****************************</h1></a>
+            TERRAIN
+        </div>
+
+        <div class="project">
+<img src="./terrain_00.png"></img>
+<p>Creating worlds has always been a pasttime hobby of mine. The tools of my craft span from legos to computer code.
+In this project I attempt to create a dynamic planet generator, though I have not gotten off the ground just yet.</p>
+
+<h2>Content</h2>
+
+<ul>
+<li>Introduction</li>
+<li>The raymarching algorithm</li>
+<li>Rendering techniques
+<ul><li>Iteration based coloring</li>
+<li>Bounding volume</li>
+<li>Fog</li>
+<li>Anti-aliasing</li>
+<li>Lighting</li>
+<li>Shadows</li>
+<li>Ambient occlusion</li>
+<li>Reflections</li>
+<li>Distortion and repetition</li></ul></li>
+<li>Other</li>
+<li>Conclusion</li>
+<li>Code</li>
+<li>References</li>
+</ul>
+
+<h2>Introduction</h2>
+
+<p>Raymarching is a 3d-rendering technique, praised by programming-enthusiasts for both its simplicity and speed. It has been used extensively in the demoscene, producing low-size executables and amazing visuals. The most frontstanding figure behind its popularity, is <a href="http://iquilezles.org/">Inigo Quilez</a>, promoting it with his presentation at nvscene: <a href="http://www.iquilezles.org/www/material/nvscene2008/nvscene2008.htm">Rendering Worlds With Two Triangles</a>.</p>
+
+<p>The idea is this: Say you have some surface in space. You don't have an explicit formula for it, nor a set of triangles describing it. But you can find out how far away it is, from any point. How would you render this surface?</p>
+
+<p>First of all, we need to find out which points that lie on the surface, and what pixels they correspond to. To do this we use a technique known as <a href="http://en.wikipedia.org/wiki/Ray_casting">ray-casting</a>.</p>
+
+<p>Imagine you and your monitor being placed in this virtual world. Your eye will be looking at a rectangle (your monitor), which we shall call the image plane. Ray-casting works by shooting rays from the eye through each pixel on the image plane, and finding the closest object blocking the path of the ray. Once we hit an object, we can compute the color and shading of the corresponding pixel. If the ray does not hit anything, the pixel is colored with some sky color.</p>
+
+<p>There are several ways in which we can calculate the intersection, for example we analytically solve for it. A raymarcher, however, looks for an approximate solution, by marching along the ray in steps until it finds an intersection. By controlling the step size using a distance field, we can reach blazing speeds, even on a regular laptop GPU.</p>
+
+<h2>The raymarching algorithm</h2>
+
+<img src="./terrain_04.png" width=400></img>
+
+<p>In traditional raytracing, a scene is often described by a set of triangles or spheres, making up a mesh. Using  some spatial acceleration structure, we can quickly solve for the exact intersections between the rays and the objects. </p>
+
+<p>With raymarching however, we allow for some leeway in the intersection, and accept it when a ray is close enough to a surface. This is done by marching along the ray at step sizes, and checking whether or not the surface is within a given threshold. We can set a limit on the number of steps to prevent marching into oblivion. In code the algorithm looks like this:</p>
+
+<pre><code>bool raymarch(vec3 rayOrigin, vec3 rayDirection) {
+    float t = 0.0f;
+    for(int i = 0; i &lt; maxSteps; ++i) {
+        float d = sceneDistance(rayOrigin + rayDirection * t);
+        if(d &lt; epsilon) {
+            // Do something with p
+            return true;
+        }
+        t += d;
+    }
+    return false;
+}
+</code></pre>
+
+<p>But this can be slow if the step size is small, and inaccurate if the step size is large. So we speed things up by implementing a variable step size, and that is where <strong>distance fields</strong> comes in.</p>
+
+</div>
+
+<!-- <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = '9bitscience';
+    var disqus_url = "http://journal.stuffwithstuff.com/2014/07/15/a-turn-based-game-loop";
+
+    (function() {
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript> -->
+
+<!-- <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'journal-stuffwithstuff';
+    var disqus_url = "http://journal.stuffwithstuff.com/2014/07/15/a-turn-based-game-loop";
+
+    (function() {
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript> -->
+
+        <div id="footer">
+            <p>70 END</p>
+            <p>80 GOTO : <a href="https://twitter.com/uint9">Twitter</a>, <a href="https://github.com/lightbits">Github</a></p>
+        </div>
+    </div>
+</body>
+</html>

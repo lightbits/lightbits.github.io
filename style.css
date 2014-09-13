@@ -1,0 +1,119 @@
+body {
+	background: #fff;
+	font-family: 'Verdana', 'Arial', sans-serif;
+	color: #222222;
+	font-size: 14px;
+	margin: 0;
+}
+
+#main {
+	width: 720px;
+	margin: 0 auto;
+	padding: 20px;
+}
+
+#pages, #footer {
+	font-family: fixedsys;
+	font-weight: bold;
+	background: #775545;
+	color: #ffefef;
+	letter-spacing: 1px;
+	font-size: 12px;
+	padding: 5px 10px 5px 10px;
+}
+
+#content {
+	background: #775545;
+	font-size: 12px;
+	min-height: 800px;
+	line-height: 20px;
+}
+
+#pages h1 { font-size: 12px; }
+#title h1 { font-family: fixedsys; color: #887772; font-size: 20px; letter-spacing: 1px; font-weight: bold; padding: 5px 10px 5px 10px;}
+#pages a, #footer a { color: #ffefef; text-decoration: none; }
+#pages a:hover { color #FC7C73; }
+
+
+/************************/
+/*	Projects  */
+/************************/
+
+.project_tile {
+	width: 200px;
+	height: 140px;
+	float: left;
+	margin-top: 10px;
+	margin-bottom: 20px;
+	padding: 20px;
+}
+
+.project_tile h1 {
+	font-size: 12px;
+	color: #ffefef;
+	text-align: center;
+	margin-top: -5px;
+	font-family: fixedsys, sans-serif;
+	letter-spacing: 1px;
+	font-weight: bold;
+	background: #775545;
+}
+
+.project_tile img {
+	width: 200px;
+	height: 140px;
+}
+
+a { text-decoration: none; color: #FC7C73; }
+a:focus { outline: 0; }
+a:hover { color: #FC7C73; }
+
+.project {
+	/*padding: 10px;*/
+	padding-bottom: 10px;
+	font-family: "PT Serif";
+	font-size: 16px;
+	line-height: 20px;
+	background: #fff;
+	color: #553325;
+}
+
+.project p, .project h1, .project h2 {
+	padding-left: 10px;
+	padding-right: 10px;
+}
+
+.project img {
+	max-width: 720px;
+	display: block;
+	margin: 0 auto;
+}
+
+/**************************/
+/*			Code 		  */
+/**************************/
+
+pre {
+	padding-left: 10px;
+	padding-right: 10px;
+}
+
+pre code {
+	display: block; 
+	padding: 0.5em;
+	border-radius: 3px;
+	color: #444;
+	background: #F5F8FA;
+}
+
+code {
+	/*padding: 2px 4px 2px;*/
+	border-radius: 3px;
+	font-family: "Source Code Pro";
+	font-size: 13px;
+	height: auto;
+	width: auto;
+	max-width: 700px;
+	margin: 0 auto;
+    overflow: auto;
+}
