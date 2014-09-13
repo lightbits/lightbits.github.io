@@ -13,9 +13,31 @@
         DISTANCE FIELDS
     </div>
     <div id="project">
-    <img alt="Title" src="/projects/2014-09-13-terrain/terrain_00.png" />
-<p>Creating worlds has always been a pastime hobby of mine. The tools of my craft span from legos to computer code. In this post I'll cover the latter.</p>
-<h2>Fractal Brownian Motion</h2>
+    <p>Hello. This is my first article in a series of many, where I dive deep into an interesting algorithm and investigate what it can be used for, and (hopefully) end up with something nice to show in the end. For each of the projects my target result is a technical writeup like this, and either an interactive demo or some cool visuals. All code will be uploaded to Github, with full documentation.</p>
+<p>For this article I will write about the rendering technique known as <strong>raymarching with distance fields</strong>, capable of producing highly detailed images in real-time with very simple code.</p>
+<img alt="Inigo Quilez' slisesix" src="http://4.bp.blogspot.com/-Zjev0r-Eoms/UeQd_wcDInI/AAAAAAAAAGE/Py6rDNjTlCY/s1600/gfx00.jpg" />
+<p><strong>slisesix by Inigo Quilez</strong></p>
+<p>Before reading on, perhaps you would like to try the <a href="https://dl.dropboxusercontent.com/u/27844576/raymarch/raymarching.html"><strong>interactive WebGL demo?</strong></a></p>
+<h2>Content</h2>
+<ul>
+<li>Introduction</li>
+<li>The raymarching algorithm</li>
+<li>Rendering techniques</li>
+<li>Iteration based coloring</li>
+<li>Bounding volume</li>
+<li>Fog</li>
+<li>Anti-aliasing</li>
+<li>Lighting</li>
+<li>Shadows</li>
+<li>Ambient occlusion</li>
+<li>Reflections</li>
+<li>Distortion and repetition</li>
+<li>Other</li>
+<li>Conclusion</li>
+<li>Code</li>
+<li>References</li>
+</ul>
+<h2>Introduction</h2>
 <p>Raymarching is a 3d-rendering technique, praised by programming-enthusiasts for both its simplicity and speed. It has been used extensively in the demoscene, producing low-size executables and amazing visuals. The most frontstanding figure behind its popularity, is <a href="http://iquilezles.org/">Inigo Quilez</a>, promoting it with his presentation at nvscene: <a href="http://www.iquilezles.org/www/material/nvscene2008/nvscene2008.htm"><em>Rendering Worlds With Two Triangles</em></a>.</p>
 <p>The idea is this: Say you have some surface in space. You don't have an explicit formula for it, nor a set of triangles describing it. But you can find out how far away it is, from any point. How would you render this surface?</p>
 <p>First of all, we need to find out which points that lie on the surface, and what pixels they correspond to. To do this we use a technique known as <a href="http://en.wikipedia.org/wiki/Ray_casting">ray-casting</a>.</p>
@@ -23,7 +45,6 @@
 <p>There are several ways in which we can calculate the intersection, for example we analytically solve for it. A raymarcher, however, looks for an approximate solution, by marching along the ray in steps until it finds an intersection. By controlling the step size using a <em>distance field</em>, we can reach blazing speeds, even on a regular laptop GPU.</p>
 <h2>The raymarching algorithm</h2>
 <p>In traditional raytracing, a scene is often described by a set of triangles or spheres, making up a mesh. Using  some spatial acceleration structure, we can quickly solve for the exact intersections between the rays and the objects. </p>
-<img alt="width=400" src="/projects/2014-09-13-terrain/terrain_04.png" />
 <p>With raymarching however, we allow for some leeway in the intersection, and accept it when a ray is <em>close enough</em> to a surface. This is done by marching along the ray at step sizes, and checking whether or not the surface is within a given threshold. We can set a limit on the number of steps to prevent marching into oblivion. In code the algorithm looks like this:</p>
 <pre><code>bool raymarch(vec3 rayOrigin, vec3 rayDirection) {
     float t = 0.0f;

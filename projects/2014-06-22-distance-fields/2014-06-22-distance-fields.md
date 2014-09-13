@@ -1,8 +1,33 @@
-![Title](/projects/2014-09-13-terrain/terrain_00.png)
+Hello. This is my first article in a series of many, where I dive deep into an interesting algorithm and investigate what it can be used for, and (hopefully) end up with something nice to show in the end. For each of the projects my target result is a technical writeup like this, and either an interactive demo or some cool visuals. All code will be uploaded to Github, with full documentation.
 
-Creating worlds has always been a pastime hobby of mine. The tools of my craft span from legos to computer code. In this post I'll cover the latter.
+For this article I will write about the rendering technique known as **raymarching with distance fields**, capable of producing highly detailed images in real-time with very simple code.
 
-Fractal Brownian Motion
+![Inigo Quilez' slisesix](http://4.bp.blogspot.com/-Zjev0r-Eoms/UeQd_wcDInI/AAAAAAAAAGE/Py6rDNjTlCY/s1600/gfx00.jpg)
+
+**slisesix by Inigo Quilez**
+
+Before reading on, perhaps you would like to try the [**interactive WebGL demo?**](https://dl.dropboxusercontent.com/u/27844576/raymarch/raymarching.html)
+
+Content
+----------
+* Introduction
+* The raymarching algorithm
+* Rendering techniques
+ * Iteration based coloring
+ * Bounding volume
+ * Fog
+ * Anti-aliasing
+ * Lighting
+ * Shadows
+ * Ambient occlusion
+ * Reflections
+ * Distortion and repetition
+* Other
+* Conclusion
+* Code
+* References
+
+Introduction
 ------------
 Raymarching is a 3d-rendering technique, praised by programming-enthusiasts for both its simplicity and speed. It has been used extensively in the demoscene, producing low-size executables and amazing visuals. The most frontstanding figure behind its popularity, is [Inigo Quilez](http://iquilezles.org/), promoting it with his presentation at nvscene: [*Rendering Worlds With Two Triangles*](http://www.iquilezles.org/www/material/nvscene2008/nvscene2008.htm).
 
@@ -17,8 +42,6 @@ There are several ways in which we can calculate the intersection, for example w
 The raymarching algorithm
 -------------------------
 In traditional raytracing, a scene is often described by a set of triangles or spheres, making up a mesh. Using  some spatial acceleration structure, we can quickly solve for the exact intersections between the rays and the objects. 
-
-![width=400](/projects/2014-09-13-terrain/terrain_04.png)
 
 With raymarching however, we allow for some leeway in the intersection, and accept it when a ray is *close enough* to a surface. This is done by marching along the ray at step sizes, and checking whether or not the surface is within a given threshold. We can set a limit on the number of steps to prevent marching into oblivion. In code the algorithm looks like this:
 
