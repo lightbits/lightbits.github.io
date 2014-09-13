@@ -1,18 +1,10 @@
 body {
-	background: #fff;
-	font-family: 'Verdana', 'Arial', sans-serif;
-	color: #222222;
-	font-size: 14px;
-	margin: 0;
-}
-
-#main {
-	width: 720px;
 	margin: 0 auto;
+	width: 720px;
 	padding: 20px;
 }
 
-#pages, #footer {
+#wrapper {
 	font-family: fixedsys;
 	font-weight: bold;
 	background: #775545;
@@ -22,54 +14,19 @@ body {
 	padding: 5px 10px 5px 10px;
 }
 
-#content {
+#wrapper h1 { font-size: 12px; }
+#wrapper a { color: #ffefef; text-decoration: none; }
+#wrapper a:focus { outline: 0; }
+#wrapper a:hover { color: #fc7c73; }
+
+#home {
 	background: #775545;
 	font-size: 12px;
 	min-height: 800px;
 	line-height: 20px;
 }
 
-#pages h1 { font-size: 12px; }
-#title h1 { font-family: fixedsys; color: #887772; font-size: 20px; letter-spacing: 1px; font-weight: bold; padding: 5px 10px 5px 10px;}
-#pages a, #footer a { color: #ffefef; text-decoration: none; }
-#pages a:hover { color #FC7C73; }
-
-
-/************************/
-/*	Projects  */
-/************************/
-
-.project_tile {
-	width: 200px;
-	height: 140px;
-	float: left;
-	margin-top: 10px;
-	margin-bottom: 20px;
-	padding: 20px;
-}
-
-.project_tile h1 {
-	font-size: 12px;
-	color: #ffefef;
-	text-align: center;
-	margin-top: -5px;
-	font-family: fixedsys, sans-serif;
-	letter-spacing: 1px;
-	font-weight: bold;
-	background: #775545;
-}
-
-.project_tile img {
-	width: 200px;
-	height: 140px;
-}
-
-a { text-decoration: none; color: #FC7C73; }
-a:focus { outline: 0; }
-a:hover { color: #FC7C73; }
-
-.project {
-	/*padding: 10px;*/
+#project {
 	padding-bottom: 10px;
 	font-family: "PT Serif";
 	font-size: 16px;
@@ -78,16 +35,27 @@ a:hover { color: #FC7C73; }
 	color: #553325;
 }
 
-.project p, .project h1, .project h2 {
-	padding-left: 10px;
-	padding-right: 10px;
+#project p, #project h1, #project h2 { padding-left: 10px; padding-right: 10px; }
+#project img { max-width: 720px; display: block; margin: 0 auto; }
+#project a { text-decoration: none; color: #fc7c73; }
+#project a:focus { outline: 0; }
+#project a:hover { color: #FC7C73; }
+
+.project_tile {
+	width: 200px;
+	height: 133px;
+	float: left;
+	margin-top: 10px;
+	margin-bottom: 20px;
+	padding: 20px;
+	text-align: center;
+	font-family: fixedsys, sans-serif;
+	letter-spacing: 1px;
+	color: #ffefef;
 }
 
-.project img {
-	max-width: 720px;
-	display: block;
-	margin: 0 auto;
-}
+.project_tile h1 { font-size: 12px; margin-top: -5px; font-weight: bold; }
+.project_tile img { width: 200px; height: 133px; }
 
 /**************************/
 /*			Code 		  */
@@ -107,7 +75,6 @@ pre code {
 }
 
 code {
-	/*padding: 2px 4px 2px;*/
 	border-radius: 3px;
 	font-family: "Source Code Pro";
 	font-size: 13px;
