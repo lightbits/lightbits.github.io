@@ -16,7 +16,7 @@ def fix_img_tags(html):
     pattern = "(<p>)(<img.*/>)(</p>)"
     return re.sub(pattern, replace_img, html)
 
-def make_post(name, title, year, month, day):
+def make_post(name, title_nice, title_raw, year, month, day):
     path = "../projects/%s/%s.md" % (name, name)
     if not os.path.exists(path):
         print("%s does not exist" % name)
@@ -31,13 +31,13 @@ def make_post(name, title, year, month, day):
         %s
     </div>
     <div id="project">
-    """ % (title.upper())
+    """ % (title_nice.upper())
 
     bottom = """
     </div>
     """
 
-    path = "../%s/%s/%s/%s/index.html" % (year, month, day, title.lower())
+    path = "../%s/%s/%s/%s/index.html" % (year, month, day, title_raw)
     if not os.path.exists(os.path.dirname(path)):
         os.makedirs(os.path.dirname(path))
     with open(path, "w+") as f:
@@ -58,11 +58,12 @@ for p in projects:
         continue
 
     comp = p.split('-')
-    title = ' '.join([s.capitalize() for s in comp[3:]])
+    title_nice = ' '.join([s.capitalize() for s in comp[3:]])
+    title_raw = '-'.join(comp[3:])
     year = comp[0]
     month = comp[1]
     day = comp[2]
-    make_post(p, title, year, month, day)
+    make_post(p, title_nice, title_raw, year, month, day)
 
     home += """
         <a href="./%s/%s/%s/%s/">
@@ -70,7 +71,7 @@ for p in projects:
                 <img src="./projects/%s/preview.png"></img>
                 <h1>%s</h1>
             </div>
-        </a>""" % (year, month, day, title, p, title)
+        </a>""" % (year, month, day, title_raw, p, title_nice)
 
 home += "</div>\n"
 f = open("../index.html", "w+")
