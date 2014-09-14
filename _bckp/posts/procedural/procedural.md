@@ -1,0 +1,3 @@
+![Title](/posts/procedural/terrain_00.png)
+
+Creating worlds has always been a pastime hobby of mine. The tools of my craft span from legos to computer code. In this post I'll cover the latter.

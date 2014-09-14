@@ -1,0 +1,74 @@
+<!-- <h1>Error checking in OpenGL</h1> -->
+<p>When programming OpenGL, you will run into bugs from time to time. Nonsensical geometry, stuff rendering black, stuff not rendering at all, etc...
+In these situations, you've most likely done something you shouldn't. For example, tried to buffer more data than the allocated memory can hold, forgotten to
+upload data, forgotten to set correct uniforms, and so on.</p>
+<p>Now OpenGL can't help you with all of these - but if some buffer fails to allocate, or you pass an invalid enum, it can tell you about it. All you need
+to do is listen.</p>
+<p>Whenever you do something bad in OpenGL, an error flag is raised. You can figure out what functions raise which error flags by reading the
+<a href="http://www.opengl.org/sdk/docs/man/">man pages</a>, which are actually quite pleasant to read.</p>
+
+<p>The following is a list of all the possible errors:</p>
+<ul>
+<li>GL_NO_ERROR</li>
+<li>GL_INVALID_ENUM</li>
+<li>GL_INVALID_VALUE</li>
+<li>GL_INVALID_OPERATION</li>
+<li>GL_INVALID_FRAMEBUFFER_OPERATION</li>
+<li>GL_STACK_UNDERFLOW</li>
+<li>GL_STACK_OVERFLOW</li>
+<li>GL_OUT_OF_MEMORY</li>
+</ul>
+
+<p>If any error flag, except for the last one, is raised, the command you were trying to execute is ignored; leaving the state of OpenGL unchanged.
+If the last one occurs, the state is undefined, which is really scary and you don't want that.</p>
+
+<p>We can find out if an error occurred by calling <a href="http://www.opengl.org/sdk/docs/man/xhtml/glGetError.xml"><code>glGetError()</code></a>, 
+which returns any of the above codes, as an enum. If multiple errors occurred and you want to see them all, you will need to call this function
+repeatedly until it returns GL_NO_ERROR flag.</p>
+
+<p>But this sort of global variable might be a source for confusion when debugging. For example: consider the function,</p>
+
+<pre><code>void foo() {
+	glBindBuffer(GL_ARRAY_BUFFER, &someBuffer);
+	glBufferSubData(GL_ARRAY_BUFFER, offset, size, data)
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
+</pre></code>
+
+Let's say the we try to send more data than the buffer has allocated memory for. The error flag will be set to GL_INVALID_VALUE, and our call to
+<code>glBufferSubData()</code> will do nothing. However, we do not check for errors in this function.
+
+Consider another function:
+
+<pre><code>void bar() {
+	glBindBuffer(GL_ARRAY_BUFFER, &completelyDifferentBuffer);
+	glBufferData(GL_ARRAY_BUFFER, size, NULL, usage);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+	GLenum error = glGetError();
+	...
+}
+</pre></code>
+
+<p>This function does check for errors. Now here's the kicker: if this is the first place we do an error-check after the error flag was raised, 
+we will discover the error here! The reason is that the error flag is only reset to GL_NO_ERROR when we call <code>glGetError()</code>.
+But this function is completely unrelated to the other!</p>
+
+<p>It would seem as if the error occurred when we allocate data using the other buffer, when in fact it didn't.</p>
+
+<p>So what can we learn from this? For one, we realize that we can't partially check for errors, as it actually makes everything <i>more confusing</i>, which is
+the opposite of what we want. Our options are then:
+<ul>
+<li>Check for errors in every function where we interact with OpenGL</li>
+<li>Check for errors only in the main rendering loop.</li>
+</ul>
+
+The first seems like it will cause quite a bit of overhead, and lead to some bloated code. So we naturally lean towards the second option.
+Our problem now, is that we no longer know exactly what function call caused the error, only that an error occurred somewhere.</p>
+
+<p>There might be some clever programmable solution to this, like wrapping OpenGL calls to modify some global variable that keeps track of the last
+called function, and its parameters. But if you need such detailed debugging, I suggest you use <a href="http://www.gremedy.com/">gDEBugger</a>, which
+is an awesome OpenGL debugger/profiler that lets you see everything going on.</p>
+
+<p>The suggested solution is then that we only check for errors in the main rendering loop, and if an error occurs, we either guess what caused it,
+or pull out the debugger.</p>

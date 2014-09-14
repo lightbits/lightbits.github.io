@@ -38,7 +38,6 @@ def make_post(filename, year, month, day):
     html = fix_img_tags(html)
 
     top = """
-        <p>*** 9BITSCIENCE ***</p>
         %s
     </div>
     <div id="project">
@@ -77,14 +76,8 @@ def make_post(filename, year, month, day):
         </div>
     </a>""" % (year, month, day, filename, filename, title)
 
-def add_archive(filename, title, year, month, day):
-    return """<p>%s-%s-%s <a href="archive/%s/">%s</a></p>""" % (year, month, day, filename, title)
-
 home = """
-        <p><a href="http://lightbits.github.io/">*** 9BITSCIENCE PERSONELL LOG - EMPLOYEE nr. 0000 ***</a></p>
-        Searching... </br>
-        Records are available, open? [y/n]</br>
-        >>_</p></br>
+        10 BEGIN : Select your destination
     </div>
     <div id="home">"""
 
@@ -95,15 +88,6 @@ home += make_post("tree",               "2014", "09", "12")
 home += make_post("android",            "2014", "09", "12")
 home += make_post("waves",              "2014", "09", "12")
 home += make_post("snake",              "2014", "09", "12")
-home += """
-    </div>
-    <div id="archives">
-    <h1>Archives</h1>
-"""
-home += add_archive("compute-shaders", "Introduction to Compute Shaders", "2014", "09", "13")
-home += add_archive("imgui", "Immediate Mode GUIs", "2014", "09", "10")
-home += add_archive("volumetric-flow", "Volumetric Flow Particles", "2014", "09", "08")
-home += add_archive("ssbo-alignment", "Shader Storage Buffer Object Alignment", "2014", "09", "01")
 home += "</div>\n"
 f = open("../index.html", "w+")
 f.write(header + home + footer)
