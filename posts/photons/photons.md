@@ -1,4 +1,3 @@
-# Two-dimensional Photon Simulator
 Browsing the [Tigsource forums](http://forums.tigsource.com/) is always a good idea if you need inspiration. I saw [a post](http://forums.tigsource.com/index.php?topic=31378.0) about simulating photons in a 2D image, and couldn't help but try it out myself.
 
 ![500000 photons](/posts/photons/result_500000.png)

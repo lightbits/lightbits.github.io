@@ -23,7 +23,7 @@ The sound effects were created with the [bfxr][3] tool, and the bgm was made wit
 ## Source code and binaries
 The game was programmed with C++ 11, so you may have to download and install the Visual C++ Redistributable for Visual Studio 2012 x86, [here][5].
 
-Windows binary: [riemannsnake_windows.7z][6]
+Windows binary: [riemannsnake_windows.7z][6]  
 Source code: [lightbits/riemannsnake][7]
 
   [1]: /posts/snake/screenshot0.png
