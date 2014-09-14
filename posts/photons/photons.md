@@ -1,7 +1,7 @@
 # Two-dimensional Photon Simulator
 Browsing the [Tigsource forums](http://forums.tigsource.com/) is always a good idea if you need inspiration. I saw [a post](http://forums.tigsource.com/index.php?topic=31378.0) about simulating photons in a 2D image, and couldn't help but try it out myself.
 
-![500000 photons](http://folk.ntnu.no/simeh/projects/photons/result_500000.png)
+![500000 photons](/posts/photons/result_500000.png)
 
 The above image simulates half a million photons bouncing around in a scene. It took about 30 secs to render on one thread of an Intel Core i5 @ 1.60 GHz.
 
@@ -20,7 +20,7 @@ Naturally, the values in the lightbuffer will quickly exceed the range of 8-bit 
 
 Now the problem is that after we multiply the light with the texture, we end up with an image that can't be displayed on todays monitors, as the RGB values are a hundred times greater than 1.0. If we clamp each component to a [0, 1], we get an image which is completely white some places, and completely black otherwise.
 
-![Clamped](http://folk.ntnu.no/simeh/projects/photons/result_clamped.bmp)
+![Clamped](/posts/photons/result_clamped.bmp)
 
 In the above image I clamped the lightbuffer to [0, 1] before multiplying with the texture. Clearly not cool at all.
 
@@ -78,15 +78,15 @@ Giving that a whirl gives the scene shown at the top. In that scene I set the ex
 ### Pictures!
 Here's it running on a mario level, with a hundred thousand photons:
 
-![mariotthousand](http://folk.ntnu.no/simeh/projects/photons/mariotthousand.png)
+![mariotthousand](/posts/photons/mariotthousand.png)
 
 Half a million photons:
 
-![mariohmillion](http://folk.ntnu.no/simeh/projects/photons/mariohmillion.png)
+![mariohmillion](/posts/photons/mariohmillion.png)
 
 One million photons:
 
-![mariomillion](http://folk.ntnu.no/simeh/projects/photons/mariomillion.png)
+![mariomillion](/posts/photons/mariomillion.png)
 
 ## Resources
 The following links really helped while trying to implement a tonemap operator:

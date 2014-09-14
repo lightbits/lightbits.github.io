@@ -4,8 +4,6 @@ For this article I will write about the rendering technique known as **raymarchi
 
 ![Inigo Quilez' slisesix](http://4.bp.blogspot.com/-Zjev0r-Eoms/UeQd_wcDInI/AAAAAAAAAGE/Py6rDNjTlCY/s1600/gfx00.jpg)
 
-**slisesix by Inigo Quilez**
-
 Before reading on, perhaps you would like to try the [**interactive WebGL demo?**](https://dl.dropboxusercontent.com/u/27844576/raymarch/raymarching.html)
 
 Content
@@ -162,9 +160,7 @@ A simple black or white image is not too exciting. Alot of these can be found bo
 #### Iteration count
 A quick way to spice things up, is to let the color depend on the ray step count. That is, how many steps the raymarch function performed before bailing out or hitting a surface. This will allow you to see where the most intensive portions of your image are.
 
-![Iteration based color](http://4.bp.blogspot.com/-uoHgx5pgwv8/UeL7CD1z31I/AAAAAAAAAD8/cgHwGfx_GPg/s1600/iterations.png)
-
-**Iteration-based coloring. The maximum step count was set to 64.**
+![Iteration based coloring. The maximum step count was set to 64.](http://4.bp.blogspot.com/-uoHgx5pgwv8/UeL7CD1z31I/AAAAAAAAAD8/cgHwGfx_GPg/s1600/iterations.png)
 
 #### Bounding volume
 We can speed up the raymarching if we limit the rays to a certain bounding volume.
@@ -241,8 +237,7 @@ Which results in many cubes repeated in the xz-plane:
 
 By combining domain repetition with subtracting distance fields from eachother (as described in the beginning), we can make complex objects like this:
 
-![Domain fractal](http://2.bp.blogspot.com/-UhTlNBbAsks/UeR49uPRSmI/AAAAAAAAAGU/NUq2l8NlINw/s1600/subtract_modulo2.png)
-**Domain repeated cubes are subtracted from a non-repeated, larger sphere**
+![Domain repeated cubes are subtracted from a non-repeated, larger sphere](http://2.bp.blogspot.com/-UhTlNBbAsks/UeR49uPRSmI/AAAAAAAAAGU/NUq2l8NlINw/s1600/subtract_modulo2.png)
 
 Be careful though, as distorting the distance field like this can cause some nasty artifacts. A sort-of solution is to step shorter in the raymarching function than the distance field returns.
 
@@ -255,8 +250,6 @@ Consider a heightmap describing your terrain. It could be a texture sampler uplo
 See [Terrain marching](http://www.iquilezles.org/www/articles/terrainmarching/terrainmarching.htm) for a nice introduction.
 
 ![Ixaleno/rgba by Inigo Quilez](http://1.bp.blogspot.com/-NqCg7Hqre9I/UeL7DO6KZSI/AAAAAAAAAFI/tJQgvY_hDPE/s1600/ray_05_g.jpg)
-
-**Ixaleno/rgba by Inigo Quilez**
 
 Conclusion
 ----------
