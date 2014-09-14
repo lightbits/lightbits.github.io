@@ -86,6 +86,8 @@ home += make_post("procedural",         "2014", "09", "12")
 home += make_post("photons",            "2014", "09", "12")
 home += make_post("tree",               "2014", "09", "12")
 home += make_post("android",            "2014", "09", "12")
+home += make_post("waves",              "2014", "09", "12")
+home += make_post("snake",              "2014", "09", "12")
 home += "</div>\n"
 f = open("../index.html", "w+")
 f.write(header + home + footer)
