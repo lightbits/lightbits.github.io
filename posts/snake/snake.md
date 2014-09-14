@@ -26,7 +26,7 @@ The game was programmed with C++ 11, so you may have to download and install the
 Windows binary: [riemannsnake_windows.7z][6]
 Source code: [lightbits/riemannsnake][7]
 
-  [1]: http://1.bp.blogspot.com/-lkeWykpRwbE/UsiGFJWzg-I/AAAAAAAAAIQ/ecE8sQDjbIM/s1600/screenshot0.png
+  [1]: /posts/snake/screenshot0.png
   [2]: http://codeflow.org/entries/2012/aug/02/easy-wireframe-display-with-barycentric-coordinates/
   [3]: http://www.bfxr.net/
   [4]: http://pxtone.haru.gs/
