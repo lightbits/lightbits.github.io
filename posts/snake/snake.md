@@ -1,5 +1,3 @@
-# Riemann Snake
-
 ![][1]
 
 This is my first 3D game, written using C++ and OpenGL. 
