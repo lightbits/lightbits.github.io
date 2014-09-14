@@ -1,8 +1,8 @@
-<center><iframe src="//player.vimeo.com/video/94689403" width="720" height="404" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe></center>
-
 Traditionally, rendering water uses a hack known as normalmaps. The normalmap represents small variations of the surface normal due to waves. And this works pretty well! Good normalmaps can give a convincing wave effect combined with some clever scrolling techniques. If you want artistic value, this is probably the way to go. For realism? Not so much.
 
 But today we have more computing power in our pants pocket than you need to travel to the moon, so we might as well spend it all on simulating the wave equations in realtime!
+
+<center><iframe src="//player.vimeo.com/video/94689403" width="720" height="404" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe></center>
 
 The wave equation describes, as the name suggests, how waves behave. Of course, it is not limited to water waves - it's fully applicable for any other wibbly wobbley physical phenomenon you can imagine.
 
