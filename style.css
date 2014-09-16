@@ -6,7 +6,7 @@ body {
 }
 
 #wrapper {
-	font-family: fixedsys;
+	font-family: fixedsys, consolas, monospace;
 	background: #854C30;
 	color: #ffefef;
 	font-size: 12px;
@@ -26,7 +26,7 @@ body {
 }
 
 #archives {
-	font-family: fixedsys;
+	font-family: fixedsys, consolas, monospace;
 	background: #30346D;
 	font-size: 12px;
 	min-height: 600px;
@@ -62,7 +62,7 @@ body {
 	margin-bottom: 20px;
 	padding: 20px;
 	text-align: center;
-	font-family: fixedsys, sans-serif;
+	font-family: fixedsys, consolas, monospace;
 	color: #ffefef;
 }
 
