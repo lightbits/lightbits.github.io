@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>lightbits</title>
+<link rel="stylesheet" href="style.css" type="text/css">
+<script src="analytics.js"></script>
+</head>
+<body>
+
+<h1>v4l2 adventures: Missing Huffman table</h1>
+
+<p>For the past few weeks, I've been working on camera capture on Linux for an embedded computer vision project. Up until now, I've had the opportunity to use a great 60 fps fisheye camera, but I no longer have the camera at hand. So I thought it would be useful to be able to use my laptop's webcamera, if only for the sake of testing.</p>
+
+<p>I had been using v4l2 to capture individual frames from the camera over USB, and <a href="http://www.libjpeg-turbo.org/">turbojpeg</a> to decompress each frame from JPEG to uncompressed pixels. It had worked great so far, but I ran into a snag when I tried to use my laptop camera. When decompressing frames I got the error:</p>
+
+<pre><code>missing huffman table</pre></code>
+
+<p>Which seemed strange, considering how it worked with the fisheye camera, and, for that matter, a Logitech C920 that I had used earlier. To verify that the frame was actually a valid JPEG, I tried writing them to disk. But alas, none of my image viewers could open it. The size of the file was several kilobytes, so clearly something was in it. But what? To find out, I looked at the binary content:</p>
+
+<pre><code>$ xxd frame.jpg | less</pre></code>
+
+<div style="color:#888; font-size: 80%; width: 90%; margin: 0 auto;"><p>
+On Linux, this runs a program called ```xxd``` which reads the input file binary data and prints it out as a table of hex values. The ```... | less``` sends the output, instead of printing to the terminal, to a program called ```less```, which is an interactive text scrolling thing that runs in the terminal. Neat!</p></div>
+
+<p>which spat out the following:</p>
+
+<pre><code>0000000: ffd8 ffe0 0021 4156 4931 0001 0101 0078  .....!AVI1.....x
+0000010: 0078 0000 0000 0000 0000 0000 0000 0000  .x..............
+0000020: 0000 0000 00ff db00 4300 0101 0101 0101  ........C.......
+0000030: 0101 0101 0201 0102 0204 0202 0203 0205  ................
+0000040: 0303 0304 0605 0606 0505 0505 0f07 0908  ................
+0000050: 0607 0907 0505 080b 0809 0a0a 0b0b 0b06  ................
+0000060: 070c 0c0b 0a0c 090a 0b0a ffdb 0043 0101  .............C..
+0000070: 0202 0202 0204 0202 040a 0a05 060a 0a0a  ................
+0000080: 0a0a 0a0a 0a0a 0a0a 0a0a 0a0a 0a0a 0a0a  ................
+0000090: 0a0a 0a0a 0a0a 0a0a 0a0a 0a0a 0a0a 0a0a  ................
+00000a0: 0a0a 0a0a 0a0a 0a0a 0a0a 0a0a 0a0a 0aff  ................
+00000b0: c000 1108 0258 0320 0301 2100 0211 0103  .....X. ..!.....
+00000c0: 1101 ffda 000c 0301 0002 1103 1100 3f00  ..............?.
+</pre></code>
+
+<p>I knew that file formats, like JPEGs or PNGs, usually have some stuff in the first couple of bytes that signalize what format they are, and sure enough, there is an odd looking "AVI1" string that looks more than intentional, so let's look that up. Judging by this ffmpeg <a href="https://www.ffmpeg.org/ffmpeg-bitstream-filters.html#mjpeg2jpeg">page</a>, it appears that AVI1 is a synonym for MJPEG.</p>
+
+<p>This shouldn't have been surprising, given that I request <code>V4L2_PIX_FMT_MJPEG</code> format when I set up the USB camera; what surprises me more is that the cameras I had worked with so far had, infact, been outputting valid JPEGs: the difference being that MJPEGs can omit this elusive Huffman table.</p>
+
+<p>Apparently, there is little enough difference between MJPEGs and JPEGs that you can squeeze a Huffman table into the header and get a valid JPEG. To test this, I found that I could use this ffmpeg command:</p>
+
+<pre><code>$ ffmpeg -i frame.jpg -vcodec mjpeg -f image2 frame.jpg</code></pre>
+
+<p>which allowed me to open the image in an image viewer, success! But now I needed to make this happen in code. Since I had no idea whether this table-squeezing business was a difficult task or not, I decided to look for some existing code.</p>
+
+<p>After wading through some old google message boards with poorly formatted messages, I managed to find some code in a v4l2 repository and some code written in objective C. However, neither looked particularly simple, and I didn't want to spend time trying to decipher what they were doing, so I decided to just RTFM; for which wikipedia proved a great resource with its entry on the <a href="https://en.wikipedia.org/wiki/JPEG#Syntax_and_structure">JPEG header</a>.</p>
+
+<h2>Deciphering the JPEG header</h2>
+
+<p>Apparently JPEG headers consist of segments, each beginning with a marker of two bytes, with each marker of the form <code>ff**</code>. To understand how this works I decided to decipher the header of the MJPEG frame above, again using <code>xxd frame.jpg | less</code>, and hitting the <code>/</code> key to search for <code>ff</code> bytes and highlight them.</p>
+
+<style>
+#xxd1 { background: #C9EEC2; color: #000; }
+#xxd2 { background: #C9EEC2; color: #000; }
+
+/*#xxd1 { background: #4285F4; color: #fff; }*/
+/*#xxd2 { background: #54A75B; color: #fff; }*/
+</style>
+
+<pre><code>0000000: <span id="xxd1">ff</span>d8 <span id="xxd1">ff</span>e0 0021 4156 4931 0001 0101 0078  .....!AVI1.....x
+0000010: 0078 0000 0000 0000 0000 0000 0000 0000  .x..............
+0000020: 0000 0000 00<span id="xxd1">ff</span> db00 4300 0101 0101 0101  ........C.......
+0000030: 0101 0101 0201 0102 0204 0202 0203 0205  ................
+0000040: 0303 0304 0605 0606 0505 0505 0f07 0908  ................
+0000050: 0607 0907 0505 080b 0809 0a0a 0b0b 0b06  ................
+0000060: 070c 0c0b 0a0c 090a 0b0a <span id="xxd1">ff</span>db 0043 0101  .............C..
+0000070: 0202 0202 0204 0202 040a 0a05 060a 0a0a  ................
+0000080: 0a0a 0a0a 0a0a 0a0a 0a0a 0a0a 0a0a 0a0a  ................
+0000090: 0a0a 0a0a 0a0a 0a0a 0a0a 0a0a 0a0a 0a0a  ................
+00000a0: 0a0a 0a0a 0a0a 0a0a 0a0a 0a0a 0a0a 0a<span id="xxd1">ff</span>  ................
+00000b0: c000 1108 0258 0320 0301 2100 0211 0103  .....X. ..!.....
+00000c0: 1101 <span id="xxd1">ff</span>da 000c 0301 0002 1103 1100 3f00  ..............?.
+</pre></code>
+
+<p>The first segment is <code>ffd8</code>, which is just a magic number that says that this is a JPEG. Immediately following that is <code>fffe</code>, which represents a text comment, whose length is given by the next two bytes <code>0021</code> = 33 byte, which includes the two bytes themselves. The following bytes, up until the next marker, contain the comment, which appears to just say that this is a AVI1 file.</p>
+
+<pre><code>0000000: ffd8 ffe0 0021 <span id="xxd1">4156 4931 0001 0101 0078</span>  .....!AVI1.....x
+0000010: <span id="xxd1">0078 0000 0000 0000 0000 0000 0000 0000</span>  .x..............
+0000020: <span id="xxd1">0000 0000 00</span>ff db00 4300 0101 0101 0101  ........C.......
+</pre></code>
+
+<p>Next we see two sections with the same marker, <code>ffdb</code>, which define <i>quantization tables</i>.</p>
+
+<pre><code>0000000: ffd8 ffe0 0021 4156 4931 0001 0101 0078  .....!AVI1.....x
+0000010: 0078 0000 0000 0000 0000 0000 0000 0000  .x..............
+0000020: 0000 0000 00<span id="xxd1">ff db00 4300 0101 0101 0101</span>  ........C.......
+0000030: <span id="xxd1">0101 0101 0201 0102 0204 0202 0203 0205</span>  ................
+0000040: <span id="xxd1">0303 0304 0605 0606 0505 0505 0f07 0908</span>  ................
+0000050: <span id="xxd1">0607 0907 0505 080b 0809 0a0a 0b0b 0b06</span>  ................
+0000060: <span id="xxd1">070c 0c0b 0a0c 090a 0b0a</span> <span id="xxd2">ffdb 0043 0101</span>  .............C..
+0000070: <span id="xxd2">0202 0202 0204 0202 040a 0a05 060a 0a0a</span>  ................
+0000080: <span id="xxd2">0a0a 0a0a 0a0a 0a0a 0a0a 0a0a 0a0a 0a0a</span>  ................
+0000090: <span id="xxd2">0a0a 0a0a 0a0a 0a0a 0a0a 0a0a 0a0a 0a0a</span>  ................
+00000a0: <span id="xxd2">0a0a 0a0a 0a0a 0a0a 0a0a 0a0a 0a0a 0a</span>ff  ................
+00000b0: c000 1108 0258 0320 0301 2100 0211 0103  .....X. ..!.....
+00000c0: 1101 ffda 000c 0301 0002 1103 1100 3f00  ..............?.
+</pre></code>
+
+<p>We then find the <i>Start of Frame</i> (SOF) segment, <code>ffc0</code> Its length is <code>0011</code> = 17 byte, and is supposed to contain stuff like the width and height of the image. For example, I know that my image is 800x600, or <code>0320</code> and <code>0258</code> in hex, which we can see right at the start.</p>
+
+<pre><code>00000a0: 0a0a 0a0a 0a0a 0a0a 0a0a 0a0a 0a0a 0a<span id="xxd1">ff</span>  ................
+00000b0: <span id="xxd1">c000 1108 0258 0320 0301 2100 0211 0103</span>  .....X. ..!.....
+00000c0: <span id="xxd1">1101</span> ffda 000c 0301 0002 1103 1100 3f00  ..............?.
+</pre></code>
+
+<p>The last marker is the <i>Start of Scan</i> (SOS), <code>ffda</code>. Bytes after this marker contain the compressed image data.</p>
+
+<pre><code>00000a0: 0a0a 0a0a 0a0a 0a0a 0a0a 0a0a 0a0a 0aff  ................
+00000b0: c000 1108 0258 0320 0301 2100 0211 0103  .....X. ..!.....
+00000c0: 1101 <span id="xxd1">ffda</span> 000c 0301 0002 1103 1100 3f00  ..............?.
+</pre></code>
+
+<h2>Add the missing Huffman table</h2>
+
+<p>But nowhere is the Huffman table marker, <code>ffc4</code>, to be seen. If we look at the frame that ffmpeg gave us, we can see that it does indeed have a Huffman table in there, placed right before the <i>Start of Frame</i> segment.</p>
+
+<pre><code>0000000: ffd8 fffe 0010 4c61 7663 3536 2e36 302e  ......Lavc56.60.
+0000010: 3130 3000 ffdb 0043 0008 0a0a 0b0a 0b0d  100....C........
+0000020: 0d0d 0d0d 0d10 0f10 1010 1010 1010 1010  ................
+0000030: 1010 1212 1215 1515 1212 1210 1012 1214  ................
+0000040: 1415 1517 1717 1515 1515 1717 1919 191e  ................
+0000050: 1e1c 1c23 2324 2b2b 33<span id="xxd1">ff c401 a200 0001</span>  ...##$++3.......
+0000060: <span id="xxd1">0501 0101 0101 0100 0000 0000 0000 0001</span>  ................
+         <span id="xxd1">                  ...                  </span>
+00001e0: <span id="xxd1">c9ca d2d3 d4d5 d6d7 d8d9 dae2 e3e4 e5e6</span>  ................
+00001f0: <span id="xxd1">e7e8 e9ea f2f3 f4f5 f6f7 f8f9 fa</span>ff c000  ................
+</pre></code>
+
+<p>It seems like these tables aren't necessarily unique per image, and if you don't have a table you can just pick among a set of 'default' tables and squeeze it in. To try this, I copied the Huffman table from ffmpeg's converted image, and wrote a function to insert it before the <code>ffc0</code> marker in my MJPEGs:</p>
+
+<pre><code>#include &lt;string.h&gt;
+#include &lt;stdint.h&gt;
+uint32_t mjpg_to_jpg(uint8_t *mjpg,
+                     uint32_t mjpg_size,
+                     uint8_t *jpg)
+{
+    static uint8_t huffman[] = { 0xff, 0xc4, 0x01, ... , 0xfa };
+
+    uint32_t i = 0;
+    while (!(mjpg[i] == 0xff &amp;&amp; mjpg[i+1] == 0xc0))
+        i++;
+
+    memcpy(jpg,                   mjpg,    i);
+    memcpy(jpg+i,                 huffman, sizeof(huffman));
+    memcpy(jpg+i+sizeof(huffman), mjpg+i,  mjpg_size-i);
+
+    uint32_t jpg_size = mjpg_size+sizeof(huffman);
+    return jpg_size;
+}
+</pre></code>
+
+<p>Running this on the MJPEG data I receive from the camera seems to work, as I am able to both decompress the frames with turbojpeg, and also open the files I dump to disk in an image viewer.</p>
+
+<p>There is a slight visual difference between the JPEG I produce with the code above, and the one I get from running the ffmpeg conversion command. I suspect this is because ffmpeg is doing some additional compression, especially since the binary data after the <i>Start of Scan</i> segment is different in the two cases.</p>
+
+<p>Anyway, this took me a couple of hours, which is unfortunate because there is lots of other stuff to do. But it was kind of fun to inspect binary data and try to decipher file format headers, and I ended up with simpler code than what I could find elsewhere.</p>
+
+<p>If you would like to reuse this code, feel free to check out my single header-file <a href="https://github.com/lightbits/usbcam">usbcam</a> library on github, which provides a wrapper around v4l2, and has a bunch of useful tips for doing real-time video capture for computer vision. There you will find the full source code for the above function, including the 420 byte Huffman table I used.</p>
+
+<div class="footer">
+<a href="http://lightbits.github.io/">Archive</a>
+<a href="https://twitter.com/uint9">Twitter</a>
+<a href="https://github.com/lightbits">Github</a>
+</div>
+
+</body>
+</html>
