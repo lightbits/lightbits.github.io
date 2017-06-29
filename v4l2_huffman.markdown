@@ -11,8 +11,8 @@ Which seemed strange, considering how it worked with the fisheye camera, and, fo
 ```
 $ xxd frame.jpg | less
 ```
-<div style="color:#888; font-size: 80%; width: 90%; margin: 0 auto;">
-On Linux, this runs a program called ```xxd``` which reads the input file binary data and prints it out as a table of hex values. The ```... | less``` sends the output, instead of printing to the terminal, to a program called ```less```, which is an interactive text scrolling thing that runs in the terminal. Neat!
+<div style="color:#888; font-size: 80%; width: 90%; margin: 0 auto;"><p>
+On Linux, this runs a program called ```xxd``` which reads the input file binary data and prints it out as a table of hex values. The ```... | less``` sends the output, instead of printing to the terminal, to a program called ```less```, which is an interactive text scrolling thing that runs in the terminal. Neat!</p>
 </div>
 
 which spat out the following:
@@ -30,13 +30,11 @@ which spat out the following:
 00000a0: 0a0a 0a0a 0a0a 0a0a 0a0a 0a0a 0a0a 0aff  ................
 00000b0: c000 1108 0258 0320 0301 2100 0211 0103  .....X. ..!.....
 00000c0: 1101 ffda 000c 0301 0002 1103 1100 3f00  ..............?.
-
-...
 ```
 
 I knew that file formats, like JPEGs or PNGs, usually have some stuff in the first couple of bytes that signalize what format they are, and sure enough, there is an odd looking "AVI1" string that looks more than intentional, so let's look that up. Judging by this ffmpeg [page](https://www.ffmpeg.org/ffmpeg-bitstream-filters.html#mjpeg2jpeg), it appears that AVI1 is a synonym for MJPEG.
 
-This shouldn't have been surprising, given that I request the ```V4L2_PIX_FMT_MJPEG``` format when I set up the USB camera; what surprises me more is that the cameras I had worked with so far had, infact, been outputting valid JPEGs: the difference being that MJPEGs can omit this elusive Huffman table.
+This shouldn't have been surprising, given that I request ```V4L2_PIX_FMT_MJPEG``` format when I set up the USB camera; what surprises me more is that the cameras I had worked with so far had, infact, been outputting valid JPEGs: the difference being that MJPEGs can omit this elusive Huffman table.
 
 Apparently, there is little enough difference between MJPEGs and JPEGs that you can squeeze a Huffman table into the header and get a valid JPEG. To test this, I found that I could use this ffmpeg command:
 ```

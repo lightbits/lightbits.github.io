@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>markdown conversion tool</title>
+<style>
+body { display: flex; }
+.box { width: 250px; height: 500px; margin: 8px; border: 1px solid #000; }
+textarea { font-size: 12px; font-family: "source code pro",monospace; }
+#output_html { height: 500px; overflow-y: scroll; font-family: arial,sans-serif; font-size: 90%; line-height: 150%; }
+#output_html h1 { font-size: 16px; }
+#output_html h2 { font-size: 14px; }
+</style>
+<script src="marked.min.js"></script>
+<script>
+function generate()
+{
+    marked.setOptions({
+      gfm: true,
+      tables: true,
+      breaks: false,
+      pedantic: false,
+      sanitize: false,
+      smartLists: true,
+      smartypants: false
+    });
+
+    input = document.getElementById("input").value;
+    html = marked(input);
+    document.getElementById("output").innerText = html;
+    document.getElementById("output_html").innerHTML = html;
+}
+</script>
+</head>
+<body>
+<textarea class="box" spellcheck="false" onkeyup="generate();" id="input"></textarea>
+<textarea class="box" spellcheck="false" id="output"></textarea>
+<div style="width: 500px;" class="box" spellcheck="false" id="output_html"></div>
+</body>
+</html>
