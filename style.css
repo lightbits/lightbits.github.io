@@ -4,7 +4,6 @@ p         { line-height: 150%; }
 .post     { display: flex; padding-bottom: .5em;}
 .date     { font-style:italic; width: 5em; text-align: right; padding-right: .5em;}
 .footer   { display:flex; flex-direction:row; justify-content:space-between; padding-top: 1em; padding-bottom: 1em; }
-a         { text-decoration:none; border-bottom: 1px solid #ddd; }
 a:link    { color: #000; }
 a:visited { color: #880088; }
 a:hover   { color: #E44F46; }
