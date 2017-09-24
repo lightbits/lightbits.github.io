@@ -2,22 +2,173 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>lightbits</title>
+<title>Simen Haugo</title>
 <link rel="stylesheet" href="style.css" type="text/css">
 <script src="analytics.js"></script>
 </head>
 <body>
 
-<img src="bg-top.png"/>
+<style>
+.profile { padding: 16px 64px 16px 64px; }
+.profile h1 { font-size: 120%; font-weight: bold; text-align: left; }
 
+.project span {
+    color: #aaa;
+    float: left;
+    font-style: normal;
+    letter-spacing: -1px;
+    font-weight: bold;
+    font-size: 90%;
+}
+
+.project a {
+    color: #333;
+    background: #F5F5F0;
+    padding-left: 8px;
+    padding-right: 8px;
+    padding-bottom: 4px;
+    padding-top: 4px;
+    border-radius: 8px;
+    text-decoration: none;
+    line-height: 30px;
+    font-size: 12px;
+    font-weight: bold;
+}
+.project a:hover { background: #fff; color: #ad2818; }
+
+/*desktop*/
+.project img { float: left; width: 300px; padding-right: 12px; }
+.project video { float: left; width: 300px; padding-right: 12px; }
+.project { border: 1px solid #fff; min-height: 350px; margin-bottom: 100px; }
+.project p { font-size: 90%; text-align: justify; }
+.project h3 { text-align: right; font-weight: normal; font-style: italic; margin-top: 0; }
+
+/*mobile*/
+/*.project img { width: 100%; }
+.project video { width: 100%;}
+.project { margin-left: 12px; margin-right: 12px; min-height: 350px; margin-bottom: 100px; }
+.project p { text-align: justify; }
+.project h3 { text-align: center; font-weight: normal; font-style: italic; margin-top: 0; }
+.project span { display: none; }
+.project a { margin-bottom: 12px; display: block; width: 90%; text-align: center; }*/
+</style>
+
+<div class="profile">
+    <h1>Simen Haugo</h1>
+    <i>I <a href="#research">research</a> robotic vision at NTNU and mentor students at <a href="#ascendntnu">Ascend NTNU</a>. I also write <a href="#writing">articles</a>, and build software and robotics <a href="#projects">projects</a>.</i>
+</div>
+
+<!-- <img src="bg-top.png"/> -->
+
+<h2>Activity</h2>
+<div class="post"><div class="date">Oct 2017</div><span>I attended <a href="./v4l2_real_time/">3D Vision 2017</a></span></div>
+<div class="post"><div class="date">Oct 2017</div><span>I held a talk on <a href="./v4l2_real_time/">essentials of computer vision</a></span></div>
+<div class="post"><div class="date">Sep 2017</div><span>I held a talk on <a href="./v4l2_real_time/">visualizing computer programs</a></span></div>
+<div class="post"><div class="date">Aug 2017</div><span>I am now researching robotic vision at NTNU</span></div>
+<div class="post"><div class="date">Aug 2017</div><span>We participated in the <a href="">International Aerial Robotics Competition</a>, again!</span></div>
+<div class="post"><div class="date">Jun 2016</div><span>I got my <a href="">Engineering Cybernetics degree</a></span></div>
+<div class="post"><div class="date">Aug 2016</div><span>We participated in the <a href="">International Aerial Robotics Competition</a></span></div>
+<div class="post"><div class="date">Apr 2015</div><span>I co-founded <a href="">Ascend NTNU</a></span></div>
+
+<h2 id="writing">Writing</h2>
 <div class="post"><div class="date">Jul 2017</div><a href="./v4l2_real_time/">v4l2 adventures: Real-time video capture for computer vision</a></div>
 <div class="post"><div class="date">Jun 2017</div><a href="./v4l2_huffman/">v4l2 adventures: Missing Huffman table</a></div>
+
+<h2 id="research">Research</h2>
+
+<div class="project">
+    <h3>Continuous signed distance functions</h3>
+    <video controls loop poster="C:/Programming/fraktal/_car_5.png" width="300">
+        <source src="C:/Programming/fraktal/video.mp4" type="video/mp4">
+    </video>
+    <p>To program a self-driving car, we need more than just a point cloud of its surroundings; to plan paths and obey rules, we need to know about the road, lanes, signs, pedestrians, other cars, and more. But information like this can only be had by imposing knowledge of our world and society into our algorithms that are, otherwise, oblivious to these concepts. This does, however, lead to a dilemma of how to represent all these objects and concepts in a computer program! Signed distance functions have been popular in computer graphics, and can possibly be a good tool for computer vision as well; in this paper I look at how.</p>
+    <a href="">paper (pdf)</a><br>
+</div>
+
+<div class="project" style="min-height: 270px; margin-bottom: 0px;">
+    <h3>Fitting 3D models to 3D reconstructions</h3>
+    <img src="gallery/fitshape.gif"/>
+    <p>While the above research looked at how to represent objects, that is only part of the job; to make use of it, we need to recognize these objects from sensor measurements: like color imagery, or depth data. In my master thesis I look at ways in which you can recover the 3D pose of objects, with the above representation, from color images and point clouds.</p>
+    <a href="">paper (pdf)</a><br>
+</div>
+
+<h2 id="projects">Projects</h2>
+
+<div class="project" id="ascendntnu">
+    <h3><span>robotics</span>Ascend NTNU</h3>
+    <img src="gallery/ascend.png"/>
+    <p>I helped start a robotics team at our university NTNU in 2015. Our common goal each year is to compete in the international aerial robotics competition (IARC), where student teams from universities around the world build drones that push the state of the art in technology. As a member in 2016 and 2017, we competed in the seventh mission, where the challenge is to herd independently moving roombas from one side to another in a 20x20m arena. Everything must be done autonomously by the drone - i.e. with the push of a single 'start' button - without GPS or external motion tracking systems.</p>
+    <!-- ascendntnu.no -->
+    <a href="">homepage</a><br>
+</div>
+
+<div class="project">
+    <h3><span>computer vision</span>Tracking robot vacuum cleaners</h3>
+    <img src="gallery/roomba.jpg"/>
+    <p>The seventh IARC challenge is to build a drone to herd 10 iRoomba vacuum cleaner robots across a 20m x 20m arena. The robots have sensors that the drone must physically touch, in order to affect their semi-random motion. But doing this assumes that you know where they are relative to the drone. With external sensing, like beacons or wall cameras, being banned, your only option is to spot them from the drone itself. I worked on the detection and tracking algorithm that we used to steer our drone in real-time and precisely interact with the robots.</p>
+    <!-- ttk4550 -->
+    <a href="">article (pdf)</a><br>
+</div>
+
+<div class="project" style="min-height: 320px;">
+    <h3><span>computer vision</span>Inside-out position tracking</h3>
+    <img src="gallery/grid1.jpg"/>
+    <p>A key step in overcoming the seventh IARC mission hinges on your drone's ability to know where it is in the arena - knowing that you're above a roomba is not useful, unless you also know where you are. The arena is patterned with a white grid of 1x1m tiles, that you can use for navigation, and a green edge indicating the herding line. Unfortunately, the arena is otherwise free to vary, and can have all sorts of distractions both inside and outside the grid, like sports markings, people or protection nets.</p>
+    <!-- iarc postmortem 2016 -->
+    <a href="">article (html)</a><br>
+</div>
+
+<div class="project">
+    <h3><span>tools</span>AI simulation and debugging tool for IARC</h3>
+    <img src="gallery/ai-tool.gif"/>
+    <p>This is one of my favorite projects, because I got to make a tool that was actually useful to many people. I originally tried out gazebo, as it gives you precise physics; but found their API too limiting and difficult to maneuver. So I built a tool that simulated only what was needed, for the members in our AI group to test and debug their algorithms in a simulated mission scenario. I also added features like scrubbing back or forward in time, seeing a list of sent commands, robot status, recording video, etc., with the help of ImGui.</p>
+</div>
+
+<div class="project">
+    <h3><span>tools</span>Mission status viewer</h3>
+    <img src="gallery/mission1.jpg"/>
+    <p>Our robotics team built an autonomous drone that can fly along paths inside, without GPS or any external tracking system - only inside-out tracking. With all the things that can go wrong, it's important to have their status available in one place. This tool uses ImGui and VDB, and lets us plot flight paths, see position state estimates, see commanded flight velocity, see detected objects, reset the Kalman filter, see CPU load and temperatures, and so on. But the best feature is the drone's tiny animated propellers.</p>
+</div>
+
+<div class="project">
+    <h3><span>computer graphics</span>Curl noise particles</h3>
+    <img src="gallery/particles.jpg"/>
+    <p>One of my first jobs as an intern was to make a demo that used compute shaders. I went through a couple of prototypes that were too slow, or didn't have the look I wanted: among them a fluid simulator and a dynamic voxelized cloud renderer (based on mmacklin's beautiful images). I then discovered Nvidia's paper on soft shadowed particles that looked good, but lacked exciting behaviour or interactivity. The final demo uses curl noise, which is a nice way to fake fluid dynamics, and also uses some tricks to add object collision. Most of the development was spent implementing sorting, and making the thing run fast enough.</p>
+    <a href="">article (html)</a><br>
+</div>
+
+<div class="project" style="min-height: 440px;">
+    <h3><span>computer graphics</span>Implicit surfaces with geometry shaders</h3>
+    <img src="gallery/implicit1.jpg"/>
+    <p>Implicit surfaces are much cooler than triangle meshes, because you can very quickly describe interesting surfaces procedurally, in code, with just simple maths - no modelling skills needed! These surfaces can even be animated in ways that would be much harder with meshes. On the other hand, rendering them is trickier, because you don't have an explicit list over all the surface points; you can instead only check if a given point is on the surface or not. How can we generate a triangle mesh that OpenGL can render? and how can we do it at 60 fps on a mobile GPU?</p>
+    <a href="">article (html)</a><br>
+</div>
+
+<div class="project" style="min-height: 430px;">
+    <h3><span>computer graphics</span>FRAKTAL</h3>
+    <img src="gallery/fraktal1.jpg"/>
+    <p>I built this tool to render signed distance function scenes under my favorite type of diffuse lighting. The scene is defined in a shader file that can be reloaded on the fly. Rendering is done with path tracing on the GPU, and can be refined by letting it run longer. Despite being a hobby project, I got a chance to use it heavily for my master thesis, three years after initially building it.</p>
+    <a href="https://github.com/lightbits/fraktal">github (todo)</a>
+    <a href="https://github.com/lightbits/fraktal/">devlog (todo)</a>
+</div>
+
+<!-- <div class="project">
+    <h3><span>computer graphics</span>PORTAL RENDERING in OpenGL</h3>
+    <img src="file:///C:/Writing/portals/titleshot.png"/>
+    <p>I made this program to learn how portals can be rendered using OpenGL. This was a brilliant way to apply the theory I learned about rotation matrices from my robotics classes, into something visual; since figuring out where to render the scene from, behind the portal, is essentially a coordinate system transform! I also made a simple 3D test scene in Blender, and baked the lighting into a texture map using Cycles.</p>
+    <a href="">article (html)</a>
+</div> -->
 
 <div class="footer">
 <a href="https://lightbits.github.io/">Archive</a>
 <a href="https://twitter.com/uint9">Twitter</a>
 <a href="https://github.com/lightbits">Github</a>
 </div>
+
+<p style="text-align: center; font-size: 80%;">
+    Simen Haugo © 2017<br>
+    <a style="text-decoration:none;" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">BY-NC-SA</a> 4.0
+</p>
 
 </body>
 </html>
