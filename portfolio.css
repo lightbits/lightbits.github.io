@@ -9,16 +9,15 @@
 
 .project img { float: left; width: 300px; padding-right: 12px; }
 .project video { float: left; width: 300px; padding-right: 12px; }
-.project { border: 1px solid #fff; min-height: 350px; margin-bottom: 100px; }
+.project { min-height: 350px; margin-bottom: 100px; }
 .project p { font-size: 90%; text-align: justify; }
 .project h3 { text-align: right; font-weight: normal; font-style: italic; margin-top: 0; }
 
 @media screen and (max-width: 600px){
 .project img { width: 100%; margin-bottom: 12px; }
 .project video { width: 100%; margin-bottom: 12px; }
-.project { margin-left: 12px; margin-right: 12px; min-height: 350px; margin-bottom: 100px; }
-.project p { text-align: justify; font-size: 100%; }
-.project h3 { text-align: center; font-weight: normal; font-style: italic; margin-top: 0; }
+.project p { font-size: 100%; }
+.project h3 { text-align: center; }
 .project span { display: none; }
 body { margin: 12px; }
 }
