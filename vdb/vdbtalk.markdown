@@ -22,9 +22,9 @@ I want to begin this talk with a quiz: I'm going to show you two images generate
 
 The answer is (hidden, mark this line to see it): <span style="color:#f0f0f0;">A is the buggy program, B is running correctly.</span>
 
-*Note: Most of the audience answered A (correct). No one answered B, and some weren't sure. Live quizzes are always nerve-wracking!*
-
 ![](slides/Slide5.PNG)
+
+*Note: Most of the audience answered A (correct). No one answered B, and some weren't sure. Live quizzes are always nerve-wracking!*
 
 Great! We'll get back to this. Now I want to take you back 30 years ago to 1986. A paper was published that stirred up the software engineering industry. It was called [No Silver Bullet](https://en.wikipedia.org/wiki/No_Silver_Bullet), and written by software engineer and computer scientist Fred Brooks. At the time, Brooks was concerned about software engineering: in particular, why it’s so hard.
 
@@ -63,7 +63,7 @@ Debuggers and profilers have gotten more user friendly, or atleast, they look pr
 
 ![](slides/Slide12.PNG)
 
-*Note: I found this image by searching for 'code visualization'. The [tool](http://www.cs.rug.nl/svcg/SoftVis/Dependencies) was apparently intended to visualize the structure and dependencies in software systems.*
+*Note: I found this image by searching for 'code visualization'. The [tool](http://www.cs.rug.nl/svcg/SoftVis/Dependencies) was intended to visualize the structure and dependencies in software systems.*
 
 We have elaborate project management tools like Jira. And we have made countless attempts at visualizing our code.
 
