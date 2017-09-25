@@ -36,8 +36,7 @@ Why do we push back deadlines? How can we launch a space probe that does its cal
 <p>His essay was pessimistic: &quot;within a decade, there is no single development, in either technology or management technique, which by itself promises even one order of magnitude improvement in productivity&quot;.</p>
 <p>For example, moving from writing assembly code to writing in high-level languages was one of the greatest productivity boosts in software engineering: software was produced faster and it was less error-prone. But at the time, he doubted we would see another invention come close to the same effect that high-level languages had on the industry.</p>
 <p><img src="slides/Slide8.PNG" alt=""></p>
-<p>His 1986 essay caused a lot of debate in the industry as, nine years later, he was urged to publish a <a href="https://tcagley.wordpress.com/2015/11/14/mythical-man-month-no-silver-bullet-refired-part-17/">follow-up</a>, to address those who had written to him telling him he was wrong. That their Database-Driven Declarative Meta Programming Language was the bullet the industry was searching for.</p>
-<p>He remained unconvinced</p>
+<p>His 1986 essay caused a lot of debate in the industry as, nine years later, he was urged to publish a <a href="https://tcagley.wordpress.com/2015/11/14/mythical-man-month-no-silver-bullet-refired-part-17/">follow-up</a>, to address those who had written to him telling him he was wrong. That their Database-Driven Declarative Meta Programming Language was the bullet the industry was searching for. Suffice to say, Brooks remained unconvinced.</p>
 <p><img src="slides/Slide9.PNG" alt=""></p>
 <p>It is now Wednesday. September 20. 2017. The majority of programs are written in languages and analyzed with tools, based on 30 or even 40 year old technology and ideas.</p>
 <p><img src="slides/Slide10.PNG" alt=""></p>
@@ -50,8 +49,7 @@ Why do we push back deadlines? How can we launch a space probe that does its cal
 <p>We have elaborate project management tools like Jira. And we have made countless attempts at visualizing our code.</p>
 <p><img src="slides/Slide13.PNG" alt=""></p>
 <p><em>Note: Visual Studio also jumped on the code visualization bandwagon at some point. I have personally not tried out this feature, so it may very well be useful.</em></p>
-<p>And yet, software engineering is still hard. We still release buggy software. We still fail to meet deadlines due to unforeseen problems. We have to make our initial designs under the presumption that we will make mistakes in the future.</p>
-<p>So what&#39;s going on? Is he still right? Is there no silver bullet in sight?</p>
+<p>And yet, software engineering is still hard. We still release buggy software. We still fail to meet deadlines due to unforeseen problems. We have to make our initial designs under the presumption that we will make mistakes in the future. So what&#39;s going on? Is he still right? Is there no silver bullet in sight?</p>
 <h2 id="visualization">Visualization</h2>
 <p>Let&#39;s look at that quiz from earlier. Debugging or analyzing program behavior is usually associated with text: printf statements flying by in a terminal, or hexadecimal numbers in a memory table, or variable and register watches. But in this mode of debugging, where you read text and reason about it in your head, you are ignoring the part of your brain that handles rich visual information, that evolved over millions of years to reason about large and complex data.</p>
 <div style="margin: 0 auto; text-align: center;">
@@ -98,8 +96,7 @@ Why do we push back deadlines? How can we launch a space probe that does its cal
 <p>I was surprised to see that the number of points within the rectangle kept growing...</p>
 <p><img src="slides/Slide39.PNG" alt=""></p>
 <p>I quickly realized that I forgot to set the count variable to zero after moving the rectangles to their new location. I fixed the bug, and the rectangles converged in much fewer iterations, saving precious milliseconds of computation.</p>
-<p>The moral of this story is that if I had not drawn each step; and if I couldn’t interact and explore my data, I probably wouldn’t even known that the bug was there. Despite the algorithm sort of working anyway, maybe some other input might break it <em>(algorithms like this make me want to introduce another concept of robustness: not just robustness against errors in the data, but also robustness against errors made by the programmer!)</em>.</p>
-<p>Not only could this have caused hard to find issues in the future but it also meant that the program was running way slower than it needed to.</p>
+<p>The moral of this story is that if I had not drawn each step; and if I couldn’t interact and explore my data, I probably wouldn’t even have known that the bug was there. Despite the algorithm sort of working anyway, some other input may well break it <em>(algorithms like this make me want to introduce another concept of robustness: not just robustness against errors in the data, but also robustness against errors made by the programmer!)</em>. Not only could this have caused hard to find issues in the future but it also meant that the program was running slower than it needed to.</p>
 <h2 id="introduction-to-vdb">Introduction to VDB</h2>
 <p>This simple visualization program, which started as an evening project, eventually started getting used in all of my projects from that point on: not only computer vision projects (like the one in the story), but I also used it for course work in robotics and AI. The ability to quickly create interactive visualizations, that could let me explore and understand my program, turned out to be more useful than I imagined.</p>
 <p><em>Note: To give an example, I used it for an assignment in my robotics and kinematics class, where we were supposed to design an algorithm that would control the joints of a robot arm to throw a ball as far as possible. My solution was to apply a joint torque that varied over time, and made a quick GUI program that let me tune the torques at discrete time points while drawing the resulting trajectory of the arm and the ball.</em></p>
@@ -112,8 +109,7 @@ int main() {
 }
 </code></pre></div><p><em>Compile and run.</em></p>
 <p>Well it doesn&#39;t do a whole lot, but for those of you who have tried to use C++ libraries, you know that getting to this point can often be the hardest part, and can take many hours or even days of work. I&#39;ve tried to make it easy to download and try out the library, and also easy to integrate it into your project, no matter what build system you&#39;re using, so hopefully this will not take much of your time.</p>
-<p>Anyway, this program doesn&#39;t do anything. It creates a variable x, prints it to the terminal, and then exits. For the sake of fitting the example on a slide and in your head, x is only a float variable, but you can imagine it&#39;s something more complicated, like the result from some image processing algorithm, or the measurements from a scanning lidar.</p>
-<p>So maybe we want to visualize x or modify x, before printing it to the terminal (or passing it on to the next step of an algorithm).</p>
+<p>Anyway, this program doesn&#39;t do anything. It creates a variable x, prints it to the terminal, and then exits. For the sake of fitting the example on a slide and in your head, x is only a float variable, but you can imagine it&#39;s something more complicated, like the result from some image processing algorithm, or the measurements from a scanning lidar. So maybe we want to visualize x or modify x, before printing it to the terminal (or passing it on to the next step of an algorithm).</p>
 <div id="blah"><pre><code>#include &lt;vdb.h&gt;
 int main() {
     float x = 0.0f;
@@ -177,8 +173,7 @@ int main() {
 <p>In other words, visualizing your code is more than just UML diagrams or fully connected graphs. Make interactive visualizations that let you explore your data and see your program behaviour, take advantage of the millions of years of evolution that produced your awesome brain. Display sensor data, like camera images or lidar range measurements, as they come in. Modify and tweak variables at runtime with instant feedback.</p>
 <p>If this talk has gotten you interested, check out the <a href="https://github.com/lightbits/vdb">github</a> page. There you will find a readme, which explains how you can get started and try out a simple test program, whether you&#39;re running linux, windows or macos.</p>
 <p><img src="slides/Slide53.PNG" alt=""></p>
-<p>There&#39;s also a gallery that shows some examples with source code, and  examples that show how to integrate VDB into a CMake or a Makefile project, or how you can combine it with robotics libraries like ROS or Dune.</p>
-<p>If you have any questions, feel free to get in touch. You can send me an email, or make an issue on github.</p>
+<p>There&#39;s also a gallery that shows some examples with source code, and  examples that show how to integrate VDB into a CMake or a Makefile project, or how you can combine it with robotics libraries like ROS or Dune. If you have any questions, feel free to get in touch. You can send me an email, or make an issue on github.</p>
 <p>Thank you!</p>
 <p><em>Note: Due to time I did not mention any alternatives to this project, of which there are a few. For example, <a href="http://jupyter.org/">Jupyter notebooks</a> can be a powerful development tool, although the application domain does not strictly overlap with vdb. OpenCV also has some functionality to open a window, but installing OpenCV and configuring your project to use it can be a hassle.</em></p>
 
