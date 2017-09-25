@@ -24,50 +24,50 @@ The answer is (hidden, mark this line to see it): <span style="color:#f0f0f0;">A
 
 *Note: Most of the audience answered A (correct). No one answered B, and some weren't sure. Live quizzes are always nerve-wracking!*
 
-![](slides/Slide5.png)
+![](slides/Slide5.PNG)
 
 Great! We'll get back to this. Now I want to take you back 30 years ago to 1986. A paper was published that stirred up the software engineering industry. It was called [No Silver Bullet](https://en.wikipedia.org/wiki/No_Silver_Bullet), and written by software engineer and computer scientist Fred Brooks. At the time, Brooks was concerned about software engineering: in particular, why it’s so hard.
 
-![](slides/Slide6.png)
+![](slides/Slide6.PNG)
 
 He wanted to know why we ship software with bugs in them?
 Why do we push back deadlines? How can we launch a space probe that does its calculations in the wrong units? Even today, big companies with thousands of engineers, still ship buggy software.
 
 *Note: See also [The Engineering Commons Podcast: Episode 133 - Embarrassed Engineer](http://theengineeringcommons.com/episode-133-embarrassed-engineer/) for an amusing look at some of SE's (non-fatal) mistakes.*
 
-![](slides/Slide7.png)
+![](slides/Slide7.PNG)
 
 His essay was pessimistic: *"within a decade, there is no single development, in either technology or management technique, which by itself promises even one order of magnitude improvement in productivity"*.
 
 For example, moving from writing assembly code to writing in high-level languages was one of the greatest productivity boosts in software engineering: software was produced faster *and* it was less error-prone. But at the time, he doubted we would see another invention come close to the same effect that high-level languages had on the industry.
 
-![](slides/Slide8.png)
+![](slides/Slide8.PNG)
 
 His 1986 essay caused a lot of debate in the industry as, nine years later, he was urged to publish a [follow-up](https://tcagley.wordpress.com/2015/11/14/mythical-man-month-no-silver-bullet-refired-part-17/), to address those who had written to him telling him he was wrong. That their Database-Driven Declarative Meta Programming Language was the bullet the industry was searching for.
 
 He remained unconvinced
 
-![](slides/Slide9.png)
+![](slides/Slide9.PNG)
 
 It is now Wednesday. September 20. 2017. The majority of programs are written in languages and analyzed with tools, based on 30 or even 40 year old technology and ideas.
 
-![](slides/Slide10.png)
+![](slides/Slide10.PNG)
 
 Of course things have changed over time; Python, Javascript, Go and Julia, these days we have so many languages that wikipedia can barely keep up.
 
-![](slides/Slide11.png)
+![](slides/Slide11.PNG)
 
 *Note: The image shows Visual Studio (unsure which version) with its profiler and memory view open.*
 
 Debuggers and profilers have gotten more user friendly, or atleast, they look prettier.
 
-![](slides/Slide12.png)
+![](slides/Slide12.PNG)
 
 *Note: I found this image by searching for 'code visualization'. The [tool](http://www.cs.rug.nl/svcg/SoftVis/Dependencies) was apparently intended to visualize the structure and dependencies in software systems.*
 
 We have elaborate project management tools like Jira. And we have made countless attempts at visualizing our code.
 
-![](slides/Slide13.png)
+![](slides/Slide13.PNG)
 
 *Note: Visual Studio also jumped on the code visualization bandwagon at some point. I have personally not tried out this feature, so it may very well be useful.*
 
@@ -86,11 +86,11 @@ Let's look at that quiz from earlier. Debugging or analyzing program behavior is
 
 This example illustrates how awesome your brain is at recognizing patterns. But if this part of our brain is able to understand large, interconnected sets of data, maybe we are doing ourselves a disservice by ignoring it? Of course, Brooks knew about this. But he doubted we would be able to visualize software in a helpful way.
 
-![](slides/Slide16.png)
+![](slides/Slide16.PNG)
 
 We can understand why he was so sceptical: our attempts at visualizing code have often been in the form of graphs connecting all the bits and pieces together. But once the program becomes sufficiently complex, this graph falls victim to the very problem it was meant to solve in the first place, and becomes more like an illustration that acknowledges the complexity, instead of a tool that reduces it.
 
-![](slides/Slide17.png)
+![](slides/Slide17.PNG)
 
 *"Software"*, he said, *"is invisible and unvisualizable. This difficulty in visualizing software impedes understanding within a single mind, and severely hinders communication between minds."*
 
@@ -98,41 +98,41 @@ We can understand why he was so sceptical: our attempts at visualizing code have
 
 In the rest of this talk I will show you my silver bullet. I called it VDB, short for visual debugger. This was a mistake, because I constantly mistype the name. But it's better than my first attempt, which was an abbreviation of "graphical debugger", or, GDB: the double-meaning I thought was only clever at the time, and not a source of headaches and confusion.
 
-<img style="width: 100%;" src="slides/Slide18.png"/>
+<img style="width: 100%;" src="slides/Slide18.pngPNG>
 
 To give you some context around why this tool was brought into existence, I'd like to show you a problem I worked a year ago.
 
-![](slides/Slide19.png)
+![](slides/Slide19.PNG)
 
 I needed an algorithm that could find dense clusters in a set of 2D points. I searched on Google, and found many algorithms that I could use. I chose mean-shift, and according to [stackoverflow](https://stackoverflow.com/a/17912660), it works like this:
 
-![](slides/Slide20.png)
+![](slides/Slide20.PNG)
 
 Let’s say that this is our input data and we want to find those two clusters.
 
-![](slides/Slide21.png)
+![](slides/Slide21.PNG)
 
 The first step is to draw some rectangles that fully cover your data points.
 
-![](slides/Slide22.png)
+![](slides/Slide22.PNG)
 
 Then, for each rectangle, find the average – the mean - of the points inside it, and move the rectangles to be centered around the average.
 
-![](slides/Slide23.png)
+![](slides/Slide23.PNG)
 
 You repeat this procedure - compute the mean of the points inside the rectangle, move the rectangles, etc - until you think your rectangles have converged.
 
-![](slides/Slide29.png)
+![](slides/Slide29.PNG)
 
 The idea is that rectangles that started close to a cluster will converge to that point, since that is where the average lies. At the end, you can then check where the clusters are by looking at the statistics of the rectangles: the number of points inside, the spread of the points, or if any other rectangles converged to that spot.
 
-![](slides/Slide30.png)
+![](slides/Slide30.PNG)
 
 I ran this algorithm on my data and wanted a way to see all the points and the rectangles. I started doing what I thought was the simplest thing, which was to literally draw an image and save it as a PNG file, and open that in an image viewing app. This turned out to be really tedious, so I decided to write some code that would open up a graphics window at various points in my program, that would let me draw the data directly with basic OpenGL commands.
 
 I already had a bunch of OpenGL code lying around from past projects, so this only took an evening (*That is more time spent than what it saved me with the dumb approach, but as we will see, I got my return on this investment fairly quickly*). Unfortunately, all screenshots of this are lost in the sands of time; except for the one above, which looks kinda like stars in a galaxy.
 
-![](slides/Slide31.png)
+![](slides/Slide31.PNG)
 
 The algorithm appeared to work on the first try and the rectangles correctly found the clusters, just like I wanted them to. But there something strange happening.
 
@@ -142,19 +142,19 @@ The algorithm appeared to work on the first try and the rectangles correctly fou
 
 Instead of slowing down, some of the rectangles kept shaking back and forth. I wasn't sure if this was meant to happen or not, so I decided to probe further into this behaviour.
 
-![](slides/Slide36.png)
+![](slides/Slide36.PNG)
 
 I knew about this amazing library called [Dear ImGui](https://github.com/ocornut/imgui/) that lets you really easily create quick GUIs, and it had code to integrate it into an OpenGL/SDL graphics window. So I decided to add that, and make it so I could hover my mouse over one of the suspicious rectangles, and see a text tooltip showing more information about it.
 
-![](slides/Slide37.png)
+![](slides/Slide37.PNG)
 
 Like the number of points inside the rectangle.
 
-![](slides/Slide38.png)
+![](slides/Slide38.PNG)
 
 I was surprised to see that the number of points within the rectangle kept growing...
 
-![](slides/Slide39.png)
+![](slides/Slide39.PNG)
 
 I quickly realized that I forgot to set the count variable to zero after moving the rectangles to their new location. I fixed the bug, and the rectangles converged in much fewer iterations, saving precious milliseconds of computation.
 
@@ -252,13 +252,13 @@ You can use this to see how the results from an image processing algorithm chang
 
 *Note: See Nicolas Guillemot's [flash talk](https://www.youtube.com/watch?v=LSRJ1jZq90k) at CppCon 2016 on immediate mode GUIs, and a comparison with traditional GUIs like Qt.*
 
-![](slides/Slide46.png)
+![](slides/Slide46.PNG)
 
 Despite the simplicity, ImGui can be used to make "real" applications. Here is a screenshot from a debugging mode of a video game; in here the developers can do stuff like edit objects, see how long the frame took to render, or how long it took to update the AI, and they can pause the game to inspect the state.
 
 *Note: This screenshot is from the author of Dear ImGui himself and a game he and his team were working on. See [the gallery](https://github.com/ocornut/imgui/issues/973) for more examples.*
 
-![](slides/Slide47.png)
+![](slides/Slide47.PNG)
 
 Here is a tool someone made to create texture assets for 3D models. You can go to town and style the GUI to your own liking, and add tabs and subwindows to make it feel like a normal desktop application.
 
@@ -276,13 +276,13 @@ In our team at Ascend we used this tool to make our mission status viewer. It sh
 
 We can see if programs are running slowly and how long they take to compute stuff and display a warning, if they run too slow.
 
-![](slides/Slide51.png)
+![](slides/Slide51.PNG)
 
 In other words, visualizing your code is more than just UML diagrams or fully connected graphs. Make interactive visualizations that let you *explore* your data and *see* your program behaviour. Display sensor data, like camera images or lidar range measurements, as they come in. Modify and tweak variables at runtime with instant feedback.
 
 If this talk has gotten you interested, check out the [github](https://github.com/lightbits/vdb) page. There you will find a readme, which explains how you can get started and try out a simple test program, whether you're running linux, windows or macos.
 
-![](slides/Slide53.png)
+![](slides/Slide53.PNG)
 
 There's also a gallery that shows some examples with source code, and  examples that show how to integrate VDB into a CMake or a Makefile project, or how you can combine it with robotics libraries like ROS or Dune.
 
