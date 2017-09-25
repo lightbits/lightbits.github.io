@@ -8,6 +8,7 @@
 <style>
 p img { width: 100%; max-width: 360px; }
 em { color: #999; }
+em a { color: #555; }
 </style>
 </head>
 <body>
@@ -30,7 +31,7 @@ em { color: #999; }
 <p><img src="slides/Slide6.PNG" alt=""></p>
 <p>He wanted to know why we ship software with bugs in them?
 Why do we push back deadlines? How can we launch a space probe that does its calculations in the wrong units? Even today, big companies with thousands of engineers, still ship buggy software.</p>
-<p><em>Note: See also <a href="http://theengineeringcommons.com/episode-133-embarrassed-engineer/">The Engineering Commons Podcast: Episode 133 - Embarrassed Engineer</a> for an amusing look at some of SE&#39;s (non-fatal) mistakes.</em></p>
+<p><em>Note: See also The Engineering Commons Podcast: <a href="http://theengineeringcommons.com/episode-133-embarrassed-engineer/">Episode 133</a> - Embarrassed Engineer for an amusing look at some of SE&#39;s (non-fatal) mistakes.</em></p>
 <p><img src="slides/Slide7.PNG" alt=""></p>
 <p>His essay was pessimistic: &quot;within a decade, there is no single development, in either technology or management technique, which by itself promises even one order of magnitude improvement in productivity&quot;.</p>
 <p>For example, moving from writing assembly code to writing in high-level languages was one of the greatest productivity boosts in software engineering: software was produced faster and it was less error-prone. But at the time, he doubted we would see another invention come close to the same effect that high-level languages had on the industry.</p>
@@ -66,7 +67,7 @@ Why do we push back deadlines? How can we launch a space probe that does its cal
 <h2 id="my-silver-bullet">My silver bullet</h2>
 <p>In the rest of this talk I will show you my silver bullet. I called it VDB, short for visual debugger. This was a mistake, because I constantly mistype the name. But it&#39;s better than my first attempt, which was an abbreviation of &quot;graphical debugger&quot;, or, GDB: the double-meaning I thought was only clever at the time, and not a source of headaches and confusion.</p>
 <p><img style="width: 100%;" src="slides/Slide18.PNG"/></p>
-<p>To give you some context around why this tool was brought into existence, I&#39;d like to show you a problem I worked a year ago.</p>
+<p>To give you some context around why this tool was brought into existence, I&#39;d like to show you a problem I worked on a year ago.</p>
 <p><img src="slides/Slide19.PNG" alt=""></p>
 <p>I needed an algorithm that could find dense clusters in a set of 2D points. I searched on Google, and found many algorithms that I could use. I chose mean-shift, and according to <a href="https://stackoverflow.com/a/17912660">stackoverflow</a>, it works like this:</p>
 <p><img src="slides/Slide20.PNG" alt=""></p>
@@ -124,7 +125,7 @@ int main() {
     printf(&quot;%f&quot;, x);
     return 0;
 }
-</code></pre></div><p>With VDB you can say that you want to &quot;pause&quot; the code to open a a graphics display, where you can visualize and modify your program. To do this you create a VDBB-VDBE block.</p>
+</code></pre></div><p>With VDB you can say that you want to &quot;pause&quot; the code to open a graphics windows, where you can visualize and modify your program. To do this you use the VDBB-VDBE block.</p>
 <div id="blah"><pre><code>VDBB(label):
     if (!window_open(label)) {
         open_window(label);
@@ -169,11 +170,11 @@ int main() {
 <p>Besides GUIs, you have access to regular OpenGL commands, which lets you draw both 2D and 3D data, like points, lines or cubes. I have also added some features that I&#39;ve found to want often when writing these visualizations. One of them is an easy way to do conditional drawing: that is, drawing additional information or graphics when the mouse is hovering over a specific thing.</p>
 <p><img src="slides/vdb_iarc.png" alt=""></p>
 <p>In our team at Ascend we used this tool to make our mission status viewer. It shows a video feed from on-board cameras, displays position state estimates, and lets us reset the Kalman filter to a specified state. We can also draw flight paths and tell the drone to execute them, or see the temperature and CPU load of the on-board computers.</p>
-<p><em>Note: <a href="https://ascendntnu.no/">Ascend NTNU</a> is the autonomous robotics group at my university, that I helped start and was a member in for two years, until I graduated.</em></p>
+<p><em>Note: <a href="https://ascendntnu.no/">Ascend NTNU</a> is the autonomous robotics group at my university.</em></p>
 <p><img src="slides/vdb_iarc2.png" alt=""></p>
 <p>We can see if programs are running slowly and how long they take to compute stuff and display a warning, if they run too slow.</p>
 <p><img src="slides/Slide51.PNG" alt=""></p>
-<p>In other words, visualizing your code is more than just UML diagrams or fully connected graphs. Make interactive visualizations that let you <em>explore</em> your data and <em>see</em> your program behaviour. Display sensor data, like camera images or lidar range measurements, as they come in. Modify and tweak variables at runtime with instant feedback.</p>
+<p>In other words, visualizing your code is more than just UML diagrams or fully connected graphs. Make interactive visualizations that let you explore your data and see your program behaviour, take advantage of the millions of years of evolution that produced your awesome brain. Display sensor data, like camera images or lidar range measurements, as they come in. Modify and tweak variables at runtime with instant feedback.</p>
 <p>If this talk has gotten you interested, check out the <a href="https://github.com/lightbits/vdb">github</a> page. There you will find a readme, which explains how you can get started and try out a simple test program, whether you&#39;re running linux, windows or macos.</p>
 <p><img src="slides/Slide53.PNG" alt=""></p>
 <p>There&#39;s also a gallery that shows some examples with source code, and  examples that show how to integrate VDB into a CMake or a Makefile project, or how you can combine it with robotics libraries like ROS or Dune.</p>
