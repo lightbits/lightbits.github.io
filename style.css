@@ -1,6 +1,5 @@
-body      { max-width: 600px; margin: 0 auto; font-family: "open sans", arial,sans-serif; font-size: 90%; }
+body      { max-width: 600px; margin: 0 auto; font-family: "open sans", arial,sans-serif; font-size: 90%; padding: 8px; }
 img       { max-width: 100%; margin: 0 auto; display: block; }
-p         { line-height: 150%; }
 .post     { display: flex; padding-bottom: .5em;}
 .date     { font-style:italic; width: 5em; text-align: center; padding-right: .5em;}
 .footer   { display:flex; flex-direction:row; justify-content:space-between; padding-top: 1em; padding-bottom: 1em; }
