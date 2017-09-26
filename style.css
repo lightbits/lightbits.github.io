@@ -1,4 +1,5 @@
-body      { max-width: 600px; margin: 0 auto; font-family: "open sans", arial,sans-serif; font-size: 90%; padding: 8px; }
+body      { max-width: 600px; margin: 0 auto; padding: 8px; font-family: sans-serif; }
+p         { line-height: 125%; }
 img       { max-width: 100%; margin: 0 auto; display: block; }
 .post     { display: flex; padding-bottom: .5em;}
 .date     { font-style:italic; width: 5em; text-align: center; padding-right: .5em;}
