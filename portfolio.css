@@ -1,8 +1,7 @@
 .project span {
-    color: #aaa;
+    color: #ccc;
     float: left;
     font-style: normal;
-    letter-spacing: -1px;
     font-weight: bold;
     font-size: 90%;
 }
