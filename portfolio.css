@@ -11,7 +11,7 @@
 .project video { float: left; width: 300px; padding-right: 12px; }
 .project { min-height: 350px; margin-bottom: 100px; }
 .project p { font-size: 90%; text-align: justify; }
-.project h3 { text-align: right; font-weight: normal; font-style: italic; margin-top: 0; }
+.project h3 { text-align: right; font-weight: normal; font-style: italic; }
 
 @media screen and (max-width: 600px){
 .project img { width: 100%; margin-bottom: 12px; }
