@@ -1,4 +1,5 @@
-body { max-width:640px; margin:0 auto; padding:8px; font-family: arial,sans-serif;}
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+body { max-width:640px; margin:0 auto; padding:8px; font: 15px 'Roboto',arial,sans-serif; color: #222; }
 p { line-height:1.35em; }
 img { max-width:100%; margin:0 auto; display:block; }
 pre,code { font: 13px monospace; background: #FAF8F5; }
