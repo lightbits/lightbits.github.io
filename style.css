@@ -1,12 +1,10 @@
-@import url('https://fonts.googleapis.com/css?family=Roboto');
-body { max-width:640px; margin:0 auto; padding:8px; font: 15px 'Roboto',arial,sans-serif; color: #222; }
+body { max-width:640px; margin:0 auto; padding:8px; color: #222; }
 p { line-height:1.35em; }
 img { max-width:100%; margin:0 auto; display:block; }
 pre,code { font: 13px monospace; background: #FAF8F5; }
 pre { padding: 8px; border-radius: 10px; }
 h1 { font-size: 150%; text-align: center; font-weight: normal; }
 h2 { font-size: 125%; }
-h1,h2,h3 { letter-spacing: -0.05em; }
 .post { display:flex; padding-bottom:.5em;}
 .date { font-style:italic; width:5em; text-align:center; padding-right:.5em;}
 .footer { display:flex; flex-direction:row; justify-content:space-between; }
