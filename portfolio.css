@@ -1,5 +1,5 @@
-.project img { float: left; width: 250px; padding-right: 12px; }
-.project video { float: left; width: 250px; padding-right: 12px; }
+.project img { float: right; width: 250px; padding-left: 12px; }
+.project video { float: right; width: 250px; padding-left: 12px; }
 .project { max-width: 640px; min-height: 350px; margin-bottom: 100px; }
 .project h3 { background: #f0f0f0; text-align: center; padding: 8px; }
 @media screen and (max-width: 600px){
