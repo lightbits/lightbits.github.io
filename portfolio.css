@@ -1,22 +1,9 @@
-.project span {
-    color: #ccc;
-    float: left;
-    font-style: normal;
-    font-weight: bold;
-    font-size: 90%;
-}
-
-.project img { float: left; width: 300px; padding-right: 12px; }
-.project video { float: left; width: 300px; padding-right: 12px; }
-.project { min-height: 350px; margin-bottom: 100px; }
-.project p { font-size: 90%; text-align: justify; }
-.project h3 { text-align: right; font-weight: normal; font-style: italic; }
-
+.project img { float: left; width: 250px; padding-right: 12px; }
+.project video { float: left; width: 250px; padding-right: 12px; }
+.project { max-width: 640px; min-height: 350px; margin-bottom: 100px; }
+.project h3 { background: #f0f0f0; text-align: center; padding: 8px; }
 @media screen and (max-width: 600px){
 .project img { width: 100%; margin-bottom: 12px; }
 .project video { width: 100%; margin-bottom: 12px; }
-.project p { font-size: 100%; }
-.project h3 { text-align: center; }
-.project span { display: none; }
 body { margin: 12px; }
 }
