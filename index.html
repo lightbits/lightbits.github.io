@@ -40,7 +40,7 @@
     <video controls loop poster="gallery/csdf.png" width="300">
         <source src="gallery/csdf.mp4" type="video/mp4">
     </video>
-    <p>To program a self-driving car, we need more than just a point cloud of its surroundings; to plan paths and obey rules, we need to know about the road, lanes, signs, pedestrians, other cars, and more. But information like this can only be had by imposing knowledge of our world and society into our algorithms that are, otherwise, oblivious to these concepts. This does, however, lead to a dilemma of how to represent all these objects and concepts in a computer program! Signed distance functions have been popular in computer graphics, and can possibly be a good tool for computer vision as well; in this paper I look at how.</p>
+    <p>In my master thesis I looked at how to model and integrate man-made objects into 3D scene understanding algorithms. The motivation being that, to program a self-driving car, we want more than just a point cloud of its surroundings. To plan paths and obey rules, we want to know about things like lanes, signs, pedestrians, other cars, and so on. But information like that can only be had by imposing knowledge about our society into algorithms that are, otherwise, oblivious to such concepts. This leads to a dilemma of how to represent all these objects and concepts in a computer program.</p>
 </div>
 
 <div class="project" style="min-height: 270px; margin-bottom: 0px;">
@@ -107,6 +107,7 @@
     <h3>FRAKTAL</h3>
     <img src="gallery/fraktal.jpg"/>
     <p>I built this tool to render signed distance function scenes under my favorite type of diffuse lighting. The scene is defined in a shader file that can be reloaded on the fly. Rendering is done with path tracing on the GPU, and can be refined by letting it run longer. Despite being a hobby project, I got a chance to use it heavily for my master thesis, three years after initially building it.</p>
+    <p>You can grab the source at github and try it out if you can figure it out. You can also read my dev log, where you can see the early, embarrassingly noisy, renders.</p>
     <a href="https://github.com/lightbits/fraktal">github</a>
     <a href="https://github.com/lightbits/fraktal/blob/master/devlog/devlog.md">devlog</a>
 </div>
