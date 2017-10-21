@@ -70,13 +70,17 @@
 <div class="project">
     <h3>Tracking robot vacuum cleaners</h3>
     <img src="gallery/roomba.jpg"/>
-    <p>The seventh IARC challenge is to build a drone to herd 10 iRoomba vacuum cleaner robots across a 20m x 20m arena. The robots have sensors that the drone must physically touch, in order to affect their semi-random motion. But doing this assumes that you know where they are relative to the drone. With external sensing, like beacons or wall cameras, being banned, your only option is to spot them from the drone itself. I worked on the detection and tracking algorithm that we used to steer our drone in real-time and precisely interact with the robots.</p>
+    <p>As part of my work at Ascend, I worked on the vacuum cleaner tracking problem. The competition challenge is to build a drone to herd 10 iRoombas across a 20m x 20m arena. The robots have sensors that the drone can physically touch to steer their motion path.</p>
+
+    <p>But physically touching it or landing on it means you need to know its position. With external sensing, like beacons or wall cameras, being banned, your only option is to see them from the drone itself.</p>
+
+    <p>This project was an interesting learning lesson. I spent six months, as part of my pre-master project on a method that worked by rendering a 3D model of the robot and adjusting the pose estimate to make the render appear identical with the camera image. While insanely cool, it was also insanely complicated, was not predictable, and ran way too slowly. The better approach only took an evening to implement and works by just finding colored blobs.</p>
 </div>
 
 <div class="project" style="min-height: 350px;">
     <h3>Inside-out position tracking</h3>
     <img src="gallery/grid.jpg"/>
-    <p>A key step in overcoming the seventh IARC mission hinges on your drone's ability to know where it is in the arena - knowing that you're above a roomba is not useful, unless you also know where you are. The arena is patterned with a white grid of 1x1m tiles, that you can use for navigation, and a green edge indicating the herding line. Unfortunately, the arena is otherwise free to vary, and can have all sorts of distractions both inside and outside the grid, like sports markings, people or protection nets.</p>
+    <p>As part of my work at Ascend I also worked on the inside-out position tracking problem. A key step in overcoming the seventh IARC mission hinges on your drone's ability to know where it is in the arena - knowing that you're above a roomba is not useful, unless you also know where you are. The arena is patterned with a white grid of 1x1m tiles, that you can use for navigation, and a green edge indicating the herding line. Unfortunately, the arena is otherwise free to vary, and can have all sorts of distractions both inside and outside the grid, like sports markings, people or protection nets.</p>
 </div>
 
 <div class="project">
