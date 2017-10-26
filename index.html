@@ -41,12 +41,15 @@
         <source src="gallery/csdf.mp4" type="video/mp4">
     </video>
     <p>In my master thesis I looked at how to model and integrate man-made objects into 3D scene understanding algorithms. The motivation being that, to program a self-driving car, we want more than just a point cloud of its surroundings. To plan paths and obey rules, we want to know about things like lanes, signs, pedestrians, other cars, and so on. But information like that can only be had by imposing knowledge about our society into algorithms that are, otherwise, oblivious to such concepts. This leads to a dilemma of how to represent all these objects and concepts in a computer program.</p>
+    <p>I eventually compressed my 50 page master thesis into an 8 page two-column paper that I submitted to <a href="http://3dv.org/">3DV</a>, a conference for 3D computer vision. I'll update this page when it becomes available.</p>
 </div>
 
 <div class="project" style="min-height: 270px; margin-bottom: 0px;">
     <h3>Fitting 3D models to 3D reconstructions</h3>
     <img src="gallery/fitshape.gif"/>
-    <p>While the above research looked at how to represent objects, that is only part of the job; to make use of it, we need to recognize these objects from sensor measurements: like color imagery, or depth data. In my master thesis I look at ways in which you can recover the 3D pose of objects, with the above representation, from color images and point clouds.</p>
+    <p>While the above research looked at how to represent objects, that is only part of the job; to make use of it, we need to recognize these objects from sensor measurements: like color imagery, or depth data. In my master thesis I also looked at ways to recover the 3D pose of objects with the above representation, from color images and point clouds.</p>
+    <p>My thesis also has more background information, so it might be easier to read than the above paper. You can get it at the link below.</p>
+    <a href="papers/csdf-thesis.pdf"><img style="float:none;display:inline-block;height:128px;width:inherit;vertical-align:middle;" src="papers/csdf-thesis-icon.png"/>csdf-thesis.pdf</a>
 </div>
 
 <br>
@@ -75,6 +78,9 @@
     <p>But physically touching it or landing on it means you need to know its position. With external sensing, like beacons or wall cameras, being banned, your only option is to see them from the drone itself.</p>
 
     <p>This project was an interesting learning lesson. I spent six months, as part of my pre-master project on a method that worked by rendering a 3D model of the robot and adjusting the pose estimate to make the render appear identical with the camera image. While insanely cool, it was also insanely complicated, was not predictable, and ran way too slowly. The better approach only took an evening to implement and works by just finding colored blobs.</p>
+
+    <p>You can check out my project report at the link below. I go into detail about computer vision basics, like how to estimate 3D poses, how to work with fisheye cameras, and different ways to detect objects. I also describe the fancy 3D rendering method that ultimately wasn't useful.</p>
+    <a href="papers/roomba.pdf"><img style="float:none;display:inline-block;height:128px;width:inherit;vertical-align:middle;" src="papers/roomba-icon.png"/>roomba.pdf</a>
 </div>
 
 <div class="project" style="min-height: 350px;">
