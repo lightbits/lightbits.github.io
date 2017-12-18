@@ -1,0 +1,64 @@
+# 3DVision 2017 - My first research conference
+
+Much to my own surprise, my paper got accepted, despite having no novel results or experimental demonstrations. So in October, I went to China for the International Conference on 3D Vision, lugging along an inconventiently large poster and a small backpack.
+
+![](title.jpg)
+<p style="color:#777;width:80%;margin:0 auto;">The calm and spacious terminal 3 in Beijing airport was much appreciated after 20 hours of travel, although it would be another 6 hours until I got to the hotel.</p>
+
+My paper (which just barely got through the reviewers) was an 8-page condensation of my master thesis, the process of which was surprisingly satisfying and, I like to imagine, similar to chiselling away cruft and rough edges from a wood sculpture.
+
+At the conference I presented my work in poster format. A smaller, limited number of people, also got the opportunity to present their work in a stage presentation. Some being twenty minutes long, and the rest being five minutes.
+
+![](IMG_2017.JPG)
+<p style="color:#777;width:80%;margin:0 auto;">The conference was set up with a main room for presentations. Each day began with a keynote by an invited speaker, followed by selected contributors presenting their work, and then maybe a panel session. Interspersed between the presentations were poster sessions, and coffee breaks to stretch your legs and talk with people.
+<br> <br>
+One aspect that was peculiar about this conference was that there was only one "track". Usually, in larger conferences (like CVPR for computer vision or IROS for robotics), there are multiple tracks of presentations in parallel, because they just have so many contributors. The upshot is that you get a lot of content, but the downside is that you have to choose which one to attend!
+</p>
+
+I felt a huge guilt during the months leading up to the completion of my thesis: a large part of our population don't have access to clean water or health care, we can't feed everyone and yet we are throwing more than ever, we are filling the oceans with plastic, and it's really about time to do something about that climate change. There's all these problems that need to be solved, but here I am spending *a lot* time on a pdf file that literally two people on the planet will read (and only because it's their job).
+
+The goal that kept me sane was to inspire the reader and give them ideas for their work: more so than showing off a "novel way of doing X" or having tables and graphs that prove it is "better than existing methods"; novelty is not a virtue on its own (tried-and-tested can be preferrable), nor is claiming one is universally better than another particularly productive (there are always trade-offs). For that, my favorite papers are the ones that give me a new way of looking at a problem I'm familiar with, and I was hoping to do that for anyone who might read the paper.
+
+My reviewers complained about the lack of both novelty and results, so I guess I got that right, but I can't say if I succeeded at inspiring anyone. It was nonetheless a pleasant surprise and motivating experience when, as I stood in front of my hastily put-together poster, people came by and seemed genuinely interested in this odd-looking collage of 3D drawings and (way too much) text. Talking with people during the poster sessions was definitely the highlight of the conference for me.
+
+![](DSC_7460.jpg)
+<p style="color:#777;width:80%;margin:0 auto;">Each poster session had around twenty presenters standing in front of their poster. There were only about 50-80 people in the room, and dropping down to 10-30 near the end, so there was plenty of breathing space and opportunity to hog a presenter for yourself and ask them all of your burning questions.
+<br>
+<br>
+I think the sessions were divided into themes, as the other posters during my slot were sort of touching on the same topics as me. This was somewhat unfortunate, because talking with people around my stand meant I was too busy to go talk with other presenters whose work might be closely related.</p>
+
+<br>
+<br>
+<br>
+
+<h1>Conference todo's</h1>
+
+Of course, this being my first conference, I did learn some lessons:
+
+**<p style="text-align:center;">Bring a demo</p>**
+
+During my poster session I noticed the person next to me had their laptop out, running their neat body-and-pose estimation algorithm. This obviously caught everybody's attention (possibly to the detriment of their poster...). Seeing an algorithm work live and being able to interact with it is an experience that's hard to get from someone's paper or supplementary material. It would probably be a good idea to make sure I can always pull out a demo of my work and give it to people.
+
+**<p style="text-align:center;">Use the Q&A to start discussions</p>**
+
+Presentations usually leave a few minutes at the end for the audience to ask questions. What tends to happen is someone asks a technical question like "how did you do X?", and the speaker says "we discuss this in our paper", or someone asks "does your algorithm handle Y?", and the speaker gives an ambiguous answer because it depends on a lot of factors.
+
+I don't think these kind of question make the best use of everyone's time. Instead of asking a question about some detail (that you could figure out on your own by reading their paper more closely or sending them an email), take advantage of the fact that the entire audience is forced to listen to your question, and view it as an opportunity to share an opinion, provoke thoughts and motivate future discussions.
+
+**<p style="text-align:center;">Make yourself available</p>**
+
+During the breaks, when I could have taken a nap in my room or mingled in the loud hallway, I decided to retire to myself in the relatively solemn main room. I realized this was actually a good thing, because (several) people came up to me, who said they had hesitated talking to me earlier because there was a crowd. I realized some people might be too shy to talk to you after your talk or during your poster session, which makes sense, because there's a pressure or fear that you steal other's opportunity to ask their questions, so you feel that you can't take up too much of the person's time (if any).
+
+**<p style="text-align:center;">Ask yourself "What can I only do at this conference?"</p>**
+
+I picked up this mantra and thought it applied generally well to many things like the above: Is this a question I can answer over email or by reading their paper? Or, is my presentation mostly still slides with equations and tables, despite being given a stage, spotlight, a captive audience, and a 400-inch TV-stack that can play audio and video? Then I might not be taking full advantage of the conference. (I did not have a presentation slot myself, but I much appreciated the speakers who used audio and video!).
+
+<br>
+<br>
+<br>
+
+<h1>Conference summary</h1>
+
+As to the actual content of the conference, I can't write a summary without being biased by what I personally got from it - which depends on what was occupying my brain at the time, and what I was (sub)consciously paying attention to. Some people even go for the sole purpose of talking with people, avoiding the presentations entirely, making it even more personal. I like to watch the presentations anyway, if only because I enjoy seeing commonalities across people's work and also my own.
+
+I'll probably write again about an idea that I noticed permeating itself through (almost) everyone's presentations and posters. I think the idea is hinting at a direction that people are heading towards in computer vision, but I'll spare that for later.
