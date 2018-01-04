@@ -5,7 +5,5 @@ pre,code { font: 13px monospace; background: #FAF8F5; }
 pre { padding: 8px; border-radius: 10px; }
 h1 { font-size: 150%; text-align: center; font-weight: normal; }
 h2 { font-size: 125%; }
-.post { display:flex; padding-bottom:.5em;}
-.date { font-style:italic; width:5em; text-align:center; padding-right:.5em;}
 .footer { display:flex; flex-direction:row; justify-content:space-between; }
 .attrib { text-align: center; font-size: 90%; }
