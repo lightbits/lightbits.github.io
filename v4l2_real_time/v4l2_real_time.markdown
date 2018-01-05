@@ -1,7 +1,7 @@
 v4l2 adventures: Real-time video for computer vision
 ============================================================
 
-For the past few weeks I have been working with camera capture on Linux for a computer vision project: tracking Roomba robot vacuum cleaners from a drone. This is in preparation for [my university team](ascendntnu.no)'s entry in the annual [International Aerial Robotics Competition (IARC)](http://www.aerialroboticscompetition.org/) for autonomous drones. In the current challenge, which has been unsolved since 2014, participants must build a drone that can navigate a 20m x 20m indoor space by itself, without GPS, and herd ten Roombas from one side to the other through physical interaction. Sounds interesting? follow our blog at [Ascend NTNU](ascendntnu.no)!
+For the past few weeks I have been working with camera capture on Linux for a computer vision project: tracking Roomba robot vacuum cleaners from a drone. This is in preparation for [my university team](https://ascendntnu.no/)'s entry in the annual [International Aerial Robotics Competition (IARC)](http://www.aerialroboticscompetition.org/) for autonomous drones. In the current challenge, which has been unsolved since 2014, participants must build a drone that can navigate a 20m x 20m indoor space by itself, without GPS, and herd ten Roombas from one side to the other through physical interaction. Sounds interesting? follow our blog at [Ascend NTNU](https://ascendntnu.no/)!
 
 ![](venue1.jpg)
 
