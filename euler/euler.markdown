@@ -1,5 +1,5 @@
-Local rotation parametrizations in optimization
-===============================================
+Why you shouldn't use Euler angles in gradient descent but not for the reasons you think
+====================================================================
 <!-- <h2 style="border-bottom: none; text-align: center; font-weight: normal;"><i>Problems that can occur when estimating 3D rotation using gradient-based optimization and how to deal with them.</i></h2> -->
 
 <!-- Euler angles, quaternions, axis-angle, the exponential and logarithm maps; there are many ways to describe how a thing is rotated in 3D space, and you may have heard of some of these. -->
@@ -10,16 +10,18 @@ A familiar proverb that, as noted by Chris Hecker in his [GDC talk](), has an un
 
 **"If you can turn anything into a nail, all you need is a hammer."**
 
-Chris Hecker's realization was that *numerical optimization* can be used to solve *a lot* of different problems in the same way, making it a sort of hammer in your maths toolbox. Consequently, if you have a library or program (like MATLAB) that can do optimization, you can solve any problem that you can wrangle into the right form, all using the same tool.
+Chris Hecker's message was that *numerical optimization* can solve *a lot* of different problems in the same way, making it a sort of hammer in your maths toolbox. Consequently, if you have a library or program (like MATLAB) that can do optimization, you can solve any problem that you can wrangle into the right form, all using the same tool.
 
 With increasing computer power and a desire for rapid iteration, having a hammer readily available can be of great value, even if it doesn't solve the problem as cleanly or as run-time-efficiently as it could, because it can save you a lot of time as a programmer.
 
-I have since learned that optimization is a powerful technique that, when put in the right hands in the right problem domain, can solve useful problems.
+I have since learned that optimization is a powerful technique can solve a variety of problems whose closed-form solution (if it even exists) is so far beyond my mathematics / algorithms knowledge that I couldn't even begin to approach it in any other way.
 
-I have also learned that 3D rotations can cause a lot of tears.
+I have also learned that 3D rotations can behave weirdly.
 
 Estimating rotations
 --------------------
+
+To make the problems concrete, I'm going to consider a particular optimization often found in computer vision. Translating the discussion to your domain is left as an exercise.
 
 <!-- todo: image PSO estimate rotation and translation of bunny -->
 <!-- todo: image estimate rotation and translation of camera -->
