@@ -41,18 +41,51 @@ Another example, if you want recover a 3D model of the scene from multiple image
 
 Triangulation is part of stuff like photogrammetry, structure from motion or multi-view stereo: the study of recovering 3D models from images. A related problem is tracking the pose of a camera as it moves through the world, sometimes called visual odometry.
 
-Many computer vision algorithms use optimization to estimate the pose (3D rotation and translation) of either an object in an image, or the camera itself. These problems need a *parametrization* of rotation in order to define the aforementioned cost function.
+Example problem
+---------------
 
-One such parametrization is the *rotation matrix*: a 3x3 matrix of mutually perpendicular and unit length columns. This is not a nice parametrization, because not all 3x3 matrices are valid rotation matrices. So if you, say, wanted to generate a random rotation, you could not just sample 9 numbers and put them in a matrix.
+todo: feature matching. rotate a plate to minimize distance between projected pixels and features.
 
-For example, some optimization methods, like *particle swarm optimization*, try to find the optimal parameters by evaluating the cost function at many (pseudorandom) locations in the parameter space, and share information between samples to pinpoint the location of the minimum.
+Cost function is sum of distances.
 
-These methods work very well with Euler angles because, unlike the methods I describe below, they do not need to compute the derivative of the cost function.
+Let's apply gradient descent. But uh oh, how do we take the derivative of a rotation matrix?
 
-Gradient-based methods, like the first order Gauss-Newton method, try find the optimal parameters by iteratively solving a *linear* least squares problem, which involves taking the derivative of the cost function with respect to the pose parameters. It turns out that this opens a can of worms when your parameters involve rotation.
+Let's use Euler angles. But uh oh, gimbal lock.
 
-What is gimbal lock and why should I care?
-------------------------------------------
+<!-- Many computer vision algorithms use optimization to estimate the pose (3D rotation and translation) of either an object in an image, or the camera itself. These problems need a *parametrization* of rotation in order to define the aforementioned cost function. -->
+
+<!-- One such parametrization is the *rotation matrix*: a 3x3 matrix of mutually perpendicular and unit length columns. This is not a nice parametrization, because not all 3x3 matrices are valid rotation matrices. So if you, say, wanted to generate a random rotation, you could not just sample 9 numbers and put them in a matrix. -->
+
+<!-- For example, some optimization methods, like *particle swarm optimization*, try to find the optimal parameters by evaluating the cost function at many (pseudorandom) locations in the parameter space, and share information between samples to pinpoint the location of the minimum. -->
+
+<!-- These methods work very well with Euler angles because, unlike the methods I describe below, they do not need to compute the derivative of the cost function. -->
+
+<!-- Gradient-based methods, like the first order Gauss-Newton method, try find the optimal parameters by iteratively solving a *linear* least squares problem, which involves taking the derivative of the cost function with respect to the pose parameters. It turns out that this opens a can of worms when your parameters involve rotation. -->
+
+What is gimbal lock?
+--------------------
+
+For the red plate I am adjusting rx and keeping rz fixed, for the green plate I am adjusting rz in the opposite direction and keeping rx fixed. I repeat this adjustment while adjusting ry for both plates toward 90 degrees, at which point they end up producing the same motion!
+
+![](cv-why-not-euler-anim0.gif)
+
+Why is this a problem?
+
+Well if the true rotation is at the sideways angle. todo: image
+
+But tilted slightly. todo: show camera and tilted object from the side.
+
+Then we can't actually adjust our parameters to achieve that rotation???
+
+Well there *exists* a set of parameters that describe the rotation? In fact, they are...
+
+But in the local case, looking at the gradient, two of our motions are equivalent.
+
+Also a problem in Gauss Newton and Gradient-based methods in general. Show non-invertible Hessian.
+
+deleteme
+---------
+
 Let's say that we want to estimate the pose of a camera against a calibration checkerboard. We'll use the Gauss-Newton algorithm. Our first attempt uses Euler angles to parametrize the rotation, and a translation vector to describe the checkerboard's origin. A point p in the checkerboard transformed into camera space, and projected into the image, is therefore given by:
 
     R = Rz(rz)Ry(ry)Rx(rx)
