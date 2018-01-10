@@ -9,7 +9,7 @@ My paper (which just barely got through the reviewers) was an 8-page condensatio
 
 At the conference I presented my work in poster format. A smaller, limited number of people, also got the opportunity to present their work in a stage presentation. Some being twenty minutes long, and the rest being five minutes.
 
-![](IMG_2017.JPG)
+![](IMG_2017.jpg)
 <p style="color:#777;width:80%;margin:0 auto;">The conference was set up with a main room for presentations. Each day began with a keynote by an invited speaker, followed by selected contributors presenting their work, and then maybe a panel session. Interspersed between the presentations were poster sessions, and coffee breaks to stretch your legs and talk with people.
 <br> <br>
 One aspect that was peculiar about this conference was that there was only one "track". Usually, in larger conferences (like CVPR for computer vision or IROS for robotics), there are multiple tracks of presentations in parallel, because they just have so many contributors. The upshot is that you get a lot of content, but the downside is that you have to choose which one to attend!
