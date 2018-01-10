@@ -1,4 +1,4 @@
-Why you shouldn't use Euler angles in gradient descent but not for the reasons you think
+You probably shouldn't use Euler angles in gradient descent but not for the reasons you think
 ====================================================================
 <!-- <h2 style="border-bottom: none; text-align: center; font-weight: normal;"><i>Problems that can occur when estimating 3D rotation using gradient-based optimization and how to deal with them.</i></h2> -->
 
@@ -14,7 +14,7 @@ Chris Hecker's message was that *numerical optimization* can solve *a lot* of di
 
 With increasing computer power and a desire for rapid iteration, having a hammer readily available can be of great value, even if it doesn't solve the problem as cleanly or as run-time-efficiently as it could, because it can save you a lot of time as a programmer.
 
-I have since learned that optimization is a powerful technique can solve a variety of problems whose closed-form solution (if it even exists) is so far beyond my mathematics / algorithms knowledge that I couldn't even begin to approach it in any other way.
+I have since learned that optimization is a powerful technique that can solve a variety of problems whose closed-form solution (if it exists) is so far beyond my mathematics / algorithms knowledge that I couldn't even begin to approach it in any other way.
 
 I have also learned that 3D rotations can behave weirdly.
 
@@ -83,46 +83,8 @@ But in the local case, looking at the gradient, two of our motions are equivalen
 
 Also a problem in Gauss Newton and Gradient-based methods in general. Show non-invertible Hessian.
 
-deleteme
----------
-
-Let's say that we want to estimate the pose of a camera against a calibration checkerboard. We'll use the Gauss-Newton algorithm. Our first attempt uses Euler angles to parametrize the rotation, and a translation vector to describe the checkerboard's origin. A point p in the checkerboard transformed into camera space, and projected into the image, is therefore given by:
-
-    R = Rz(rz)Ry(ry)Rx(rx)
-    T = (tx, ty, tz)
-    u,v = project(R*p + t)
-
-During optimization, we would then compute the derivative of our cost function with respect to these coordinates $(r_x,r_y,r_z,t_x,t_y,t_z)$, and update them directly using a Gauss-Newton step direction. To illustrate the problem that can occur here, consider a plate of four points, representing our checkerboard model.
-
-    o----o     ^ Y
-    |    |     |
-    |    |     |
-    o----o     +-----> X
-
-In this diagram we are looking at the plate head-on. The x-axis is to the right, the y-axis goes up, and the z-axis goes out of the screen.  Now suppose the object is rotated 90 degrees about the y-axis, that is, it is oriented at $R_z(0)R_y(90^\circ)R_x(0)$. Then it looks like this
-
-    o
-    |
-    |
-    o
-
-If we adjust $r_x$ so that the final orientation is $R_z(0)R_y(90^\circ)R_x(45^\circ)$, the plate will look like this
-
-       o
-      /
-     /
-    o
-
-But if we adjust $r_z$ by the same amount in the opposite direction, so that the final orientation is $R_z(-45^\circ)R_y(90^\circ)R_x(0)$, the plate will end up in exactly the same orientation.
-
-This phenomenom is called *gimbal lock*. Initially, at (0,0,0), we could rotate freely about all three axes, but if $r_y=90^\circ$ we can only really rotate in two, atleast infinitesimally. In other words, we have lost a degree of freedom. Here's an animation that shows the gimbal lock effect.
-
-![](cv-why-not-euler-anim0.gif)
-
-For the red plate I am adjusting rx and keeping rz fixed, for the green plate I am adjusting rz in the opposite direction and keeping rx fixed. I repeat this adjustment while adjusting ry for both plates toward 90 degrees, at which point they end up producing the same motion!
-
-So why is that a problem?
--------------------------
+Aside: It's also problematic for Gauss-Newton
+---------------------------------------------
 When we use Gauss-Newton to find the optimal pose, our goal is to adjust the parameters with small updates, such that the resulting motion of our model will cause the cost function to decrease. For nonlinear least squares problems, this is done by linearizing each error term:
 
      E = sum (u' - u)^2 + (v' - v)^2
@@ -172,6 +134,12 @@ A third way to get around this is to use a different parametrization. let's look
 
 Localized Euler angle parametrization
 -------------------------------------
+
+<!-- todo: replace with 3D textured cube. -->
+<!-- todo: show cube rotating into singularity, with euler angle printed on the side -->
+<!-- todo: show that we have lost a degree of freedom -->
+<!-- todo: Let R0 = singularity rotation. And left-mul variable R -->
+
 What we did above was to parametrize our pose estimate with a set of minimal global parameters (absolute Euler angles). During optimization we would then update these directly, using the Gauss-Newton step. Another approach, if we still want to use Euler angles, is to optimize with respect to *local* Euler angles, that are afterwards used to update our *global* Euler angles. We can do this by concatenating two rotations: a local rotation, that is expressed with our optimization variables, and the global rotation, that stays constant during an optimization iteration. In other words, we parametrize an incremental rotation around a stationary orientation:
 
     R = Rz(ez)Ry(ey)Rx(ex) R0
@@ -181,6 +149,8 @@ The key that will make this work is to keep our local coordinates small, because
 If you try to visualize what happens here in our plate example, you will discover that even if R0 is located at the singular orientation, the left-hand matrix allows us to rotate the plate about any of the three axes, thereby recovering our lost degree of freedom! The following animation tries to illustrate this:
 
 ![](cv-why-not-euler-anim3.gif)
+
+<!-- todo: replace with 3D textured cube. -->
 
 The red plate is adjusting ez, the green is adjusting ey and the blue is adjusting ex. As you can see, even though the nominal rotation is located at the singularity, we can rotate about all three axes. This ought to not be very surprising, since this is equivalent to just multiplying all your points with a constant rotation matrix R, and then doing a standard Euler rotation on the result. Again, this will have gimbal lock problems as soon as ey gets close to 90 degrees, but we're avoiding that by keeping our local parameters small!
 

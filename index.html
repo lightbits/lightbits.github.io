@@ -47,15 +47,14 @@
     <video controls loop poster="gallery/csdf.png" width="300">
         <source src="gallery/csdf.mp4" type="video/mp4">
     </video>
-    <p>In my master thesis I looked at how to model and integrate man-made objects into 3D scene understanding algorithms. The motivation being that, to program a self-driving car, we want more than just a point cloud of its surroundings. To plan paths and obey rules, we want to know about things like lanes, signs, pedestrians, other cars, and so on. But information like that can only be had by imposing knowledge about our society into algorithms that are, otherwise, oblivious to such concepts. This leads to a dilemma of how to represent all these objects and concepts in a computer program.</p>
+    <p>In my master thesis I looked at how to add real-life objects to 3D reconstruction algorithms (like SLAM or SfM). The motivation being that a point cloud (or a mesh) is not very useful from a programmer perspective: to make a robot do something interesting, it needs to know stuff like 'this is is a door' or 'this is a hammer'. But we can only get that information by modelling our knowledge of the world, which leads to a dilemma of how to represent all these objects and concepts in a computer program.</p>
     <p>I eventually compressed my 50 page master thesis into an 8 page two-column paper that I submitted to <a href="http://3dv.org/">3DV</a>, a conference for 3D computer vision. I'll update this page when it becomes available.</p>
 </div>
 
 <div class="project" style="min-height: 270px; margin-bottom: 0px;">
     <h3>Fitting 3D models to 3D reconstructions</h3>
     <img src="gallery/fitshape.gif"/>
-    <p>While the above research looked at how to represent objects, that is only part of the job; to make use of it, we need to recognize these objects from sensor measurements: like color imagery, or depth data. In my master thesis I also looked at ways to recover the 3D pose of objects with the above representation, from color images and point clouds.</p>
-    <p>My thesis also has more background information, so it might be easier to read than the above paper. You can get it at the link below.</p>
+    <p>The above paper looked at how to model objects, but that is only part of the job. To make use of those models, we need to recognize them in the data (like color or depth images). In my master thesis below I have a more detailed discussion and experiments on ways to detect and localize objects modelled with signed distance functions. It's a bit longer, but in return it might be easier to read than the above paper.</p>
     <a href="papers/csdf-thesis.pdf"><img style="float:none;display:inline-block;height:128px;width:inherit;vertical-align:middle;" src="papers/csdf-thesis-icon.png"/>csdf-thesis.pdf</a>
 </div>
 
@@ -110,8 +109,10 @@
     <h3>VDB</h3>
     <img src="gallery/vdb.png"/>
     <p>In his '86 paper <i>No Silver Bullet</i>, Fred Brooks suggested there is no single development in software engineering that promises even one tenfold productivity increase within a decade. Even today, doubts remain as to whether such a solution will ever come.</p>
-    <p>Prototyped on a sunday morning in january 2016, this visualization and prototyping tool has been my personal silver bullet, that lets me interact and understand my programs. Check out the github link for more information.</p>
+    <p>Hacked together on a sunday morning in january 2016, this visualization and prototyping tool has been my personal silver bullet.</p>
     <a href="https://github.com/lightbits/vdb">readme (github)</a>
+    <br>
+    <a href="./vdb/">A talk I gave in 2017 (transcript)</a>
 </div>
 
 <div class="project" style="min-height: 430px;">
