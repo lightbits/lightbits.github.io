@@ -58,56 +58,55 @@ A nail version of this problem is similar to most nail versions of problems, and
 2. measuring how off it was, and
 3. guessing the answer again (but now you are educated).
 
-In the context of book-pose-estimation, we can make a guess as to how its positioned by projecting it into image coordinates and comparing it with our photo:
+In the context of book-pose-estimation, it means we guess the pose of the book. To measure how bad our guess was, we can render the book as seen by my camera (a handheld Canon with heavy lens distortion).
 
 ![](reproject1.jpg)
 
-We could look at this as a person and go "yup that's pretty close". But it's too slow to ask a person after each guess. If we want to automate this with a computer we need to be more *quantitative*.
+We can look at this as a person and say "yup that's pretty close". But it's too slow to ask a person after each guess. If we want to automate this with a computer we need to be *quantitative*. We have lots of options to measure the quantitative quality of our guess, most of them invented by grad students who proceed to write papers about it...
 
-At this point you have many options to measure the quality (or similarity or error) of your guess.
-
-Here's one option. When we found pixel patches in the photograph and searched for matching patches in our 3D book, we got a bunch of 2D-3D correspondences: for each 2D patch coordinate in the photo, we have one 3D coordinate in the 3D box.
+Here's one that's pretty popular...
 
 ![](reproject2.png)
 
-One way to measure the quality of our guess is to compute the sum of distances between those 3D coordinates, after projecting them into the image, and their matching 2D coordinates.
+When we found pixel patches in the photograph and searched for matching patches in our 3D book, we got a bunch of 2D-3D correspondences: for each 2D patch coordinate in the photo, we have one 3D coordinate on the 3D box. One measure of the quality of our guess is the sum of squared distances between those 3D coordinates (projected into the image) and their matching 2D coordinates.
 
 ![](reproject3.png)
 
-Mathematically we could write our quality metric as
+Mathematically we could write this as
 
     E = sum for i=1..N (x[i] - u[i])^2 + (y[i] - v[i])^2
 
-u,v are the 2D coordinates for those patches in the photo, and x,y are the projected 2D coordinates:
+u,v are the 2D coordinates for those patches in the photo, and x,y are the projected box coordinates:
 
     x,y = perspective_projection(R*p + T)
 
-The 3D box-space coordinate `p` is first rotated (by the rotation matrix R) and translated (by the vector T) from box coordinates into camera coordinates, and then converted to 2D through a standard perspective projection.
+The 3D box-space coordinate `p` is first transformed (by the rotation matrix R and translation vector T) from box coordinates into camera coordinates, and then transformed to 2D by a perspective projection.
 
-This is now an **optimization problem**.
+The quality measure E is a function of the rotation and translation. Plug in R and T, get a value. The value is zero when the predicted 2D coordinates match the observed ones, and positive otherwise. In that sense we really ought to call it an error metric.
 
-The quality measure E is a function of a rotation matrix R and a translation vector T. If we want to find the true values for R and T, we just need to find the values that make E as small as possible.
+<!-- We now have an **optimization problem**. -->
 
-How can we do that? Well I wrote *gradient descent* in the title of this article, and somewhere along the line I was going to use it to make a point about Euler angles...
-
-<!-- Let's apply gradient descent. But uh oh, how do we take the derivative of a rotation matrix? -->
+If we want to find the true values for R and T, we just need to find the values that make the error as small as possible. How? Well I wrote **gradient descent** in the title of this article, and somewhere along the line I was going to use it to make a point about Euler angles...
 
 <!-- Let's use Euler angles. But uh oh, gimbal lock. -->
 
-<!-- Many computer vision algorithms use optimization to estimate the pose (3D rotation and translation) of either an object in an image, or the camera itself. These problems need a *parametrization* of rotation in order to define the aforementioned cost function. -->
+Gradient descent
+----------------
+
+(algorithms in established software packages like matlab or numpy do additional numerical massaging to increase robustness.)
+
+Gradient descent works by calculating the derivative of E with respect to the parameters we are after. The derivative of E tells us how the error changes for a change in R and T.
 
 <!-- One such parametrization is the *rotation matrix*: a 3x3 matrix of mutually perpendicular and unit length columns. This is not a nice parametrization, because not all 3x3 matrices are valid rotation matrices. So if you, say, wanted to generate a random rotation, you could not just sample 9 numbers and put them in a matrix. -->
 
-<!-- For example, some optimization methods, like *particle swarm optimization*, try to find the optimal parameters by evaluating the cost function at many (pseudorandom) locations in the parameter space, and share information between samples to pinpoint the location of the minimum. -->
+Some optimization methods, like *particle swarm optimization*, try to find the optimal parameters by evaluating the error function at many random locations in the parameter space, and share information between samples to pinpoint the location of the minimum.
 
-<!-- These methods work very well with Euler angles because, unlike the methods I describe below, they do not need to compute the derivative of the cost function. -->
+Those methods work fine with Euler angles because they don't rely on the gradient of the error.
 
 <!-- Gradient-based methods, like the first order Gauss-Newton method, try find the optimal parameters by iteratively solving a *linear* least squares problem, which involves taking the derivative of the cost function with respect to the pose parameters. It turns out that this opens a can of worms when your parameters involve rotation. -->
 
 What is gimbal lock?
 --------------------
-
-ok honestly all of this text so far was just to get you on the same page. now i start talking about interesting stuff.
 
 For the red plate I am adjusting rx and keeping rz fixed, for the green plate I am adjusting rz in the opposite direction and keeping rx fixed. I repeat this adjustment while adjusting ry for both plates toward 90 degrees, at which point they end up producing the same motion!
 
