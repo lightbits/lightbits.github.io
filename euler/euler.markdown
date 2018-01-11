@@ -1,8 +1,5 @@
 You probably shouldn't use Euler angles in gradient descent but not for the reasons you think
 ====================================================================
-<!-- <h2 style="border-bottom: none; text-align: center; font-weight: normal;"><i>Problems that can occur when estimating 3D rotation using gradient-based optimization and how to deal with them.</i></h2> -->
-
-<!-- Euler angles, quaternions, axis-angle, the exponential and logarithm maps; there are many ways to describe how a thing is rotated in 3D space, and you may have heard of some of these. -->
 
 **"If all you have is a hammer, everything looks like a nail."**
 
@@ -12,45 +9,90 @@ A familiar proverb that, as noted by Chris Hecker in his [GDC talk](), has an un
 
 Chris Hecker's message was that *numerical optimization* can solve *a lot* of different problems in the same way, making it a sort of hammer in your maths toolbox. Consequently, if you have a library or program (like MATLAB) that can do optimization, you can solve any problem that you can wrangle into the right form, all using the same tool.
 
-With increasing computer power and a desire for rapid iteration, having a hammer readily available can be of great value, even if it doesn't solve the problem as cleanly or as run-time-efficiently as it could, because it can save you a lot of time as a programmer.
+With increasing computer power and a desire for rapid iteration, having a hammer readily available can be of great value, even if it doesn't solve the problem as cleanly or as run-time-efficiently as it could, because it can save you a lot of programmer time.
 
-I have since learned that optimization is a powerful technique that can solve a variety of problems whose closed-form solution (if it exists) is so far beyond my mathematics / algorithms knowledge that I couldn't even begin to approach it in any other way.
+I have since come to appreciate optimization as a powerful technique that can solve problems whose closed-form solution (if it even exists) is so far beyond my mathematics / algorithms knowledge that I couldn't even begin to approach it in any other way.
 
-I have also learned that 3D rotations can behave weirdly.
+I have also learned that 3D rotations are weird! But to show what I mean by that, I need to dive into a specific problem.
 
 Estimating rotations
 --------------------
 
-To make the problems concrete, I'm going to consider a particular optimization often found in computer vision. Translating the discussion to your domain is left as an exercise.
+A common problem in computer vision is finding out how a thing is rotated and translated.
 
-<!-- todo: image PSO estimate rotation and translation of bunny -->
-<!-- todo: image estimate rotation and translation of camera -->
-
-A common problem in computer vision is finding the 3D rotation and translation (a *pose*) of either an object in an image or of the camera itself.
-
-For example, if you're trying to make a [quadcopter land on a robotic vacuum cleaner](todo: iarc) using a downward facing camera, part of that problem is finding where the robot is relative to you, so you can move to the right position and orientation.
+If you want to make a quadcopter [land on a robotic vacuum cleaner](todo: iarc) using a downward facing camera, part of that problem is calculating where the robot is relative to you, so you know where you need to go.
 
 ![](lander.gif)
 
-Equivalently, you could find where you are relative to the robot. For the mathematics below it doesn't matter if we consider the pose of an object relative to the camera, or the camera relative to the object; converting from one to the other is just a matter of inverting the result.
+If you want reconstruct a 3D model of a scene from multiple images, part of the problem is calculating how each camera is rotated and translated relative to each other. Using that you can triangulate the 3D coordinate of corresponding pixels by casting rays in the direction they came from and computing where they intersect in 3D.
 
-Another example, if you want recover a 3D model of the scene from multiple images, part of the problem is finding the rotation and translation between the cameras, so you can find the depth of pixels by triangulating them (intersecting rays).
+Calculating how a vacuum cleaner robot is positioned relative to the camera, or how a camera taking one photo is positioned relative to another, can both be turned into a type of optimization problem - a nail for our hammer.
 
-![](sfm.jpg)
-<p style="text-align:center;color:#999;">Source: *Multi-View Stereo: A Tutorial.*</p>
-
-Triangulation is part of stuff like photogrammetry, structure from motion or multi-view stereo: the study of recovering 3D models from images. A related problem is tracking the pose of a camera as it moves through the world, sometimes called visual odometry.
+However, it will involve **3D rotations**, and that is where things can get nasty.
 
 Example problem
 ---------------
 
-todo: feature matching. rotate a plate to minimize distance between projected pixels and features.
+Books and CD covers are often used in example problems (and in youtube videos of object tracking algorithms) because they have a lot of **texture**, making them an easy case for computer vision algorithms.
 
-Cost function is sum of distances.
+So here's a book I picked from my shelf.
 
-Let's apply gradient descent. But uh oh, how do we take the derivative of a rotation matrix?
+<img src="book/book2.jpg" style="max-width:320px;width:100%;">
 
-Let's use Euler angles. But uh oh, gimbal lock.
+It's a **pretty good book**.
+
+But to simplify our mathematical discussion we'll assume this book is nothing more than a 3D box filled with void. Thus, one way to find out how the book is positioned relative to the camera (or vice versa) starts by finding matching patches of pixels between the photo and the 3D model.
+
+![](matches.png)
+
+At this point, your typical computer vision text book will start to tell you about the Perspective-N-Point problem and show you how easily you can recover the rotation and translation matrices using linear algebra and Singular Value Decomposition.
+
+But that's an **elegant solution**.
+
+We don't have time to learn this PnP stuff, but we do know how to use a hammer and we don't care about being efficient (maybe later we'll have to dig into it, but not right now). So let's turn this problem into a nail.
+
+## Pose estimation as an optimization problem
+
+A nail version of this problem is similar to most nail versions of problems, and consists of
+1. guessing the answer,
+2. measuring how off it was, and
+3. guessing the answer again (but now you are educated).
+
+In the context of book-pose-estimation, we can make a guess as to how its positioned by projecting it into image coordinates and comparing it with our photo:
+
+![](reproject1.jpg)
+
+We could look at this as a person and go "yup that's pretty close". But it's too slow to ask a person after each guess. If we want to automate this with a computer we need to be more *quantitative*.
+
+At this point you have many options to measure the quality (or similarity or error) of your guess.
+
+Here's one option. When we found pixel patches in the photograph and searched for matching patches in our 3D book, we got a bunch of 2D-3D correspondences: for each 2D patch coordinate in the photo, we have one 3D coordinate in the 3D box.
+
+![](reproject2.png)
+
+One way to measure the quality of our guess is to compute the sum of distances between those 3D coordinates, after projecting them into the image, and their matching 2D coordinates.
+
+![](reproject3.png)
+
+Mathematically we could write our quality metric as
+
+    E = sum for i=1..N (x[i] - u[i])^2 + (y[i] - v[i])^2
+
+u,v are the 2D coordinates for those patches in the photo, and x,y are the projected 2D coordinates:
+
+    x,y = perspective_projection(R*p + T)
+
+The 3D box-space coordinate `p` is first rotated (by the rotation matrix R) and translated (by the vector T) from box coordinates into camera coordinates, and then converted to 2D through a standard perspective projection.
+
+This is now an **optimization problem**.
+
+The quality measure E is a function of a rotation matrix R and a translation vector T. If we want to find the true values for R and T, we just need to find the values that make E as small as possible.
+
+How can we do that? Well I wrote *gradient descent* in the title of this article, and somewhere along the line I was going to use it to make a point about Euler angles...
+
+<!-- Let's apply gradient descent. But uh oh, how do we take the derivative of a rotation matrix? -->
+
+<!-- Let's use Euler angles. But uh oh, gimbal lock. -->
 
 <!-- Many computer vision algorithms use optimization to estimate the pose (3D rotation and translation) of either an object in an image, or the camera itself. These problems need a *parametrization* of rotation in order to define the aforementioned cost function. -->
 
@@ -65,21 +107,27 @@ Let's use Euler angles. But uh oh, gimbal lock.
 What is gimbal lock?
 --------------------
 
+ok honestly all of this text so far was just to get you on the same page. now i start talking about interesting stuff.
+
 For the red plate I am adjusting rx and keeping rz fixed, for the green plate I am adjusting rz in the opposite direction and keeping rx fixed. I repeat this adjustment while adjusting ry for both plates toward 90 degrees, at which point they end up producing the same motion!
 
 ![](cv-why-not-euler-anim0.gif)
 
 Why is this a problem?
 
+![](img1.png)
+
 Well if the true rotation is at the sideways angle. todo: image
 
 But tilted slightly. todo: show camera and tilted object from the side.
 
-Then we can't actually adjust our parameters to achieve that rotation???
-
-Well there *exists* a set of parameters that describe the rotation? In fact, they are...
-
 But in the local case, looking at the gradient, two of our motions are equivalent.
+
+In our local region (0,90,0), any small perturbation will probably produce an increase of the cost function. This means that gradient descent cannot progress any further. From the algorithm's point of view, doing anything is worse than doing nothing.
+
+There *is* a set of parameters that describe the rotation: if we... rx = 90, ry = 45, rz = 90. But that's way different from rx = 0, ry = 90, rz = 0, and getting there from where we are would involve increasing the cost function - getting worse before it gets better.
+
+And once we get there we have the same problem: now we can't rotate Y! (animation rotating rx, ry, rz)
 
 Also a problem in Gauss Newton and Gradient-based methods in general. Show non-invertible Hessian.
 
@@ -121,19 +169,11 @@ So we cannot even solve for an update, because there is no unique solution! More
 
 Matrices like this are called ill-conditioned, and have the nasty property that you will get really large values in your x vector.
 
-Alright, so what should I do?
------------------------------
-The above should have convinced you that parametrizing your orientation in terms of global Euler angles can lead you to situations where the numerical properties of your optimization problem can cause problems. One way to fix this is to add a damping term. In the example above, suppose we add a damping term along the diagonal:
+Fixing gimbal lock with localized Euler angles
+----------------------------------------------
+The example above shows that the Euler angle parametrization can lead to numerical instability, potentially causing gradient descent to slow to a grind under the right conditions, or causing Gauss-Newton to blow up when the Hessian is close to singular.
 
-         2 -1
-    H = -1  2
 
-Now the system Hx=b has a unique solution. Another way to fix it is to avoid the singular point, if you can, but that is not very robust! I mean, you would need to guarantee that your system *never* get close to that orientation. I'm sure that you could get away with it in certain use cases, and if you are certain, then go ahead, but I would rather have a solution that handles this nonetheless.
-
-A third way to get around this is to use a different parametrization. let's look at that in closer detail!
-
-Localized Euler angle parametrization
--------------------------------------
 
 <!-- todo: replace with 3D textured cube. -->
 <!-- todo: show cube rotating into singularity, with euler angle printed on the side -->
@@ -211,8 +251,18 @@ They look pretty similiar. But here's what happens if rz is linearly increased f
 
 As you can see, all three approaches are pretty close for small angles, but for angles above 45 degrees or so the approximation starts to break down to the point where it fails to accomplish a full 90 degree rotation.
 
-Other questions
----------------
+<!--
+## Aside: add a damping term
+
+One way to fix this is to add a damping term. In the example above, suppose we add a damping term along the diagonal:
+
+         2 -1
+    H = -1  2
+
+Now the system Hx=b has a unique solution. Another way to fix it is to avoid the singular point, if you can, but that is not very robust! I mean, you would need to guarantee that your system *never* get close to that orientation. I'm sure that you could get away with it in certain use cases, and if you are certain, then go ahead, but I would rather have a solution that handles this nonetheless. -->
+
+<!--
+## Other questions
 (Q) But do we actually care about that? How big *are* Gauss-Newton steps? In the end, aren't we just linearizing and approximating stuff *anyway*, since Gauss-Newton is a first order method? 25 degrees seems like a lot! I think we can just go ahead and use the (I + w^x) approximation.
 
 (Q) What about the exponential map?
@@ -308,3 +358,4 @@ $$
 $$
 
 Why do they accumulate instead of updating $\zeta_0$ in each iteration?
+ -->
