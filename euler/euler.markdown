@@ -20,13 +20,13 @@ Estimating rotations
 
 A common problem in computer vision is finding out how a thing is rotated and translated.
 
-If you want to make a quadcopter [land on a robotic vacuum cleaner](todo: iarc) using a downward facing camera, part of that problem is calculating where you are relative to the robot - or where the robot is relative to you - so you know where you need to go.
+If you want to make a quadcopter [land on a robotic vacuum cleaner](todo: iarc) using a camera, part of the problem is calculating where you are relative to the robot&mdash;or where the robot is relative to you&mdash;so you know where you need to go.
 
 <!-- ![](lander.gif) -->
 
 If you want reconstruct a 3D model of a scene from photographs, part of the problem is calculating how the camera was rotated and translated between each photo. Using that you can triangulate the 3D coordinate of corresponding pixels by casting rays in the direction they came from and computing where they intersect in 3D.
 
-Calculating how your vacuum cleaner robot is positioned relative to your quadcopter, or how a camera moves through a scene as it takes photos of it, can both be turned into a type of optimization problem - a nail for our hammer.
+Calculating how your vacuum cleaner robot is positioned relative to your quadcopter, or how a camera moves through a scene as it takes photos of it, can both be turned into a type of optimization problem&mdash;a nail for our hammer.
 
 However, it'll involve **3D rotations**, and that is where things can get nasty.
 
@@ -74,26 +74,30 @@ When we found pixel patches in the photograph and searched for matching patches 
 
 Mathematically we could write this as
 
-    E = sum for i=1..N (x[i] - u[i])^2 + (y[i] - v[i])^2
+    E = 0
+    for i = 1..N
+        E += (u_est[i] - u[i])^2 + (v_est[i] - v[i])^2
 
-u,v are the 2D coordinates for those patches in the photo, and x,y are the projected box coordinates:
+u,v are the 2D coordinates for those patches in the photo, and u_est,v_est are the projected box coordinates:
 
-    x,y = perspective_projection(R*p + T)
+    u_est,v_est = perspective_projection(R*p + T)
 
-The 3D box-space coordinate `p` is first transformed (by the rotation matrix R and translation vector T) from box coordinates into camera coordinates, and then transformed to 2D by a perspective projection.
+The 3D vector `p` is first transformed (by the rotation matrix R and translation vector T) from box coordinates into camera coordinates, and then transformed to a 2D vector by perspective projection.
 
-The quality measure E is a function of the rotation and translation. Plug in R and T, get a value. The value is zero when the predicted 2D coordinates match the observed ones, and positive otherwise. In that sense we really ought to call it an error metric.
+Our quality measure E is a function of the rotation and translation. Plug in R and T, get a value. The value is zero when the predicted 2D coordinates match the observed ones, and positive otherwise (In that sense we can call it a measure of error, rather than quality). So if we want to find the true pose of the book, we just need to find values for R and T that make the error as small as possible.
 
-We now have an **optimization problem**.
+<!-- We now have an **optimization problem**. -->
 
-If we want to find the true values for R and T, we just need to find values for them that make the error as small as possible. How? Well I wrote gradient descent in the title of this article, and somewhere along the line I was going to use it to make a point about Euler angles...
+How? Well I wrote gradient descent in the title of this article, and somewhere along the line I was going to use it to make a point about Euler angles...
 
 <!-- Let's use Euler angles. But uh oh, gimbal lock. -->
 
 Finding R and T by minimizing E
 -------------------------------
 
-We want to make the error smaller by adjusting R and T. One way to do so is to look at how E changes for a change in R and T. To illustrate, if we had the function
+We want to adjust R and T to make the error smaller. One way to do so is to look at how E changes for a change in R and T.
+
+If we had the function
 
     f(x) = x^2
 
@@ -107,7 +111,7 @@ One way to adjust x, starting with an initial guess x[0], is therefore
 
     x[n+1] = x[n] - gain*2*x[n]
 
-and indeed this will make f(x) smaller (or bigger, if you set the gain too high. Decent software packages, like matlab or numpy, do additional checks and number-massaging to protect you from stuff like that).
+and indeed this will make f(x) smaller (or bigger, if you're not careful. Decent software packages, like matlab or numpy, do additional checks and number-massaging to protect you from stuff like that).
 
 <!-- One such parametrization is the *rotation matrix*: a 3x3 matrix of mutually perpendicular and unit length columns. This is not a nice parametrization, because not all 3x3 matrices are valid rotation matrices. So if you, say, wanted to generate a random rotation, you could not just sample 9 numbers and put them in a matrix. -->
 
