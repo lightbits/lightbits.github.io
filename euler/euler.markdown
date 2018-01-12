@@ -13,29 +13,29 @@ With increasing computer power and a desire for rapid iteration, having a hammer
 
 I have since come to appreciate optimization as a powerful technique that can solve problems whose closed-form solution (if it even exists) is so far beyond my mathematics / algorithms knowledge that I couldn't even begin to approach it in any other way.
 
-I have also learned that 3D rotations are weird! But to show what I mean by that, I need to dive into a specific problem.
+I have also learned that 3D rotations are weird. But to explain this, I have to dive into a specific problem.
 
 Estimating rotations
 --------------------
 
 A common problem in computer vision is finding out how a thing is rotated and translated.
 
-If you want to make a quadcopter [land on a robotic vacuum cleaner](todo: iarc) using a downward facing camera, part of that problem is calculating where the robot is relative to you, so you know where you need to go.
+If you want to make a quadcopter [land on a robotic vacuum cleaner](todo: iarc) using a downward facing camera, part of that problem is calculating where you are relative to the robot - or where the robot is relative to you - so you know where you need to go.
 
-![](lander.gif)
+<!-- ![](lander.gif) -->
 
-If you want reconstruct a 3D model of a scene from multiple images, part of the problem is calculating how each camera is rotated and translated relative to each other. Using that you can triangulate the 3D coordinate of corresponding pixels by casting rays in the direction they came from and computing where they intersect in 3D.
+If you want reconstruct a 3D model of a scene from photographs, part of the problem is calculating how the camera was rotated and translated between each photo. Using that you can triangulate the 3D coordinate of corresponding pixels by casting rays in the direction they came from and computing where they intersect in 3D.
 
-Calculating how a vacuum cleaner robot is positioned relative to the camera, or how a camera taking one photo is positioned relative to another, can both be turned into a type of optimization problem - a nail for our hammer.
+Calculating how your vacuum cleaner robot is positioned relative to your quadcopter, or how a camera moves through a scene as it takes photos of it, can both be turned into a type of optimization problem - a nail for our hammer.
 
-However, it will involve **3D rotations**, and that is where things can get nasty.
+However, it'll involve **3D rotations**, and that is where things can get nasty.
 
 Example problem
 ---------------
 
 Books and CD covers are often used in example problems (and in youtube videos of object tracking algorithms) because they have a lot of **texture**, making them an easy case for computer vision algorithms.
 
-So here's a book I picked from my shelf.
+Here's a book I picked from my shelf.
 
 <img src="book/book2.jpg" style="max-width:320px;width:100%;">
 
@@ -45,9 +45,9 @@ But to simplify our mathematical discussion we'll assume this book is nothing mo
 
 ![](matches.png)
 
-At this point, your typical computer vision text book will start to tell you about the Perspective-N-Point problem and show you how easily you can recover the rotation and translation matrices using linear algebra and Singular Value Decomposition.
+At this point, your typical computer vision text book will start to tell you about the Perspective-N-Point problem and show you how easily you can recover the rotation and translation matrices using linear algebra and Singular Value Decomposition...
 
-But that's an **elegant solution**.
+...but that's an **elegant solution**.
 
 We don't have time to learn this PnP stuff, but we do know how to use a hammer and we don't care about being efficient (maybe later we'll have to dig into it, but not right now). So let's turn this problem into a nail.
 
@@ -55,14 +55,14 @@ We don't have time to learn this PnP stuff, but we do know how to use a hammer a
 
 A nail version of this problem is similar to most nail versions of problems, and consists of
 1. guessing the answer,
-2. measuring how off it was, and
+2. measuring how wrong it was, and
 3. guessing the answer again (but now you are educated).
 
 In the context of book-pose-estimation, it means we guess the pose of the book. To measure how bad our guess was, we can render the book as seen by my camera (a handheld Canon with heavy lens distortion).
 
 ![](reproject1.jpg)
 
-We can look at this as a person and say "yup that's pretty close". But it's too slow to ask a person after each guess. If we want to automate this with a computer we need to be *quantitative*. We have lots of options to measure the quantitative quality of our guess, most of them invented by grad students who proceed to write papers about it...
+We can look at this as a person and say "yup that's pretty close". But it's too slow to ask a person after each guess. If we want to automate this with a computer we need to be *quantitative*. We have lots of options to measure the quantitative quality of our guess.
 
 Here's one that's pretty popular...
 
@@ -84,26 +84,54 @@ The 3D box-space coordinate `p` is first transformed (by the rotation matrix R a
 
 The quality measure E is a function of the rotation and translation. Plug in R and T, get a value. The value is zero when the predicted 2D coordinates match the observed ones, and positive otherwise. In that sense we really ought to call it an error metric.
 
-<!-- We now have an **optimization problem**. -->
+We now have an **optimization problem**.
 
-If we want to find the true values for R and T, we just need to find the values that make the error as small as possible. How? Well I wrote **gradient descent** in the title of this article, and somewhere along the line I was going to use it to make a point about Euler angles...
+If we want to find the true values for R and T, we just need to find values for them that make the error as small as possible. How? Well I wrote gradient descent in the title of this article, and somewhere along the line I was going to use it to make a point about Euler angles...
 
 <!-- Let's use Euler angles. But uh oh, gimbal lock. -->
 
-Gradient descent
-----------------
+Finding R and T by minimizing E
+-------------------------------
 
-(algorithms in established software packages like matlab or numpy do additional numerical massaging to increase robustness.)
+We want to make the error smaller by adjusting R and T. One way to do so is to look at how E changes for a change in R and T. To illustrate, if we had the function
 
-Gradient descent works by calculating the derivative of E with respect to the parameters we are after. The derivative of E tells us how the error changes for a change in R and T.
+    f(x) = x^2
+
+the derivative (the gradient) tells us how the value of f changes for an increase in x:
+
+    diff(f,x) = 2x
+
+In other words, we can use the gradient as an indication of the direction we need to adjust x: If the gradient is positive, it means f increases for an increase of x (so we should decrease x); if the gradient is negative, it means f decreases for an increase of x (so we should increase x).
+
+One way to adjust x, starting with an initial guess x[0], is therefore
+
+    x[n+1] = x[n] - gain*2*x[n]
+
+and indeed this will make f(x) smaller (or bigger, if you set the gain too high. Decent software packages, like matlab or numpy, do additional checks and number-massaging to protect you from stuff like that).
 
 <!-- One such parametrization is the *rotation matrix*: a 3x3 matrix of mutually perpendicular and unit length columns. This is not a nice parametrization, because not all 3x3 matrices are valid rotation matrices. So if you, say, wanted to generate a random rotation, you could not just sample 9 numbers and put them in a matrix. -->
 
-Some optimization methods, like *particle swarm optimization*, try to find the optimal parameters by evaluating the error function at many random locations in the parameter space, and share information between samples to pinpoint the location of the minimum.
+<!-- Some optimization methods, like *particle swarm optimization*, try to find the optimal parameters by evaluating the error at random locations in the parameter space and share information between samples to pinpoint the location of the minimum. -->
 
-Those methods work fine with Euler angles because they don't rely on the gradient of the error.
+<!-- Those methods work fine with Euler angles because they don't rely on the gradient of the error. -->
 
 <!-- Gradient-based methods, like the first order Gauss-Newton method, try find the optimal parameters by iteratively solving a *linear* least squares problem, which involves taking the derivative of the cost function with respect to the pose parameters. It turns out that this opens a can of worms when your parameters involve rotation. -->
+
+The derivative of a rotation matrix
+-----------------------------------
+
+You're ok with calculating the derivative with respect to a single variable. Vectors and matrices can be kinda tricky sometimes, but with the help of online tools (todo) you still feel comfortable that you can handle it.
+
+    e[i] = length_squared(project(R*p[i] + T) - u[i])
+         = (project(R*p[i] + T) - u[i])' (project(R*p[i] + T) - u[i])
+
+Uh oh, how does one take the derivative with respect to a matrix?
+
+But a rotation matrix is not just a 3x3 array of numbers you can choose freely - not all 3x3 matrices is a valid rotation matrix - there's some constraints among the elements.
+
+(You can still do it, but you would end up with a *constrained optimization* problem to ensure that the numbers form a valid rotation. We have tools to solve those, but for some reason I never see people do it for estimating rotations, so maybe there's something else involved. Sure, quaternions is one type of constrained optimization, but even that is usually bodged by normalizing afterwards and treating it as unconstrained.)
+
+What people usually do at this point is to parametrize the rotation matrix in terms of something else - like Euler angles.
 
 What is gimbal lock?
 --------------------
@@ -114,11 +142,9 @@ For the red plate I am adjusting rx and keeping rz fixed, for the green plate I 
 
 Why is this a problem?
 
-![](img1.png)
+<img src="book/book1.jpg" style="max-width:320px;width:100%;">
 
-Well if the true rotation is at the sideways angle. todo: image
-
-But tilted slightly. todo: show camera and tilted object from the side.
+Well if the true rotation is at the sideways angle.
 
 But in the local case, looking at the gradient, two of our motions are equivalent.
 
