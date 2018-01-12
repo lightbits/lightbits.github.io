@@ -60,17 +60,17 @@ A nail version of this problem is similar to most nail versions of problems, and
 
 In the context of book-pose-estimation, it means we guess the pose of the book. To measure how bad our guess was, we can render the book as seen by my camera (a handheld Canon with heavy lens distortion).
 
-![](reproject1.jpg)
+![](reproject1-v3.jpg)
 
 We can look at this as a person and say "yup that's pretty close". But it's too slow to ask a person after each guess. If we want to automate this with a computer we need to be *quantitative*. We have lots of options to measure the quantitative quality of our guess.
 
 Here's one that's pretty popular...
 
-![](reproject2.png)
+![](reproject2-v3.jpg)
 
 When we found pixel patches in the photograph and searched for matching patches in our 3D book, we got a bunch of 2D-3D correspondences: for each 2D patch coordinate in the photo, we have one 3D coordinate on the 3D box. One measure of the quality of our guess is the sum of squared distances between those 3D coordinates (projected into the image) and their matching 2D coordinates.
 
-![](reproject3.png)
+![](reproject3-v2.jpg)
 
 Mathematically we could write this as
 
@@ -86,11 +86,7 @@ The 3D vector `p` is first transformed (by the rotation matrix R and translation
 
 Our quality measure E is a function of the rotation and translation. Plug in R and T, get a value. The value is zero when the predicted 2D coordinates match the observed ones, and positive otherwise (In that sense we can call it a measure of error, rather than quality). So if we want to find the true pose of the book, we just need to find values for R and T that make the error as small as possible.
 
-<!-- We now have an **optimization problem**. -->
-
 How? Well I wrote gradient descent in the title of this article, and somewhere along the line I was going to use it to make a point about Euler angles...
-
-<!-- Let's use Euler angles. But uh oh, gimbal lock. -->
 
 Finding R and T by minimizing E
 -------------------------------
@@ -116,18 +112,32 @@ This will make f(x) smaller and smaller (or bigger, if you're not careful. Decen
 The derivative of a rotation matrix
 -----------------------------------
 
-You're ok with calculating the derivative with respect to a single variable. Vectors and matrices can be kinda tricky sometimes, but with the help of online tools (todo) you still feel comfortable that you can handle it.
+The derivative of `x^2` is simple, but it might take you longer than you'd like to differentiate more complex expressions&mdash;possibly involving matrix multiplications and stuff. Luckily we have some pretty neat tools to do that for us&mdash;gone are the days when it was a symbol of hard work and dedication if your paper had pages upon pages of calculus, rigorously deriving each expression by hand (I still see papers like that for some reason).
 
-    e[i] = length_squared(project(R*p[i] + T) - u[i])
-         = (project(R*p[i] + T) - u[i])' (project(R*p[i] + T) - u[i])
+Look for optimization libraries with *automatic differentiation*. You could also use a symbolic processor (found in MATLAB or Octave) to derive analytic expressions and translate them into your code. You could also use this [online tool](). The simplest thing to do, however, might just be bodge it with finite differences:
 
-Uh oh, how does one take the derivative with respect to a matrix?
+    dfdx = (f(x+dx) - f(x-dx)) / 2dx
 
-But a rotation matrix is not just a 3x3 array of numbers you can choose freely - not all 3x3 matrices is a valid rotation matrix - there's some constraints among the elements.
+carefully selecting dx to be small enough, but not so small as to cause floating point catastrophies. If you have a function that takes multiple numbers, like our error function E, it works as you might expect:
 
-(You can still do it, but you would end up with a *constrained optimization* problem to ensure that the numbers form a valid rotation. We have tools to solve those, but for some reason I never see people do it for estimating rotations, so maybe there's something else involved. Sure, quaternions is one type of constrained optimization, but even that is usually bodged by normalizing afterwards and treating it as unconstrained.)
+    dfdx = (f(x+dx, y, z) - f(x-dx, y, z)) / 2dx
+    dfdy = (f(x, y+dy, z) - f(x, y-dy, z)) / 2dy
+    dfdz = (f(x, y, z+dz) - f(x, y, z-dz)) / 2dz
+
+This works for any ugly function f you can reasonably type up in code. Our function E is pretty ugly too! It has matrix multiplications and a weird 3D-2D projection with lens distortion. Yes it would be more efficient to derive analytic expressions, but again, but this article is about bodging stuff and using hammers when we're pressed on time.
+ <!-- The fact that I can just code up any camera projection with arbitrary distortion, and add all sorts of stuff to my error metric, without needing to pull out my pen and paper and memories from calc 2 is... -->
+
+Wait.
+
+You know that feeling when you realize something is harder than you first thought?
+
+How do we take the derivative with respect to a rotation matrix? It's not a 3x3 pile of numbers we can choose freely, since not all 3x3 matrices is a valid rotation matrix; there's some constraints between the elements. So we can't just do finite differences on 9 numbers `r11, r12, r13 ...` for each element in the matrix, and use that for our gradient &sup1;.
 
 What people usually do at this point is to parametrize the rotation matrix in terms of something else - like Euler angles.
+
+<span style="color:#999;">
+&sup1; Well we could, but then we get a *constrained* optimization problem to ensure that you update `r11, r12, etc` in the space of valid rotation matrices. We have tools to solve those, but for some reason I never see people do it for estimating rotations. Quaternions also gives a constrained optimization, but what I see people do is just treat it as unconstrained and normalize the quaternion after each update.
+</span>
 
 What is gimbal lock?
 --------------------
