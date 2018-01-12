@@ -95,23 +95,15 @@ How? Well I wrote gradient descent in the title of this article, and somewhere a
 Finding R and T by minimizing E
 -------------------------------
 
-We want to adjust R and T to make the error smaller. One way to do so is to look at how E changes for a change in R and T.
+We want to adjust R and T to make the error smaller. One way to do so is to look at how E changes for a change in R and T. For example, if we had the function `f(x) = x^2`, the derivative with respect to x (the gradient) says how the value of f changes for an increase in x. In this case, the derivative is `2x` so f will increase when x is positive and decrease when x is negative.
 
-If we had the function
+In other words, the gradient is an indication of the direction we can adjust our parameters: If the gradient is positive, it means f increases for an increase of x (so we should decrease x); if the gradient is negative, f will decrease for an increase of x (so we should increase x).
 
-    f(x) = x^2
-
-the derivative (the gradient) tells us how the value of f changes for an increase in x:
-
-    diff(f,x) = 2x
-
-In other words, we can use the gradient as an indication of the direction we need to adjust x: If the gradient is positive, it means f increases for an increase of x (so we should decrease x); if the gradient is negative, it means f decreases for an increase of x (so we should increase x).
-
-One way to adjust x, starting with an initial guess x[0], is therefore
+One way to adjust x, starting from an initial guess, could then be
 
     x[n+1] = x[n] - gain*2*x[n]
 
-and indeed this will make f(x) smaller (or bigger, if you're not careful. Decent software packages, like matlab or numpy, do additional checks and number-massaging to protect you from stuff like that).
+This will make f(x) smaller and smaller (or bigger, if you're not careful. Decent software packages, like matlab or numpy, do additional checks and number-massaging to prevent that) until it stops. With some luck, the value of x at that point is even what you wanted.
 
 <!-- One such parametrization is the *rotation matrix*: a 3x3 matrix of mutually perpendicular and unit length columns. This is not a nice parametrization, because not all 3x3 matrices are valid rotation matrices. So if you, say, wanted to generate a random rotation, you could not just sample 9 numbers and put them in a matrix. -->
 
