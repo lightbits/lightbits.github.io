@@ -128,46 +128,48 @@ How do we take the derivative with respect to a rotation matrix? It's not a 3x3 
 What people usually do at this point is to parametrize the rotation matrix in terms of something else - like Euler angles.
 
 <span style="color:#999;">
-&sup1; Well we could, but then we get a *constrained* optimization problem to ensure that you update `r11, r12, etc` in the space of valid rotation matrices. We have tools to solve those, but for some reason I never see people do it for estimating rotations. Quaternions also gives a constrained optimization, but what I see people do is just treat it as unconstrained and normalize the quaternion after each update.
+&sup1; NERDY TANGENT. We could, but then we get a *constrained* optimization problem to ensure that `r11, r12, ...` are kept in the space of valid rotation matrices. We have tools to solve those, but for some reason I never see people do it for estimating rotations. Quaternions calls for constrained optimization, but I've only seen people treat it as unconstrained and normalize the quaternion after each update.
 </span>
 
 Using Euler angles
 ------------------
 
-Introduce rx, ry, rz.
+Euler angles is a so-called *minimal* parametrization, in that they use the minimal amount of numbers (three) to define a rotation. By virtue of being minimal, those numbers can each be chosen freely, without concern or being constrained by the others.
 
-    euler_xyz(rx, ry, rz):
-        Rx = 1    0        0
-             0 cos(rx) -sin(rx)
-             0 sin(rx)  cos(rx)
+<!-- euler_xyz(rx, ry, rz):
+    Rx = 1    0        0
+         0 cos(rx) -sin(rx)
+         0 sin(rx)  cos(rx)
 
-        Ry =  cos(ry) 0 sin(ry)
-                 0    1    0
-             -sin(ry) 0 cos(ry)
+    Ry =  cos(ry) 0 sin(ry)
+             0    1    0
+         -sin(ry) 0 cos(ry)
 
-        Rz = cos(rz) -sin(rz) 0
-             sin(rz)  cos(rz) 0
-                0        0    1
+    Rz = cos(rz) -sin(rz) 0
+         sin(rz)  cos(rz) 0
+            0        0    1
 
-        return Rx*Ry*Rz
+    return Rx*Ry*Rz -->
 
-Now we can write code to update our six parameters.
+That sounds a bit like what we're after, so we'll add a function that takes three angles and returns a rotation matrix following some Euler angle convention, like x,y,z or z,y,x.
+
+In total we then have three variables for rotation (rx,ry,rz) and three variables for translation (tx,ty,tz). Calling our quality measure function by E, for short, we can update our six variables with gradient descent:
 
     update_parameters(rx,ry,rz, tx,ty,tz):
-        dEdrx = (E(euler(rx+drx, ry, rz), [tx, ty, tz]) -
+        dedrx = (E(euler(rx+drx, ry, rz), [tx, ty, tz]) -
                  E(euler(rx-drx, ry, rz), [tx, ty, tz])) / 2drx
-              .
-              .
-              .
-        dEdtz = (E(euler(rx, ry, rz), [tx, ty, tz+dtz]) -
+             ...
+        dedtz = (E(euler(rx, ry, rz), [tx, ty, tz+dtz]) -
                  E(euler(rx, ry, rz), [tx, ty, tz-dtz])) / 2dtz
 
-        rx -= gain*dEdrx
-        ry -= gain*dEdry
-        rz -= gain*dEdrz
-        tx -= gain*dEdtx
-        ty -= gain*dEdty
-        tz -= gain*dEdtz
+        rx -= gain*dedrx
+        ry -= gain*dedry
+        rz -= gain*dedrz
+        tx -= gain*dedtx
+        ty -= gain*dedty
+        tz -= gain*dedtz
+
+This will **sort of** work!
 
 What is gimbal lock?
 --------------------
