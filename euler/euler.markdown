@@ -115,7 +115,7 @@ The derivative of a rotation matrix
 
 The derivative of `x^2` is simple, but it might take you longer than you'd like to differentiate more complex expressions&mdash;possibly involving matrix multiplications and stuff. Luckily we have some pretty neat tools to do that for us&mdash;gone are the days when it was a symbol of hard work and dedication if your paper had pages upon pages of calculus, rigorously deriving each expression by hand (I still see papers like that for some reason).
 
-Look for optimization libraries with *automatic differentiation*. You could also use a symbolic processor (found in MATLAB or Octave) to derive analytic expressions and translate them into your code. You could also use this [online tool](). The simplest thing to do, however, might just be bodge it with finite differences:
+Look for optimization libraries with *automatic differentiation*. You could also use a symbolic processor (found in MATLAB or Octave) to derive analytic expressions and translate them into your code. You could also use this [online tool](). The simplest thing to do, however, might just be botch it with finite differences:
 
     dfdx = (f(x+dx) - f(x-dx)) / 2dx
 
@@ -125,7 +125,7 @@ carefully selecting dx to be small enough, but not so small as to cause floating
     dfdy = (f(x, y+dy, z) - f(x, y-dy, z)) / 2dy
     dfdz = (f(x, y, z+dz) - f(x, y, z-dz)) / 2dz
 
-This works for any ugly function f you can reasonably type up in code. Our function E is pretty ugly too! It has matrix multiplications and a weird 3D-2D projection with lens distortion. Yes it would be more efficient to derive analytic expressions, but again, but this article is about bodging stuff and using hammers when we're pressed on time.
+This works for any ugly function f you can reasonably type up in code. Our function E is pretty ugly too! It has matrix multiplications and a weird 3D-2D projection with lens distortion. Yes it would be more efficient to derive analytic expressions, but again, but this article is about botching stuff and using hammers when we're pressed on time.
  <!-- The fact that I can just code up any camera projection with arbitrary distortion, and add all sorts of stuff to my error metric, without needing to pull out my pen and paper and memories from calc 2 is... -->
 
 Wait.
