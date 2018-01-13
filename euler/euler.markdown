@@ -98,7 +98,9 @@ The gradient is an indication of the direction we can adjust our parameters: If 
 
 One way to adjust x, starting from an initial guess, could therefore be `x += -gain*dfdx(x)`.
 
-This will make f(x) smaller and smaller until it stops, hopefully at zero (or it blows up to infinity, if you're not careful, but decent software packages do additional checks and number-massaging to prevent that). With some luck, the value of x at that point is even what you wanted.
+![](gradientdescent.png)
+
+This will make f(x) smaller and smaller until it stops, hopefully at zero. With some luck, the value of x at that point is even what you wanted. (Also likely is that it blows up to infinity, if you're not careful, but decent software packages do additional checks and number-massaging to prevent that)
 
 The derivative of a rotation matrix
 -----------------------------------
@@ -117,7 +119,7 @@ carefully selecting dx to be small enough, but not so small as to cause a floati
 
 This works for any ugly function you can reasonably code up. In fact, our error function is pretty ugly: it has matrix multiplications and a weird 3D-2D projection with lens distortion. It would surely be more efficient (runtime-wise) to derive an analytic expression, but the generality of finite differences makes it nice when you're pressed on time.
 
-Wait.
+... wait ...
 
 You know that feeling when you realize something is harder than you first thought?
 
