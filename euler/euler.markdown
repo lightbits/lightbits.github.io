@@ -72,17 +72,18 @@ When we found pixel patches in the photograph and searched for matching patches 
 
 ![](reproject3-v2.jpg)
 
-Mathematically we could write this as
+In pseudo-code we could write this as
 
-    E = 0
-    for i = 1..N
-        E += (u_est[i] - u[i])^2 + (v_est[i] - v[i])^2
+    measure_quality(matrix3x3 R, vector3 T):
+        E = 0
+        for u,v,p in patches
+            u_est,v_est = camera_projection(R*p + T)
+            du = u_est-u
+            dv = v_est-v
+            E += du*du + dv*dv
+        return E
 
-u,v are the 2D coordinates for those patches in the photo, and u_est,v_est are the projected box coordinates:
-
-    u_est,v_est = perspective_projection(R*p + T)
-
-The 3D vector `p` is first transformed (by the rotation matrix R and translation vector T) from box coordinates into camera coordinates, and then transformed to a 2D vector by perspective projection.
+`u,v` is the 2D coordinate for each patch in the photo and `p` is the corresponding 3D coordinate. The 3D vector `p` is first transformed (by the rotation matrix R and translation vector T) from box coordinates into camera coordinates, and then transformed to a 2D vector by perspective projection.
 
 Our quality measure E is a function of the rotation and translation. Plug in R and T, get a value. The value is zero when the predicted 2D coordinates match the observed ones, and positive otherwise (In that sense we can call it a measure of error, rather than quality). So if we want to find the true pose of the book, we just need to find values for R and T that make the error as small as possible.
 
@@ -204,10 +205,8 @@ Fixing gimbal lock with localized Euler angles
 ----------------------------------------------
 The example above shows that the Euler angle parametrization can lead to numerical instability, potentially causing gradient descent to slow to a grind under the right conditions, or causing Gauss-Newton to blow up when the Hessian is close to singular.
 
-
-
-<!-- todo: replace with 3D textured cube. -->
-<!-- todo: show cube rotating into singularity, with euler angle printed on the side -->
+<!-- todo: replace with 3D textured book. -->
+<!-- todo: show book rotating into singularity, with euler angle printed on the side -->
 <!-- todo: show that we have lost a degree of freedom -->
 <!-- todo: Let R0 = singularity rotation. And left-mul variable R -->
 
@@ -227,6 +226,8 @@ The red plate is adjusting ez, the green is adjusting ey and the blue is adjusti
 
 Reducing computational cost
 ---------------------------
+The above is fine if you're doing finite differences. But if you want analytic derivatives, or you're doing automatic differentiation, you'll find it to be kinda computationally nasty&mdash;with all those cosines and sines.
+
 The local parametrization above is pretty intuitive, but it's not very practical from a computing standpoint since exactly evaluating the derivative will involve all sorts of costly sines and cosines. However, with our assumption that the optimization parameters remain small, we can make some useful approximations.
 
 For small values of x: $\cos(x) \approx 1$ and $\sin(x) \approx x$, so we can replace all those nasty trigonmetric functions in the local Euler matrix with linear expressions. We could also parametrize our local rotation in terms of an angle-axis rotation:
