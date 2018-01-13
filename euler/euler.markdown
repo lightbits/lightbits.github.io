@@ -171,6 +171,14 @@ In total we then have three variables for rotation (rx,ry,rz) and three variable
 
 This will **sort of** work!
 
+![](video.gif)
+
+It's a bit slow and unstable... but there's ways to fix that (like using someone else's library)&sup1;.
+
+<span style="color:#999;">
+&sup1;When I made this gif my parameters did blow up on the first try. I hacked in a fix by adding a line search: instead of choosing an arbitrary gain thing, you instead check the error at several points along the gradient direction and go to the point that had the lowest error. I also normalized the differences in the error function by dividing by the image width: squaring pixel coordinates gave really big values. It's still super slow, as you can see. That can be improved by using cooler methods like Gauss-Newton or Levenberg-Marquardt.
+</span>
+
 What is gimbal lock?
 --------------------
 
