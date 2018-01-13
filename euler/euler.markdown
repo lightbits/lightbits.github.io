@@ -75,24 +75,24 @@ When we found pixel patches in the photograph and searched for matching patches 
 In pseudo-code we could write this as
 
     measure_quality(matrix3x3 R, vector3 T):
-        E = 0
+        e = 0
         for u,v,p in patches
             u_est,v_est = camera_projection(R*p + T)
             du = u_est-u
             dv = v_est-v
-            E += du*du + dv*dv
-        return E
+            e += du*du + dv*dv
+        return e
 
 `u,v` is the 2D coordinate for each patch in the photo and `p` is the corresponding 3D coordinate. The 3D vector `p` is first transformed (by the rotation matrix R and translation vector T) from box coordinates into camera coordinates, and then transformed to a 2D vector by perspective projection.
 
-Our quality measure E is a function of the rotation and translation. Plug in R and T, get a value. The value is zero when the predicted 2D coordinates match the observed ones, and positive otherwise (In that sense we can call it a measure of error, rather than quality). So if we want to find the true pose of the book, we just need to find values for R and T that make the error as small as possible.
+Our quality measure is a function of the rotation and translation. Plug in R and T, get a value. The value is zero when the predicted 2D coordinates match the observed ones, and positive otherwise (in that sense we should call it a measure of error rather than quality). So if we want to find the true pose of the book, we just need to find values for R and T that make the error as small as possible.
 
 How? Well I wrote gradient descent in the title of this article, and somewhere along the line I was going to use it to make a point about Euler angles...
 
-Finding R and T by minimizing E
--------------------------------
+Gradient descent
+----------------
 
-We want to adjust R and T to make the error smaller. One way to do so is to look at how E changes for a change in R and T. For example, if we had the function `f(x) = x^2`, the derivative with respect to x (the gradient) says how the value of f changes for an increase in x. In this case, the derivative is `2x` so f will increase when x is positive and decrease when x is negative.
+We want to adjust R and T to make the error smaller. One way to do so is to look at how the error changes for a change in R and T. For example, if we had the function `f(x) = x^2`, the derivative with respect to x (the gradient) says how the value of f changes for an increase in x. In this case, the derivative is `2x` so f will increase when x is positive and decrease when x is negative.
 
 In other words, the gradient is an indication of the direction we can adjust our parameters: If the gradient is positive, it means f increases for an increase of x (so we should decrease x); if the gradient is negative, f will decrease for an increase of x (so we should increase x).
 
@@ -102,31 +102,22 @@ One way to adjust x, starting from an initial guess, could then be
 
 This will make f(x) smaller and smaller (or bigger, if you're not careful. Decent software packages, like matlab or numpy, do additional checks and number-massaging to prevent that) until it stops. With some luck, the value of x at that point is even what you wanted.
 
-<!-- One such parametrization is the *rotation matrix*: a 3x3 matrix of mutually perpendicular and unit length columns. This is not a nice parametrization, because not all 3x3 matrices are valid rotation matrices. So if you, say, wanted to generate a random rotation, you could not just sample 9 numbers and put them in a matrix. -->
-
-<!-- Some optimization methods, like *particle swarm optimization*, try to find the optimal parameters by evaluating the error at random locations in the parameter space and share information between samples to pinpoint the location of the minimum. -->
-
-<!-- Those methods work fine with Euler angles because they don't rely on the gradient of the error. -->
-
-<!-- Gradient-based methods, like the first order Gauss-Newton method, try find the optimal parameters by iteratively solving a *linear* least squares problem, which involves taking the derivative of the cost function with respect to the pose parameters. It turns out that this opens a can of worms when your parameters involve rotation. -->
-
 The derivative of a rotation matrix
 -----------------------------------
 
-The derivative of `x^2` is simple, but it might take you longer than you'd like to differentiate more complex expressions&mdash;possibly involving matrix multiplications and stuff. Luckily we have some pretty neat tools to do that for us&mdash;gone are the days when it was a symbol of hard work and dedication if your paper had pages upon pages of calculus, rigorously deriving each expression by hand (I still see papers like that for some reason).
+The derivative of `x^2` is simple, but it might take you longer than you'd like to differentiate more complex expressions, possibly involving matrix multiplications and stuff. Luckily we have some pretty neat tools to do that for us&mdash;gone are the days when it was a symbol of hard work and dedication if your paper had pages upon pages of calculus, rigorously deriving each expression by hand (I still see papers like that for some reason).
 
-Look for optimization libraries with *automatic differentiation*. You could also use a symbolic processor (found in MATLAB or Octave) to derive analytic expressions and translate them into your code. You could also use this [online tool](). The simplest thing to do, however, might just be botch it with finite differences:
+Look for libraries with *automatic differentiation*. Or, use a *symbolic processor* (found in MATLAB and Octave) to derive analytic expressions and translate them into your code. There's also an online [matrix calculus tool](). But the simplest solution might just be botch it with finite differences:
 
     dfdx = (f(x+dx) - f(x-dx)) / 2dx
 
-carefully selecting dx to be small enough, but not so small as to cause floating point catastrophies. If you have a function that takes multiple numbers, like our error function E, it works as you might expect:
+carefully selecting dx to be small enough to capture the local curvature of f, but not so small as to cause floating point catastrophies. If you have a function that takes multiple numbers, like our error function, it works as you might expect:
 
     dfdx = (f(x+dx, y, z) - f(x-dx, y, z)) / 2dx
     dfdy = (f(x, y+dy, z) - f(x, y-dy, z)) / 2dy
     dfdz = (f(x, y, z+dz) - f(x, y, z-dz)) / 2dz
 
-This works for any ugly function f you can reasonably type up in code. Our function E is pretty ugly too! It has matrix multiplications and a weird 3D-2D projection with lens distortion. Yes it would be more efficient to derive analytic expressions, but again, but this article is about botching stuff and using hammers when we're pressed on time.
- <!-- The fact that I can just code up any camera projection with arbitrary distortion, and add all sorts of stuff to my error metric, without needing to pull out my pen and paper and memories from calc 2 is... -->
+This works for any ugly function f you can reasonably type up in code. Our error function is pretty ugly too! It has matrix multiplications and a weird 3D-2D projection with lens distortion. Yes it would be more efficient to derive analytic expressions, but again, but this article is about botching stuff and using hammers when we're pressed on time.
 
 Wait.
 
@@ -145,6 +136,7 @@ What is gimbal lock?
 
 For the red plate I am adjusting rx and keeping rz fixed, for the green plate I am adjusting rz in the opposite direction and keeping rx fixed. I repeat this adjustment while adjusting ry for both plates toward 90 degrees, at which point they end up producing the same motion!
 
+<!-- todo: color blindness. these two appear the same in grayscale -->
 ![](cv-why-not-euler-anim0.gif)
 
 Why is this a problem?
@@ -162,6 +154,15 @@ There *is* a set of parameters that describe the rotation: if we... rx = 90, ry 
 And once we get there we have the same problem: now we can't rotate Y! (animation rotating rx, ry, rz)
 
 Also a problem in Gauss Newton and Gradient-based methods in general. Show non-invertible Hessian.
+
+<!-- ## Aside: Non-gradient-based optimization methods -->
+<!-- One such parametrization is the *rotation matrix*: a 3x3 matrix of mutually perpendicular and unit length columns. This is not a nice parametrization, because not all 3x3 matrices are valid rotation matrices. So if you, say, wanted to generate a random rotation, you could not just sample 9 numbers and put them in a matrix. -->
+
+<!-- Some optimization methods, like *particle swarm optimization*, try to find the optimal parameters by evaluating the error at random locations in the parameter space and share information between samples to pinpoint the location of the minimum. -->
+
+<!-- Those methods work fine with Euler angles because they don't rely on the gradient of the error. -->
+
+<!-- Gradient-based methods, like the first order Gauss-Newton method, try find the optimal parameters by iteratively solving a *linear* least squares problem, which involves taking the derivative of the cost function with respect to the pose parameters. It turns out that this opens a can of worms when your parameters involve rotation. -->
 
 Aside: It's also problematic for Gauss-Newton
 ---------------------------------------------
