@@ -68,7 +68,7 @@ Here's one that's pretty popular...
 
 ![](reproject2-v3.jpg)
 
-When we found pixel patches in the photograph and searched for matching patches in our 3D book, we got a bunch of 2D-3D correspondences: for each 2D patch coordinate in the photo, we have one 3D coordinate on the 3D box. One measure of the quality of our guess is the sum of squared distances between those 3D coordinates (projected into the image) and their matching 2D coordinates.
+When we found pixel patches in the photograph and searched for matching patches in our 3D book, we got a bunch of 2D-3D correspondences: for each 2D patch coordinate in the photo, we have one 3D coordinate on the 3D box. One measure of the quality of our guess is the average squared distance between those 3D coordinates (projected into the image) and their matching 2D coordinates.
 
 ![](reproject3-v2.jpg)
 
@@ -81,7 +81,7 @@ In pseudo-code we could write this as
             du = u_est-u
             dv = v_est-v
             e += du*du + dv*dv
-        return e
+        return e / num_patches
 
 `u,v` is the 2D coordinate for each patch in the photo and `p` is the corresponding 3D coordinate. The 3D vector `p` is first transformed (by the rotation matrix R and translation vector T) from box coordinates into camera coordinates, and then transformed to a 2D vector by perspective projection.
 
