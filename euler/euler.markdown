@@ -92,15 +92,13 @@ How? Well I wrote gradient descent in the title of this article, and somewhere a
 Gradient descent
 ----------------
 
-We want to adjust R and T to make the error smaller. One way to do so is to look at how the error changes for a change in R and T. For example, if we had the function `f(x) = x^2`, the derivative with respect to x (the gradient) says how the value of f changes for an increase in x. In this case, the derivative is `2x` so f will increase when x is positive and decrease when x is negative.
+We want to adjust R and T to make the error smaller. One way to do so is to look at how the error changes for a change in R and T. For example, if we had the function `f(x) = x^2`, the derivative with respect to x (the gradient) says how the value of f changes for an increase in x. In this case, the derivative is `dfdx(x) = 2x`, so f will decrease as x goes from negative infinity to zero, and increase as x goes from zero to positive infinity..
 
-In other words, the gradient is an indication of the direction we can adjust our parameters: If the gradient is positive, it means f increases for an increase of x (so we should decrease x); if the gradient is negative, f will decrease for an increase of x (so we should increase x).
+The gradient is an indication of the direction we can adjust our parameters: If the gradient is positive, it means f increases for an increase of x (so we should decrease x); if the gradient is negative, f will decrease for an increase of x (so we should increase x).
 
-One way to adjust x, starting from an initial guess, could then be
+One way to adjust x, starting from an initial guess, could therefore be `x += -gain*dfdx(x)`.
 
-    x[n+1] = x[n] - gain*2*x[n]
-
-This will make f(x) smaller and smaller (or bigger, if you're not careful. Decent software packages, like matlab or numpy, do additional checks and number-massaging to prevent that) until it stops. With some luck, the value of x at that point is even what you wanted.
+This will make f(x) smaller and smaller until it stops, hopefully at zero (or it blows up to infinity, if you're not careful, but decent software packages do additional checks and number-massaging to prevent that). With some luck, the value of x at that point is even what you wanted.
 
 The derivative of a rotation matrix
 -----------------------------------
@@ -111,13 +109,13 @@ Look for libraries with *automatic differentiation*. Or, use a *symbolic process
 
     dfdx = (f(x+dx) - f(x-dx)) / 2dx
 
-carefully selecting dx to be small enough to capture the local curvature of f, but not so small as to cause floating point catastrophies. If you have a function that takes multiple numbers, like our error function, it works as you might expect:
+carefully selecting dx to be small enough, but not so small as to cause a floating point catastrophy. If you have a function with multiple arguments, like our error function, you take the derivative of each one:
 
     dfdx = (f(x+dx, y, z) - f(x-dx, y, z)) / 2dx
     dfdy = (f(x, y+dy, z) - f(x, y-dy, z)) / 2dy
     dfdz = (f(x, y, z+dz) - f(x, y, z-dz)) / 2dz
 
-This works for any ugly function f you can reasonably type up in code. Our error function is pretty ugly too! It has matrix multiplications and a weird 3D-2D projection with lens distortion. Yes it would be more efficient to derive analytic expressions, but again, but this article is about botching stuff and using hammers when we're pressed on time.
+This works for any ugly function you can reasonably code up. In fact, our error function is pretty ugly: it has matrix multiplications and a weird 3D-2D projection with lens distortion. It would surely be more efficient (runtime-wise) to derive an analytic expression, but the generality of finite differences makes it nice when you're pressed on time.
 
 Wait.
 
@@ -130,6 +128,44 @@ What people usually do at this point is to parametrize the rotation matrix in te
 <span style="color:#999;">
 &sup1; Well we could, but then we get a *constrained* optimization problem to ensure that you update `r11, r12, etc` in the space of valid rotation matrices. We have tools to solve those, but for some reason I never see people do it for estimating rotations. Quaternions also gives a constrained optimization, but what I see people do is just treat it as unconstrained and normalize the quaternion after each update.
 </span>
+
+Using Euler angles
+------------------
+
+Introduce rx, ry, rz.
+
+    euler_xyz(rx, ry, rz):
+        Rx = 1    0        0
+             0 cos(rx) -sin(rx)
+             0 sin(rx)  cos(rx)
+
+        Ry =  cos(ry) 0 sin(ry)
+                 0    1    0
+             -sin(ry) 0 cos(ry)
+
+        Rz = cos(rz) -sin(rz) 0
+             sin(rz)  cos(rz) 0
+                0        0    1
+
+        return Rx*Ry*Rz
+
+Now we can write code to update our six parameters.
+
+    update_parameters(rx,ry,rz, tx,ty,tz):
+        dEdrx = (E(euler(rx+drx, ry, rz), [tx, ty, tz]) -
+                 E(euler(rx-drx, ry, rz), [tx, ty, tz])) / 2drx
+              .
+              .
+              .
+        dEdtz = (E(euler(rx, ry, rz), [tx, ty, tz+dtz]) -
+                 E(euler(rx, ry, rz), [tx, ty, tz-dtz])) / 2dtz
+
+        rx -= gain*dEdrx
+        ry -= gain*dEdry
+        rz -= gain*dEdrz
+        tx -= gain*dEdtx
+        ty -= gain*dEdty
+        tz -= gain*dEdtz
 
 What is gimbal lock?
 --------------------
