@@ -128,7 +128,7 @@ How do we take the derivative with respect to a rotation matrix? It's not a 3x3 
 What people usually do at this point is to parametrize the rotation matrix in terms of something else - like Euler angles.
 
 <span style="color:#999;">
-&sup1; NERDY TANGENT. We could, but then we get a *constrained* optimization problem to ensure that `r11, r12, ...` are kept in the space of valid rotation matrices. We have tools to solve those, but for some reason I never see people do it for estimating rotations. Quaternions calls for constrained optimization, but I've only seen people treat it as unconstrained and normalize the quaternion after each update.
+&sup1; We could, but then we get a *constrained* optimization problem to ensure that `r11, r12, ...` are kept in the space of valid rotation matrices. We have tools to solve those, but for some reason I never see people do it for estimating rotations. Quaternions calls for constrained optimization, but I've only seen people treat it as unconstrained and normalize the quaternion after each update.
 </span>
 
 Using Euler angles
@@ -153,7 +153,7 @@ Euler angles is a so-called *minimal* parametrization, in that they use the mini
 
 That sounds a bit like what we're after, so we'll add a function that takes three angles and returns a rotation matrix following some Euler angle convention, like x,y,z or z,y,x.
 
-In total we then have three variables for rotation (rx,ry,rz) and three variables for translation (tx,ty,tz). Calling our quality measure function by E, for short, we can update our six variables with gradient descent:
+In total we then have three variables for rotation (rx,ry,rz) and three variables for translation (tx,ty,tz). Calling our quality measure function by E, for short, we can update our six variables with gradient descent like so:
 
     update_parameters(rx,ry,rz, tx,ty,tz):
         dedrx = (E(euler(rx+drx, ry, rz), [tx, ty, tz]) -
@@ -187,11 +187,11 @@ For the red plate I am adjusting rx and keeping rz fixed, for the green plate I 
 <!-- todo: color blindness. these two appear the same in grayscale -->
 ![](cv-why-not-euler-anim0.gif)
 
-Why is this a problem?
+This is called gimbal lock, and happens no matter what Euler angle convention you use (although the specific rotation at which it happens will vary depending on the convention), but why is this a problem?
 
 <img src="book/book1.jpg" style="max-width:320px;width:100%;">
 
-Well if the true rotation is at the sideways angle.
+If our book is at a 90 degree angle.
 
 But in the local case, looking at the gradient, two of our motions are equivalent.
 
@@ -212,8 +212,7 @@ Also a problem in Gauss Newton and Gradient-based methods in general. Show non-i
 
 <!-- Gradient-based methods, like the first order Gauss-Newton method, try find the optimal parameters by iteratively solving a *linear* least squares problem, which involves taking the derivative of the cost function with respect to the pose parameters. It turns out that this opens a can of worms when your parameters involve rotation. -->
 
-Aside: It's also problematic for Gauss-Newton
----------------------------------------------
+## Aside: It's also problematic for Gauss-Newton
 When we use Gauss-Newton to find the optimal pose, our goal is to adjust the parameters with small updates, such that the resulting motion of our model will cause the cost function to decrease. For nonlinear least squares problems, this is done by linearizing each error term:
 
      E = sum (u' - u)^2 + (v' - v)^2
