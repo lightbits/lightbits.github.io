@@ -182,7 +182,7 @@ It's a bit slow and unstable... but there's ways to fix that (like using someone
 What is gimbal lock?
 --------------------
 
-Consider a plate that you can rotate by three angles rx, ry and rz around the x-, y- and z-axes respectively with the matrix `Rz(rz)*Ry(ry)*Rx(rx)`. Adjusting one of the angles in isolation will produce these three motions:
+Consider a plate that you can rotate by three angles rx, ry and rz around the x-, y- and z-axes respectively with the matrix `Rz(rz)*Ry(ry)*Rx(rx)`. Adjusting one of the angles in isolation produces these three motions:
 
 ![](plates1xyz.png)
 
@@ -290,7 +290,7 @@ Although we start out able to produce three distinctly different motions, we end
 
 <!-- In the example from the previous section we didn't run into any issues because the true rotation was nowhere near gimbal lock. But what if the book is standing on its side and we take our photo from a 45 degree pitch: -->
 
-It's not like we can't select rx,ry,rz to match the photo though: (-90,45,-90) looks like this:
+It's not like we can't select Euler angles that match the photo though: (-90,45,-90) looks like this:
 
 ![](sideways45.png)
 
