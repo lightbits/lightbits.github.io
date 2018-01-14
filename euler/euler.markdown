@@ -151,9 +151,9 @@ Euler angles is a so-called *minimal* parametrization, in that they use the mini
 
     return Rx*Ry*Rz -->
 
-That sounds a bit like what we're after, so we'll add a function that takes three angles and returns a rotation matrix following some Euler angle convention, like x,y,z or z,y,x.
+That sounds a bit like what we're after, so we'll add a function that takes three angles and returns a rotation matrix following some Euler angle convention, like x,y,z or z,y,x. In total we then have three variables for rotation (rx,ry,rz) and three variables for translation (tx,ty,tz).
 
-In total we then have three variables for rotation (rx,ry,rz) and three variables for translation (tx,ty,tz). Calling our quality measure function by E, for short, we can update our six variables with gradient descent like so:
+We can now update those six variables with gradient descent like so (I abbreviated the quality measure function to E):
 
     update_parameters(rx,ry,rz, tx,ty,tz):
         dedrx = (E(euler(rx+drx, ry, rz), [tx, ty, tz]) -
@@ -171,7 +171,7 @@ In total we then have three variables for rotation (rx,ry,rz) and three variable
 
 This will **sort of** work!
 
-![](video.gif)
+![](gradientdescent.gif)
 
 It's a bit slow and unstable... but there's ways to fix that (like using someone else's library)&sup1;.
 
@@ -182,24 +182,39 @@ It's a bit slow and unstable... but there's ways to fix that (like using someone
 What is gimbal lock?
 --------------------
 
-For the red plate I am adjusting rx and keeping rz fixed, for the green plate I am adjusting rz in the opposite direction and keeping rx fixed. I repeat this adjustment while adjusting ry for both plates toward 90 degrees, at which point they end up producing the same motion!
+Consider a plate that you can rotate by three angles rx, ry and rz around the x-, y- and z-axes respectively with the matrix `Rz(rz)*Ry(ry)*Rx(rx)`. Adjusting one of the angles in isolation will produce these three motions:
 
-<!-- todo: color blindness. these two appear the same in grayscale -->
-![](cv-why-not-euler-anim0.gif)
+![](plates1xyz.png)
 
-This is called gimbal lock, and happens no matter what Euler angle convention you use (although the specific rotation at which it happens will vary depending on the convention), but why is this a problem?
+They all look different, as you can see, but a funny thing happens when the y-axis angle gets close to 90 degrees...
+
+![](gimballock.gif)
+
+For the red plate I am adjusting rx and keeping rz fixed, for the blue plate I am adjusting rz in the opposite direction and keeping rx fixed. I repeat this adjustment while adjusting ry for both plates toward 90 degrees, at which point they end up producing the same motion!
+
+This loss of a degree of freedom is called gimbal lock, and happens no matter what Euler angle convention you use (although the specific rotation at which it happens will vary depending on the convention). This can be a problem if the true rotation is close to, or at, a gimbal lock.
+
+For example
 
 <img src="book/book1.jpg" style="max-width:320px;width:100%;">
 
-If our book is at a 90 degree angle.
+Your initial guess for the book's rotation now might be (0, 90, 0), which looks like this:
 
-But in the local case, looking at the gradient, two of our motions are equivalent.
+![](gimballock-book.png)
 
-In our local region (0,90,0), any small perturbation will probably produce an increase of the cost function. This means that gradient descent cannot progress any further. From the algorithm's point of view, doing anything is worse than doing nothing.
+<!-- Or it'll adjust unrelated parameters because they are now the ones that reduce the cost the most: for example, translating upwards and backwards. -->
+
+Remember, gradient descent only looks at small changes of the parameters. It's true that there is a set of parameters that produces the rotation we want, but seen from our initial place, those are far away and require our optimization to get worse before it gets better.
+
+However, neither adjusting rx or rz will produce that backward tilt.
 
 There *is* a set of parameters that describe the rotation: if we... rx = 90, ry = 45, rz = 90. But that's way different from rx = 0, ry = 90, rz = 0, and getting there from where we are would involve increasing the cost function - getting worse before it gets better.
 
-And once we get there we have the same problem: now we can't rotate Y! (animation rotating rx, ry, rz)
+And once we get there we have the same problem.
+
+<!-- In our local region (0,90,0), any small perturbation will probably produce an increase of the cost function. This means that gradient descent cannot progress any further. From the algorithm's point of view, doing anything is worse than doing nothing. -->
+
+So if your initial guess happened to be 0,90,0&mdash;which doesn't *look* unreasonable&mdash;you'll get stuck!
 
 Also a problem in Gauss Newton and Gradient-based methods in general. Show non-invertible Hessian.
 
