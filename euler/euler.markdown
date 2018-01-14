@@ -238,7 +238,7 @@ input {
     <label>rotate y [0 to 90 degrees]</label>
 </div>
 
-The two plates start out rotating about different axes, as you'd expect, but along the way the one on the right mysteriously starts looking more and more like the one on the left, until at last they look identical. What's the problem you say? Well here's an interactive puzzle for you, try to rotate the book to match the photo:
+The two plates start out rotating about different axes, as you'd expect, but along the way, the right one mysteriously starts looking more and more like the right one, until they finally look identical. So what? Well here's an interactive puzzle for you, try to rotate the book to match the photo:
 
 <div class="slider-wrap">
     <img src="book/book1.jpg" style="max-width:240px;">
@@ -283,26 +283,19 @@ The two plates start out rotating about different axes, as you'd expect, but alo
     <label>rotate y (both books)</label>
 </div>
 
-Although we start out able to produce three distinctly different motions, we end up only able to produce two, around this magical 90 degree sideways angle. This drop in degrees of freedom from three to two is called gimbal lock and happens no matter what Euler angle order you choose (although the point at which it happens will vary).
-<!-- comment: instead of telling the reader, show them, or better, let them figure it out on their own -->
+Although you start out able to produce three distinctly different motions, you can only produce two around that magical 90 degree sideways angle, and you are unable to get that backward pitch you are after. This drop in degrees of freedom from three to two is called gimbal lock and happens no matter what Euler angle order you choose (although the point at which it happens will vary).
 
-<!-- Like the two plates eventually becoming aligned as they approach 90 degrees, at this orientation the book can only be rotated about two different axes, neither of which will pitch the book backward to match the photo. -->
-
-<!-- In the example from the previous section we didn't run into any issues because the true rotation was nowhere near gimbal lock. But what if the book is standing on its side and we take our photo from a 45 degree pitch: -->
-
-It's not like we can't select Euler angles that match the photo though: (-90,45,-90) looks like this:
+However, it's not like we literally cannot find three Euler angles to match the photo; I was just artifically limiting your input range. For example, (-90,45,-90) looks like this:
 
 ![](sideways45.png)
 
 Indeed, if we rotate -90 degrees about the z-axis and -90 degrees about the x-axis, the middle rotation about the y-axis can now be used to control the pitch up or down.
 
-But alas, we find ourselves in the same rut at (-90,90,-90), where the book is seen head-on from the side. Again we can only rotate about two different axes; now we have lost the ability to rotate the book left or right!
-
-<!-- There is a set of parameters that describe the rotation -->
-
-<!-- : if we... rx = 90, ry = 45, rz = 90. But that's way different from rx = 0, ry = 90, rz = 0, and getting there from where we are would involve increasing the cost function - getting worse before it gets better. -->
+But alas, and you'll have to take my word for this, we find ourselves in the same rut at (-90,90,-90), where the book is seen head-on from the side. Again we can only rotate about two different axes, but now we have lost the ability to rotate the book left or right!
 
 ## How gimbal lock affects gradient descent
+
+<!-- In the example from the previous section we didn't run into any issues because the true rotation was nowhere near gimbal lock. But what if the book is standing on its side and we take our photo from a 45 degree pitch: -->
 
 While we can always *find* a set of angles that exactly reproduce the photo (as there is no rotation Euler angles cannot describe), the problem, in the context of gradient descent, is that those angles can be unintuitively far away from our current guess.
 
@@ -335,16 +328,13 @@ So if you happen to find yourself at that 90 degrees sideways angle, perhaps bec
 
 <!-- Also a problem in Gauss Newton and Gradient-based methods in general. Show non-invertible Hessian. -->
 
-<!-- ## Aside: Non-gradient-based optimization methods -->
-<!-- One such parametrization is the *rotation matrix*: a 3x3 matrix of mutually perpendicular and unit length columns. This is not a nice parametrization, because not all 3x3 matrices are valid rotation matrices. So if you, say, wanted to generate a random rotation, you could not just sample 9 numbers and put them in a matrix. -->
 
-<!-- Some optimization methods, like *particle swarm optimization*, try to find the optimal parameters by evaluating the error at random locations in the parameter space and share information between samples to pinpoint the location of the minimum. -->
+## (Aside) How gimbal lock affects other optimization methods
 
-<!-- Those methods work fine with Euler angles because they don't rely on the gradient of the error. -->
+Some optimization methods, like particle swarm optimization, try to find the optimal parameters by evaluating the error at random locations in the parameter space and share information between samples to pinpoint the location of the minimum.
 
-<!-- Gradient-based methods, like the first order Gauss-Newton method, try find the optimal parameters by iteratively solving a *linear* least squares problem, which involves taking the derivative of the cost function with respect to the pose parameters. It turns out that this opens a can of worms when your parameters involve rotation. -->
+Those methods work fine with Euler angles because they don't rely on the gradient of the error, and they are able to jump (more or less) to the solution (or to a close vicinity) directly. Gradient-based methods, like Gauss-Newton or gradient descent, try find the optimal parameters by looking at the current local vicinity.
 
-## Aside: It's also problematic for Gauss-Newton
 When we use Gauss-Newton to find the optimal pose, our goal is to adjust the parameters with small updates, such that the resulting motion of our model will cause the cost function to decrease. For nonlinear least squares problems, this is done by linearizing each error term:
 
      E = sum (u' - u)^2 + (v' - v)^2
