@@ -186,11 +186,8 @@ Consider a plate that you can rotate by three angles rx, ry and rz around the x-
 
 ![](plates1xyz.png)
 
-They all look clearly different, but a funny thing happens as the angle about the y-axis approaches 90 degrees...
-
+They all look clearly different, but a funny thing happens as the angle about the y-axis approaches 90 degrees. Here's an illustration:
 ![](gimballock.gif)
-
-Here's an illustration:
 
 * For the red plate I keep rz fixed and adjust rx back and forth.
 * For the blue plate I keep rx fixed and adjust rz back and forth (in the opposite direction).
@@ -198,17 +195,17 @@ Here's an illustration:
 
 The two plates start out rotating about different axes, as you'd expect, but along the way they mysteriously start looking more and more alike until their motions look identical.
 
-Although we started out able to produce three distinctly different motions, around this magical 90 degree sideways angle we can only produce two. This drop in degrees of freedom from three to two is called gimbal lock, and happens no matter what Euler angle order you choose (although the point at which it happens will vary).
+Although we started out able to produce three distinctly different motions, we end up only able to produce two, around this magical 90 degree sideways angle. This drop in degrees of freedom from three to two is called gimbal lock and happens no matter what Euler angle order you choose (although the point at which it happens will vary).
 
-While the example in the previous section had no issues, we run into trouble as soon as the true rotation is close to gimbal locking. For instance, if the book is standing on its side and we take our photo from a 45 degree pitch:
+In the example from the previous section we didn't run into any issues because the true rotation was nowhere near gimbal lock. But what if the book is standing on its side and we take our photo from a 45 degree pitch:
 
 <img src="book/book1.jpg" style="max-width:320px;width:100%;">
 
-Your initial guess for the book's rotation, as seen by the camera, might be (0,90,0)&mdash;viewing it straight from the side:
+Now, your initial guess for the book's rotation, as seen by the camera, might be (0,90,0), viewing it straight from the side:
 
 ![](gimballock-book.png)
 
-Like in the plate example above, at this orientation the book can now only be rotated about two different axes, neither of which will pitch the book backward to match the photo.
+Like the two plates eventually becoming aligned as they approach 90 degrees, at this orientation the book can only be rotated about two different axes, neither of which will pitch the book backward to match the photo.
 
 It's not like we can't select rx,ry,rz to match the photo: for example, (-90,45,-90) looks like this:
 
