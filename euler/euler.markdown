@@ -1,5 +1,5 @@
-You probably shouldn't use Euler angles in gradient descent but not for the reasons you think
-====================================================================
+# Euler, hammers and gradient descent
+<!-- # You probably shouldn't use Euler angles in gradient descent but not for the reasons you think -->
 
 **"If all you have is a hammer, everything looks like a nail."**
 
@@ -135,21 +135,6 @@ Using Euler angles
 ------------------
 
 Euler angles is a so-called *minimal* parametrization, in that they use the minimal amount of numbers (three) to define a rotation. By virtue of being minimal, those numbers can each be chosen freely, without concern or being constrained by the others.
-
-<!-- euler_xyz(rx, ry, rz):
-    Rx = 1    0        0
-         0 cos(rx) -sin(rx)
-         0 sin(rx)  cos(rx)
-
-    Ry =  cos(ry) 0 sin(ry)
-             0    1    0
-         -sin(ry) 0 cos(ry)
-
-    Rz = cos(rz) -sin(rz) 0
-         sin(rz)  cos(rz) 0
-            0        0    1
-
-    return Rx*Ry*Rz -->
 
 That sounds a bit like what we're after, so we'll add a function that takes three angles and returns a rotation matrix following some Euler angle convention, like x,y,z or z,y,x. In total we then have three variables for rotation (rx,ry,rz) and three variables for translation (tx,ty,tz).
 
@@ -328,8 +313,11 @@ So if you happen to find yourself at that 90 degrees sideways angle, perhaps bec
 
 <!-- Also a problem in Gauss Newton and Gradient-based methods in general. Show non-invertible Hessian. -->
 
+## Next time
 
-## (Aside) How gimbal lock affects other optimization methods
+This article is already very long, so in part two we'll look at ways to solve this problem, and why gimbal lock is actually *not* the problem when using Euler angles in this context.
+
+## (Bonus) How gimbal lock affects other optimization methods
 
 Some optimization methods, like particle swarm optimization, try to find the optimal parameters by evaluating the error at random locations in the parameter space and share information between samples to pinpoint the location of the minimum.
 
