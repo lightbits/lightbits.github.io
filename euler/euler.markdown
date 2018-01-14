@@ -196,21 +196,28 @@ They all look clearly different, but a funny thing happens as the angle about th
 
 <style>
 .slider img {
-    display:inline;
+    display:inline-block;
     max-width:none;
     padding:0;
     margin:0;
+    float:left;
 }
 .slider {
     display:inline-block;
     overflow-y:hidden;
     overflow-x:hidden;
     border:1px solid #ccc;
+}
+.slider-wrap {
+    width:fit-content;
     margin:0 auto;
 }
+input {
+    vertical-align: middle;
+}
 </style>
-<div style="width:fit-content;margin:0 auto;">
-    <div class="slider" id="slider1" style="width:160px;height:160px;">
+<div class="slider-wrap">
+    <div class="slider" id="slider1" style="width:160px;height:180px;">
         <div style="width:700px;">
             <img src="plates2x0.png"/>
             <img src="plates2x3.png"/>
@@ -218,7 +225,7 @@ They all look clearly different, but a funny thing happens as the angle about th
             <img src="plates2x8.png"/>
         </div>
     </div>
-    <div class="slider" id="slider2" style="width:160px;height:160px;">
+    <div class="slider" id="slider2" style="width:160px;height:180px;">
         <div style="width:700px;">
             <img src="plates2z0.png"/>
             <img src="plates2z3.png"/>
@@ -227,30 +234,69 @@ They all look clearly different, but a funny thing happens as the angle about th
         </div>
     </div>
     <br>
-    <input style="width:100%;margin:0;" type="range" min=0 max=3 step=1 value=0 oninput="document.getElementById('slider2').scrollLeft = this.value*160; document.getElementById('slider1').scrollLeft = this.value*160;"></input>
+    <input type="range" min=0 max=3 step=1 value=0 oninput="document.getElementById('slider2').scrollLeft = this.value*160; document.getElementById('slider1').scrollLeft = this.value*160;"></input>
+    <label>rotate y [0 to 90 degrees]</label>
 </div>
 
-The two plates start out rotating about different axes, as you'd expect, but along the way they mysteriously start looking more and more alike until their motions look identical.
+The two plates start out rotating about different axes, as you'd expect, but along the way the one on the right mysteriously starts looking more and more like the one on the left, until at last they look identical. What's the problem you say? Well here's an interactive puzzle for you, try to rotate the book to match the photo:
 
-Although we started out able to produce three distinctly different motions, we end up only able to produce two, around this magical 90 degree sideways angle. This drop in degrees of freedom from three to two is called gimbal lock and happens no matter what Euler angle order you choose (although the point at which it happens will vary).
+<div class="slider-wrap">
+    <img src="book/book1.jpg" style="max-width:240px;">
+    <div class="slider" id="slider3" style="width:240px;height:240px;">
+        <div style="width:720px;">
+            <img style="margin:0;" src="anim22.png"/>
+            <img style="margin:0;" src="anim27.png"/>
+            <img style="margin:0;" src="anim32.png"/>
 
-In the example from the previous section we didn't run into any issues because the true rotation was nowhere near gimbal lock. But what if the book is standing on its side and we take our photo from a 45 degree pitch:
+            <img style="margin:0;" src="anim21.png"/>
+            <img style="margin:0;" src="anim26.png"/>
+            <img style="margin:0;" src="anim31.png"/>
 
-<img src="book/book1.jpg" style="max-width:320px;width:100%;">
+            <img style="margin:0;" src="anim23.png"/>
+            <img style="margin:0;" src="anim28.png"/>
+            <img style="margin:0;" src="anim33.png"/>
+        </div>
+    </div>
+    <div class="slider" id="slider4" style="width:240px;height:240px;">
+        <div style="width:720px;">
+            <img style="margin:0;" src="anim24.png"/>
+            <img style="margin:0;" src="anim29.png"/>
+            <img style="margin:0;" src="anim34.png"/>
 
-Now, your initial guess for the book's rotation, as seen by the camera, might be (0,90,0), viewing it straight from the side:
+            <img style="margin:0;" src="anim21.png"/>
+            <img style="margin:0;" src="anim26.png"/>
+            <img style="margin:0;" src="anim31.png"/>
 
-![](gimballock-book.png)
+            <img style="margin:0;" src="anim25.png"/>
+            <img style="margin:0;" src="anim30.png"/>
+            <img style="margin:0;" src="anim35.png"/>
+        </div>
+    </div>
+    <br>
+    <input type="range" min=0 max=2 step=1 value=0 oninput="document.getElementById('slider3').scrollTop = this.value*240;"></input>
+    <label>rotate x (left)</label>
+    <br>
+    <input type="range" min=0 max=2 step=1 value=0 oninput="document.getElementById('slider4').scrollTop = this.value*240;"></input>
+    <label>rotate z (right)</label>
+    <br>
+    <input type="range" min=0 max=2 step=1 value=0 oninput="document.getElementById('slider4').scrollLeft = this.value*240;document.getElementById('slider3').scrollLeft = this.value*240;"></input>
+    <label>rotate y (both)</label>
+</div>
 
-Like the two plates eventually becoming aligned as they approach 90 degrees, at this orientation the book can only be rotated about two different axes, neither of which will pitch the book backward to match the photo.
+Although we start out able to produce three distinctly different motions, we end up only able to produce two, around this magical 90 degree sideways angle. This drop in degrees of freedom from three to two is called gimbal lock and happens no matter what Euler angle order you choose (although the point at which it happens will vary).
+<!-- comment: instead of telling the reader, show them, or better, let them figure it out on their own -->
 
-It's not like we can't select rx,ry,rz to match the photo: for example, (-90,45,-90) looks like this:
+<!-- Like the two plates eventually becoming aligned as they approach 90 degrees, at this orientation the book can only be rotated about two different axes, neither of which will pitch the book backward to match the photo. -->
+
+<!-- In the example from the previous section we didn't run into any issues because the true rotation was nowhere near gimbal lock. But what if the book is standing on its side and we take our photo from a 45 degree pitch: -->
+
+It's not like we can't select rx,ry,rz to match the photo though: (-90,45,-90) looks like this:
 
 ![](sideways45.png)
 
 Indeed, if we rotate -90 degrees about the z-axis and -90 degrees about the x-axis, the middle rotation about the y-axis can now be used to control the pitch up or down.
 
-But alas, we find ourselves in the same rut at (-90,90,-90), where the book is seen head-on from the side, where we can only rotate about two different axes; now we have lost the ability to rotate the book left or right!
+But alas, we find ourselves in the same rut at (-90,90,-90), where the book is seen head-on from the side. Again we can only rotate about two different axes; now we have lost the ability to rotate the book left or right!
 
 <!-- There is a set of parameters that describe the rotation -->
 
