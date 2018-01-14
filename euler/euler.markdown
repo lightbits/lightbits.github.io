@@ -186,29 +186,49 @@ Consider a plate that you can rotate by three angles rx, ry and rz around the x-
 
 ![](plates1xyz.png)
 
-They all look different, as you can see, but a funny thing happens when the y-axis angle gets close to 90 degrees...
+They all look clearly different, but a funny thing happens as the angle about the y-axis approaches 90 degrees...
 
 ![](gimballock.gif)
 
-For the red plate I am adjusting rx and keeping rz fixed, for the blue plate I am adjusting rz in the opposite direction and keeping rx fixed. I repeat this adjustment while adjusting ry for both plates toward 90 degrees, at which point they end up producing the same motion!
+Here's an illustration:
 
-This loss of a degree of freedom is called gimbal lock, and happens no matter what Euler angle convention you use (although the specific rotation at which it happens will vary depending on the convention). This can be a problem if the true rotation is close to, or at, a gimbal lock.
+* For the red plate I keep rz fixed and adjust rx back and forth.
+* For the blue plate I keep rx fixed and adjust rz back and forth (in the opposite direction).
+* I repeat this while slowly adjusting ry from zero to 90 degrees
 
-For example
+The two plates start out rotating about different axes, as you'd expect, but along the way they mysteriously start looking more and more alike until their motions look identical.
+
+Although we started out able to produce three distinctly different motions, around this magical 90 degree sideways angle we can only produce two. This drop in degrees of freedom from three to two is called gimbal lock, and happens no matter what Euler angle order you choose (although the point at which it happens will vary).
+
+While the example in the previous section had no issues, we run into trouble as soon as the true rotation is close to gimbal locking. For instance, if the book is standing on its side and we take our photo from a 45 degree pitch:
 
 <img src="book/book1.jpg" style="max-width:320px;width:100%;">
 
-Your initial guess for the book's rotation now might be (0, 90, 0), which looks like this:
+Your initial guess for the book's rotation, as seen by the camera, might be (0,90,0)&mdash;viewing it straight from the side:
 
 ![](gimballock-book.png)
 
-<!-- Or it'll adjust unrelated parameters because they are now the ones that reduce the cost the most: for example, translating upwards and backwards. -->
+Like in the plate example above, at this orientation the book can now only be rotated about two different axes, neither of which will pitch the book backward to match the photo.
+
+It's not like we can't select rx,ry,rz to match the photo: for example, (-90,45,-90) looks like this:
+
+![](sideways45.png)
+
+Indeed, if we rotate -90 degrees about the z-axis and -90 degrees about the x-axis, the middle rotation about the y-axis can now be used to control the pitch up or down.
+
+But alas, we find ourselves in the same rut at (-90,90,-90), where the book is seen head-on from the side, where we can only rotate about two different axes; now we have lost the ability to rotate the book left or right!
+
+<!-- There is a set of parameters that describe the rotation -->
+
+<!-- : if we... rx = 90, ry = 45, rz = 90. But that's way different from rx = 0, ry = 90, rz = 0, and getting there from where we are would involve increasing the cost function - getting worse before it gets better. -->
+
+## How gimbal lock affects gradient descent
+
+While we can always *find* a set of parameters that exactly match the photo (as there is no rotation Euler angles *cannot* describe), the problem, in the context of gradient descent, is that those parameters can be unintuitively far away from our initial guess.
+
+<!-- Or it'll adjust unrelated parameters because they are now the ones that reduce the cost the most: for example, translating upwards and backwards. Intuitively, adjusting these parameters is less work than adjusting the gimbal-locked parameters.-->
 
 Remember, gradient descent only looks at small changes of the parameters. It's true that there is a set of parameters that produces the rotation we want, but seen from our initial place, those are far away and require our optimization to get worse before it gets better.
-
-However, neither adjusting rx or rz will produce that backward tilt.
-
-There *is* a set of parameters that describe the rotation: if we... rx = 90, ry = 45, rz = 90. But that's way different from rx = 0, ry = 90, rz = 0, and getting there from where we are would involve increasing the cost function - getting worse before it gets better.
 
 And once we get there we have the same problem.
 
