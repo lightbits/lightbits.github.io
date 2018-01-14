@@ -274,13 +274,13 @@ The two plates start out rotating about different axes, as you'd expect, but alo
     </div>
     <br>
     <input type="range" min=0 max=2 step=1 value=0 oninput="document.getElementById('slider3').scrollTop = this.value*240;"></input>
-    <label>rotate x (left)</label>
+    <label>rotate x (left book)</label>
     <br>
     <input type="range" min=0 max=2 step=1 value=0 oninput="document.getElementById('slider4').scrollTop = this.value*240;"></input>
-    <label>rotate z (right)</label>
+    <label>rotate z (right book)</label>
     <br>
     <input type="range" min=0 max=2 step=1 value=0 oninput="document.getElementById('slider4').scrollLeft = this.value*240;document.getElementById('slider3').scrollLeft = this.value*240;"></input>
-    <label>rotate y (both)</label>
+    <label>rotate y (both books)</label>
 </div>
 
 Although we start out able to produce three distinctly different motions, we end up only able to produce two, around this magical 90 degree sideways angle. This drop in degrees of freedom from three to two is called gimbal lock and happens no matter what Euler angle order you choose (although the point at which it happens will vary).
