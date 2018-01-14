@@ -224,19 +224,33 @@ But alas, we find ourselves in the same rut at (-90,90,-90), where the book is s
 
 ## How gimbal lock affects gradient descent
 
-While we can always *find* a set of parameters that exactly match the photo (as there is no rotation Euler angles *cannot* describe), the problem, in the context of gradient descent, is that those parameters can be unintuitively far away from our initial guess.
+While we can always *find* a set of angles that exactly reproduce the photo (as there is no rotation Euler angles cannot describe), the problem, in the context of gradient descent, is that those angles can be unintuitively far away from our current guess.
 
-<!-- Or it'll adjust unrelated parameters because they are now the ones that reduce the cost the most: for example, translating upwards and backwards. Intuitively, adjusting these parameters is less work than adjusting the gimbal-locked parameters.-->
+Remember, gradient descent only looks at small changes of the parameters&mdash;how the error increases or decreases in the small vicinity of our current estimate.
 
-Remember, gradient descent only looks at small changes of the parameters. It's true that there is a set of parameters that produces the rotation we want, but seen from our initial place, those are far away and require our optimization to get worse before it gets better.
+So if you're at (0, 90, 0)
 
-And once we get there we have the same problem.
+![](gimballock-book.png)
 
-<!-- In our local region (0,90,0), any small perturbation will probably produce an increase of the cost function. This means that gradient descent cannot progress any further. From the algorithm's point of view, doing anything is worse than doing nothing. -->
+but the true rotation is at (-90, 45, -90)
 
-So if your initial guess happened to be 0,90,0&mdash;which doesn't *look* unreasonable&mdash;you'll get stuck!
+![](sideways45.png)
 
-Also a problem in Gauss Newton and Gradient-based methods in general. Show non-invertible Hessian.
+then gradient descent will have trouble getting there, because neither of the motions you can produce with small changes of your parameters will tilt it backward.
+
+If those motions both increase the error, it means the optimization gets stuck, unable to progress. Alternatively, it'll start adjusting the wrong parameters, say, the translation, because they are the only ones that decrease the error.
+
+<!-- Intuitively, adjusting these parameters is less work than adjusting the gimbal-locked parameters. -->
+
+Unless you're able to jump to the right solution directly, getting there might involve things getting worse before getting better: an intermediate rotation, say at (-45,45,-45), will look like this
+
+![](gimballock3.png)
+
+which is worse than the initial guess.
+
+So if you happen to find yourself at that 90 degrees sideways angle, perhaps because you've been tracking the book for a while, then you're stuck!
+
+<!-- Also a problem in Gauss Newton and Gradient-based methods in general. Show non-invertible Hessian. -->
 
 <!-- ## Aside: Non-gradient-based optimization methods -->
 <!-- One such parametrization is the *rotation matrix*: a 3x3 matrix of mutually perpendicular and unit length columns. This is not a nice parametrization, because not all 3x3 matrices are valid rotation matrices. So if you, say, wanted to generate a random rotation, you could not just sample 9 numbers and put them in a matrix. -->
