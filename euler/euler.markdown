@@ -187,11 +187,48 @@ Consider a plate that you can rotate by three angles rx, ry and rz around the x-
 ![](plates1xyz.png)
 
 They all look clearly different, but a funny thing happens as the angle about the y-axis approaches 90 degrees. Here's an illustration:
-![](gimballock.gif)
 
-* For the red plate I keep rz fixed and adjust rx back and forth.
+<!-- ![](gimballock.gif) -->
+
+<!-- * For the red plate I keep rz fixed and adjust rx back and forth.
 * For the blue plate I keep rx fixed and adjust rz back and forth (in the opposite direction).
-* I repeat this while slowly adjusting ry from zero to 90 degrees
+* I repeat this while slowly adjusting ry from zero to 90 degrees -->
+
+<style>
+.slider img {
+    display:inline;
+    max-width:none;
+    padding:0;
+    margin:0;
+}
+.slider {
+    display:inline-block;
+    overflow-y:hidden;
+    overflow-x:hidden;
+    border:1px solid #ccc;
+    margin:0 auto;
+}
+</style>
+<div style="width:fit-content;margin:0 auto;">
+    <div class="slider" id="slider1" style="width:160px;height:160px;">
+        <div style="width:700px;">
+            <img src="plates2x0.png"/>
+            <img src="plates2x3.png"/>
+            <img src="plates2x5.png"/>
+            <img src="plates2x8.png"/>
+        </div>
+    </div>
+    <div class="slider" id="slider2" style="width:160px;height:160px;">
+        <div style="width:700px;">
+            <img src="plates2z0.png"/>
+            <img src="plates2z3.png"/>
+            <img src="plates2z5.png"/>
+            <img src="plates2z8.png"/>
+        </div>
+    </div>
+    <br>
+    <input style="width:100%;margin:0;" type="range" min=0 max=3 step=1 value=0 oninput="document.getElementById('slider2').scrollLeft = this.value*160; document.getElementById('slider1').scrollLeft = this.value*160;"></input>
+</div>
 
 The two plates start out rotating about different axes, as you'd expect, but along the way they mysteriously start looking more and more alike until their motions look identical.
 
@@ -232,6 +269,9 @@ So if you're at (0, 90, 0)
 but the true rotation is at (-90, 45, -90)
 
 ![](sideways45.png)
+
+<!-- todo: overlay of translucent possible motions? -->
+<!-- todo: or JS slider -->
 
 then gradient descent will have trouble getting there, because neither of the motions you can produce with small changes of your parameters will tilt it backward.
 
