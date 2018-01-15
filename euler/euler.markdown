@@ -60,17 +60,17 @@ A nail version of this problem is similar to most nail versions of problems, and
 
 In the context of book-pose-estimation, it means we guess the pose of the book. To measure how bad our guess was, we can render the book as seen by my camera (a handheld Canon with heavy lens distortion).
 
-![](reproject1-v3.jpg)
+![](reproject1.jpg)
 
 We can look at this as a person and say "yup that's pretty close". But it's too slow to ask a person after each guess. If we want to automate this with a computer we need to be *quantitative*. We have lots of options to measure the quantitative quality of our guess.
 
 Here's one that's pretty popular...
 
-![](reproject2-v3.jpg)
+![](reproject2.jpg)
 
 When we found pixel patches in the photograph and searched for matching patches in our 3D book, we got a bunch of 2D-3D correspondences: for each 2D patch coordinate in the photo, we have one 3D coordinate on the 3D box. One measure of the quality of our guess is the average squared distance between those 3D coordinates (projected into the image) and their matching 2D coordinates.
 
-![](reproject3-v2.jpg)
+![](reproject3.jpg)
 
 In pseudo-code we could write this as
 
