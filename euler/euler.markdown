@@ -276,9 +276,51 @@ However, it's not like we literally cannot find three Euler angles to match the 
 
 ![](sideways45.png)
 
-Indeed, if we rotate -90 degrees about the z-axis and -90 degrees about the x-axis, the middle rotation about the y-axis can now be used to control the pitch up or down.
+Indeed, if we rotate -90 degrees about the z-axis and -90 degrees about the x-axis, the middle rotation about the y-axis can now be used to control the pitch up or down. Try it:
 
-But alas, and you'll have to take my word for this, we find ourselves in the same rut at (-90,90,-90), where the book is seen head-on from the side. Again we can only rotate about two different axes, but now we have lost the ability to rotate the book left or right!
+<div class="slider-wrap">
+    <div class="slider" id="slider5" style="width:240px;height:240px;">
+        <div style="width:720px;">
+            <img style="margin:0;" src="ex2-11.png"/>
+            <img style="margin:0;" src="ex2-12.png"/>
+            <img style="margin:0;" src="ex2-13.png"/>
+
+            <img style="margin:0;" src="ex2-21.png"/>
+            <img style="margin:0;" src="ex2-22.png"/>
+            <img style="margin:0;" src="ex2-23.png"/>
+
+            <img style="margin:0;" src="ex2-31.png"/>
+            <img style="margin:0;" src="ex2-32.png"/>
+            <img style="margin:0;" src="ex2-33.png"/>
+        </div>
+    </div>
+    <div class="slider" id="slider6" style="width:240px;height:240px;">
+        <div style="width:720px;">
+            <img style="margin:0;" src="ex3-11.png"/>
+            <img style="margin:0;" src="ex3-12.png"/>
+            <img style="margin:0;" src="ex3-13.png"/>
+
+            <img style="margin:0;" src="ex3-21.png"/>
+            <img style="margin:0;" src="ex3-22.png"/>
+            <img style="margin:0;" src="ex3-23.png"/>
+
+            <img style="margin:0;" src="ex3-31.png"/>
+            <img style="margin:0;" src="ex3-32.png"/>
+            <img style="margin:0;" src="ex3-33.png"/>
+        </div>
+    </div>
+    <br>
+    <input type="range" min=0 max=2 step=1 value=0 onload="console.log(this)" oninput="document.getElementById('slider5').scrollTop = this.value*240;"/>
+    <label>rotate x (left book) [-120,-90,-60]</label>
+    <br>
+    <input type="range" min=0 max=2 step=1 value=0 oninput="document.getElementById('slider6').scrollTop = this.value*240;"/>
+    <label>rotate z (right book) [-120,-90,-60]</label>
+    <br>
+    <input type="range" min=0 max=2 step=1 value=0 oninput="document.getElementById('slider6').scrollLeft = this.value*240;document.getElementById('slider5').scrollLeft = this.value*240;"/>
+    <label>rotate y (both books) [0,45,90]</label>
+</div>
+
+But alas, we find ourselves in the same rut at (-90,90,-90), where the book is seen head-on from the side. Again we can only rotate about two different axes, but now we have lost the ability to rotate the book left or right!
 
 ## How gimbal lock affects gradient descent
 
