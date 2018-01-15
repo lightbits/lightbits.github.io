@@ -3,7 +3,7 @@
 
 **"If all you have is a hammer, everything looks like a nail."**
 
-A familiar proverb that, as noted by Chris Hecker in his [GDC talk](), has an unappreciated cousin:
+A familiar proverb that, as noted by Chris Hecker in his [GDC talk](todo), has an unappreciated cousin:
 
 **"If you can turn anything into a nail, all you need is a hammer."**
 
@@ -107,7 +107,7 @@ The derivative of a rotation matrix
 
 The derivative of `x^2` is simple, but it might take you longer than you'd like to differentiate more complex expressions, possibly involving matrix multiplications and stuff. Luckily we have some pretty neat tools to do that for us&mdash;gone are the days when it was a symbol of hard work and dedication if your paper had pages upon pages of calculus, rigorously deriving each expression by hand (I still see papers like that for some reason).
 
-Look for libraries with *automatic differentiation*. Or, use a *symbolic processor* (found in MATLAB and Octave) to derive analytic expressions and translate them into your code. There's also an online [matrix calculus tool](). But the simplest solution might just be botch it with finite differences:
+Look for libraries with *automatic differentiation*. Or, use a *symbolic processor* (found in MATLAB and Octave) to derive analytic expressions and translate them into your code. There's also an online [matrix calculus tool](todo). But the simplest solution might just be botch it with finite differences:
 
     dfdx = (f(x+dx) - f(x-dx)) / 2dx
 
