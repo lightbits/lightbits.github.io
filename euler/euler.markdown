@@ -281,32 +281,32 @@ Indeed, if we rotate -90 degrees about the z-axis and -90 degrees about the x-ax
 <div class="slider-wrap">
     <div class="slider" id="slider5" style="width:240px;height:240px;">
         <div style="width:720px;">
-            <img style="margin:0;" src="ex2-11.png"/>
-            <img style="margin:0;" src="ex2-12.png"/>
-            <img style="margin:0;" src="ex2-13.png"/>
+            <img src="ex2-11.png"/>
+            <img src="ex2-12.png"/>
+            <img src="ex2-13.png"/>
 
-            <img style="margin:0;" src="ex2-21.png"/>
-            <img style="margin:0;" src="ex2-22.png"/>
-            <img style="margin:0;" src="ex2-23.png"/>
+            <img src="ex2-21.png"/>
+            <img src="ex2-22.png"/>
+            <img src="ex2-23.png"/>
 
-            <img style="margin:0;" src="ex2-31.png"/>
-            <img style="margin:0;" src="ex2-32.png"/>
-            <img style="margin:0;" src="ex2-33.png"/>
+            <img src="ex2-31.png"/>
+            <img src="ex2-32.png"/>
+            <img src="ex2-33.png"/>
         </div>
     </div>
     <div class="slider" id="slider6" style="width:240px;height:240px;">
         <div style="width:720px;">
-            <img style="margin:0;" src="ex3-11.png"/>
-            <img style="margin:0;" src="ex3-12.png"/>
-            <img style="margin:0;" src="ex3-13.png"/>
+            <img src="ex3-11.png"/>
+            <img src="ex3-12.png"/>
+            <img src="ex3-13.png"/>
 
-            <img style="margin:0;" src="ex2-21.png"/>
-            <img style="margin:0;" src="ex2-22.png"/>
-            <img style="margin:0;" src="ex2-23.png"/>
+            <img src="ex2-21.png"/>
+            <img src="ex2-22.png"/>
+            <img src="ex2-23.png"/>
 
-            <img style="margin:0;" src="ex3-31.png"/>
-            <img style="margin:0;" src="ex3-32.png"/>
-            <img style="margin:0;" src="ex3-33.png"/>
+            <img src="ex3-31.png"/>
+            <img src="ex3-32.png"/>
+            <img src="ex3-33.png"/>
         </div>
     </div>
     <br>
