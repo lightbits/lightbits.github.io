@@ -359,11 +359,11 @@ So if you happen to find yourself at that 90 degrees sideways angle, perhaps bec
 
 ## Next time
 
-This article is already very long, so in part two we'll look at ways to solve this problem, and why gimbal lock is actually *not* the problem when using Euler angles in this context.
+In part two of this article we'll actually get to the point of this elaborate setup so far, and look at ways to solve the problem, and how gimbal lock is *not* the drawback of using Euler angles.
 
 ## (Bonus) How gimbal lock affects other optimization methods
 
-Some optimization methods, like particle swarm optimization, try to find the optimal parameters by evaluating the error at random locations in the parameter space and share information between samples to pinpoint the location of the minimum.
+Some optimization methods, like particle swarm optimization, try to find the optimal parameters by evaluating the error function at random locations in the parameter space and sharing information between samples to pinpoint the exact location of the minimum.
 
 Those methods work fine with Euler angles because they don't rely on the gradient of the error, and they are able to jump (more or less) to the solution (or to a close vicinity) directly. Gradient-based methods, like Gauss-Newton or gradient descent, try find the optimal parameters by looking at the current local vicinity.
 
