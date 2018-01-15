@@ -223,7 +223,9 @@ input {
     <label>rotate y [0 to 90 degrees]</label>
 </div>
 
-The two plates start out rotating about different axes, as you'd expect, but along the way, the right one mysteriously starts looking more and more like the right one, until they finally look identical. So what? Well here's an interactive puzzle for you, try to rotate the book to match the photo:
+The two plates start out rotating about different axes, as you'd expect, but along the way, the right one mysteriously starts looking more and more like the left one, until they finally look identical (although in opposite directions). So what? Well here's an interactive puzzle for you.
+
+Try to rotate the book to match the photo:
 
 <div class="slider-wrap">
     <img src="book/book1.jpg" style="max-width:240px;">
