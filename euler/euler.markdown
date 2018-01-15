@@ -300,9 +300,9 @@ Indeed, if we rotate -90 degrees about the z-axis and -90 degrees about the x-ax
             <img style="margin:0;" src="ex3-12.png"/>
             <img style="margin:0;" src="ex3-13.png"/>
 
-            <img style="margin:0;" src="ex3-21.png"/>
-            <img style="margin:0;" src="ex3-22.png"/>
-            <img style="margin:0;" src="ex3-23.png"/>
+            <img style="margin:0;" src="ex2-21.png"/>
+            <img style="margin:0;" src="ex2-22.png"/>
+            <img style="margin:0;" src="ex2-23.png"/>
 
             <img style="margin:0;" src="ex3-31.png"/>
             <img style="margin:0;" src="ex3-32.png"/>
