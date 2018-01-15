@@ -231,32 +231,32 @@ Try to rotate the book to match the photo:
     <img src="book/book1.jpg" style="max-width:240px;">
     <div class="slider" id="slider3" style="width:240px;height:240px;">
         <div style="width:720px;">
-            <img style="margin:0;" src="anim22.png"/>
-            <img style="margin:0;" src="anim27.png"/>
-            <img style="margin:0;" src="anim32.png"/>
+            <img style="margin:0;" src="ex0-11.png"/>
+            <img style="margin:0;" src="ex0-12.png"/>
+            <img style="margin:0;" src="ex0-13.png"/>
 
-            <img style="margin:0;" src="anim21.png"/>
-            <img style="margin:0;" src="anim26.png"/>
-            <img style="margin:0;" src="anim31.png"/>
+            <img style="margin:0;" src="ex0-21.png"/>
+            <img style="margin:0;" src="ex0-22.png"/>
+            <img style="margin:0;" src="ex0-23.png"/>
 
-            <img style="margin:0;" src="anim23.png"/>
-            <img style="margin:0;" src="anim28.png"/>
-            <img style="margin:0;" src="anim33.png"/>
+            <img style="margin:0;" src="ex0-31.png"/>
+            <img style="margin:0;" src="ex0-32.png"/>
+            <img style="margin:0;" src="ex0-33.png"/>
         </div>
     </div>
     <div class="slider" id="slider4" style="width:240px;height:240px;">
         <div style="width:720px;">
-            <img style="margin:0;" src="anim24.png"/>
-            <img style="margin:0;" src="anim29.png"/>
-            <img style="margin:0;" src="anim34.png"/>
+            <img style="margin:0;" src="ex1-31.png"/>
+            <img style="margin:0;" src="ex1-32.png"/>
+            <img style="margin:0;" src="ex1-33.png"/>
 
-            <img style="margin:0;" src="anim21.png"/>
-            <img style="margin:0;" src="anim26.png"/>
-            <img style="margin:0;" src="anim31.png"/>
+            <img style="margin:0;" src="ex0-21.png"/>
+            <img style="margin:0;" src="ex0-22.png"/>
+            <img style="margin:0;" src="ex0-23.png"/>
 
-            <img style="margin:0;" src="anim25.png"/>
-            <img style="margin:0;" src="anim30.png"/>
-            <img style="margin:0;" src="anim35.png"/>
+            <img style="margin:0;" src="ex1-11.png"/>
+            <img style="margin:0;" src="ex1-12.png"/>
+            <img style="margin:0;" src="ex1-13.png"/>
         </div>
     </div>
     <br>
