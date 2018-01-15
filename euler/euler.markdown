@@ -363,17 +363,29 @@ In part two of this article we'll actually get to the point of this elaborate se
 
 ## (Bonus) How gimbal lock affects other optimization methods
 
-Some optimization methods, like particle swarm optimization, try to find the optimal parameters by evaluating the error function at random locations in the parameter space and sharing information between samples to pinpoint the exact location of the minimum.
+There's a class of optimization methods called *derivative-free optimization*. Particle Swarm Optimization, for one, looks for the solution by evaluating your error function at semi-random locations in the parameter space, and sharing information between samples to pinpoint the precise solution. Another, the Nelder-Mead method, evaluates the function at the corners of a space-filling shape, and moves its corners based on the samples and a set of rules.
 
-Those methods work fine with Euler angles because they don't rely on the gradient of the error, and they are able to jump (more or less) to the solution (or to a close vicinity) directly. Gradient-based methods, like Gauss-Newton or gradient descent, try find the optimal parameters by looking at the current local vicinity.
+Both of these are less prone to getting stuck when using Euler angles because they are not confined to studying local changes of the error: they can jump (more or less) to the solution (or to a close vicinity) directly.
 
-When we use Gauss-Newton to find the optimal pose, our goal is to adjust the parameters with small updates, such that the resulting motion of our model will cause the cost function to decrease. For nonlinear least squares problems, this is done by linearizing each error term:
+Gradient-based methods, like gradient descent, try find the optimal parameters by looking at the current local vicinity. Other popular methods in this category are Gauss-Newton and Levenberg-Marquardt for nonlinear least-squares problems&mdash;the type we dealt with here. I often see these in papers about visual odometry and SLAM, much more so than gradient descent, so here's a couple of words about them.
 
-     E = sum (u' - u)^2 + (v' - v)^2
-       = sum du^2 + dv^2
+When we use Gauss-Newton to find the optimal pose, the goal is again to adjust the parameters with small updates that decrease the error. However, instead of just moving in the (opposite) direction of the gradient, Gauss-Newton solves a system of linear equations that adjusts the direction, which tends to make it converge much faster.
 
-    du(x+h) ~ u' + Du'h - u
-    dv(x+h) ~ v' + Dv'h - v
+An introduction to Gauss-Newton is better obtained from an actual book than what I can reasonably type up here, so without getting into too many details, the system of equations look like this:
+
+    Hx = b
+
+where H is called the Hessian, and is formed by taking the sum of inner-products between the Jacobians
+
+    H = sum J'J
+
+The Jacobian says how each error term (i.e. the difference between predicted and observed pixel patch centers) changes for a change in the parameters (the book's rotation and translation).
+
+<!--  E = sum (u' - u)^2 + (v' - v)^2
+   = sum du^2 + dv^2
+
+du(x+h) ~ u' + Du'h - u
+dv(x+h) ~ v' + Dv'h - v -->
 
 In this case, we would take the derivative of our predicted coordinates, u' and v', which gives us the motion that would occur if we were to adjust any one of our parameters.
 
