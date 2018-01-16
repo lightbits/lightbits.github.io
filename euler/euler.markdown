@@ -1,5 +1,4 @@
-# Euler, hammers and gradient descent
-<!-- # You probably shouldn't use Euler angles in gradient descent but not for the reasons you think -->
+# The space in which rotations are: Getting stuck
 
 **"If all you have is a hammer, everything looks like a nail."**
 
@@ -181,11 +180,10 @@ They all look clearly different, but a funny thing happens as the angle about th
 
 <style>
 .slider img {
-    display:inline-block;
+    display:inline;
     max-width:none;
     padding:0;
     margin:0;
-    float:left;
 }
 .slider {
     display:inline-block;
@@ -193,29 +191,22 @@ They all look clearly different, but a funny thing happens as the angle about th
     overflow-x:hidden;
     border:1px solid #ccc;
 }
-.slider-wrap {
-    width:fit-content;
-    margin:0 auto;
-}
-input {
-    vertical-align: middle;
+.slider-wrap { width:fit-content; margin:0 auto; }
+input { vertical-align: middle; }
+@media screen and (max-width: 600px){
+.slider { width:160px; height:160px; }
+.slider img { width:160px; height:160px;}
 }
 </style>
 <div class="slider-wrap">
-    <div class="slider" id="slider1" style="width:160px;height:180px;">
+    <div class="slider" id="slider1" style="max-width:160px;max-height:180px;">
         <div style="width:700px;">
-            <img src="plates2x0.png"/>
-            <img src="plates2x3.png"/>
-            <img src="plates2x5.png"/>
-            <img src="plates2x8.png"/>
+            <img src="plates2x0.png"/><img src="plates2x3.png"/><img src="plates2x5.png"/><img src="plates2x8.png"/>
         </div>
     </div>
-    <div class="slider" id="slider2" style="width:160px;height:180px;">
+    <div class="slider" id="slider2" style="max-width:160px;max-height:180px;">
         <div style="width:700px;">
-            <img src="plates2z0.png"/>
-            <img src="plates2z3.png"/>
-            <img src="plates2z5.png"/>
-            <img src="plates2z8.png"/>
+            <img src="plates2z0.png"/><img src="plates2z3.png"/><img src="plates2z5.png"/><img src="plates2z8.png"/>
         </div>
     </div>
     <br>
@@ -229,44 +220,28 @@ Try to rotate the book to match the photo:
 
 <div class="slider-wrap">
     <img src="book/book1.jpg" style="max-width:240px;">
-    <div class="slider" id="slider3" style="width:240px;height:240px;">
+    <div class="slider" id="slider3" style="max-width:240px;max-height:240px;">
         <div style="width:720px;">
-            <img style="margin:0;" src="ex0-11.png"/>
-            <img style="margin:0;" src="ex0-12.png"/>
-            <img style="margin:0;" src="ex0-13.png"/>
-
-            <img style="margin:0;" src="ex0-21.png"/>
-            <img style="margin:0;" src="ex0-22.png"/>
-            <img style="margin:0;" src="ex0-23.png"/>
-
-            <img style="margin:0;" src="ex0-31.png"/>
-            <img style="margin:0;" src="ex0-32.png"/>
-            <img style="margin:0;" src="ex0-33.png"/>
+            <img src="ex0-11.png"/><img src="ex0-12.png"/><img src="ex0-13.png"/><br>
+            <img src="ex0-21.png"/><img src="ex0-22.png"/><img src="ex0-23.png"/><br>
+            <img src="ex0-31.png"/><img src="ex0-32.png"/><img src="ex0-33.png"/>
         </div>
     </div>
-    <div class="slider" id="slider4" style="width:240px;height:240px;">
+    <div class="slider" id="slider4" style="max-width:240px;max-height:240px;">
         <div style="width:720px;">
-            <img style="margin:0;" src="ex1-31.png"/>
-            <img style="margin:0;" src="ex1-32.png"/>
-            <img style="margin:0;" src="ex1-33.png"/>
-
-            <img style="margin:0;" src="ex0-21.png"/>
-            <img style="margin:0;" src="ex0-22.png"/>
-            <img style="margin:0;" src="ex0-23.png"/>
-
-            <img style="margin:0;" src="ex1-11.png"/>
-            <img style="margin:0;" src="ex1-12.png"/>
-            <img style="margin:0;" src="ex1-13.png"/>
+            <img src="ex1-31.png"/><img src="ex1-32.png"/><img src="ex1-33.png"/><br>
+            <img src="ex0-21.png"/><img src="ex0-22.png"/><img src="ex0-23.png"/><br>
+            <img src="ex1-11.png"/><img src="ex1-12.png"/><img src="ex1-13.png"/>
         </div>
     </div>
     <br>
-    <input type="range" min=0 max=2 step=1 value=0 oninput="document.getElementById('slider3').scrollTop = this.value*240;"></input>
+    <input type="range" min=0 max=2 step=1 value=0 oninput="document.getElementById('slider3').scrollTop = this.value*document.getElementById('slider3').clientWidth;"></input>
     <label>rotate x (left book)</label>
     <br>
-    <input type="range" min=0 max=2 step=1 value=0 oninput="document.getElementById('slider4').scrollTop = this.value*240;"></input>
+    <input type="range" min=0 max=2 step=1 value=0 oninput="document.getElementById('slider4').scrollTop = this.value*document.getElementById('slider3').clientWidth;"></input>
     <label>rotate z (right book)</label>
     <br>
-    <input type="range" min=0 max=2 step=1 value=0 oninput="document.getElementById('slider4').scrollLeft = this.value*240;document.getElementById('slider3').scrollLeft = this.value*240;"></input>
+    <input type="range" min=0 max=2 step=1 value=0 oninput="document.getElementById('slider4').scrollLeft = this.value*document.getElementById('slider3').clientWidth;document.getElementById('slider3').scrollLeft = this.value*document.getElementById('slider3').clientWidth;"></input>
     <label>rotate y (both books)</label>
 </div>
 
@@ -279,44 +254,28 @@ However, it's not like we literally cannot find three Euler angles to match the 
 Indeed, if we rotate -90 degrees about the z-axis and -90 degrees about the x-axis, the middle rotation about the y-axis can now be used to control the pitch up or down. Try it:
 
 <div class="slider-wrap">
-    <div class="slider" id="slider5" style="width:240px;height:240px;">
+    <div class="slider" id="slider5" style="max-width:240px;max-height:240px;">
         <div style="width:720px;">
-            <img src="ex2-11.png"/>
-            <img src="ex2-12.png"/>
-            <img src="ex2-13.png"/>
-
-            <img src="ex2-21.png"/>
-            <img src="ex2-22.png"/>
-            <img src="ex2-23.png"/>
-
-            <img src="ex2-31.png"/>
-            <img src="ex2-32.png"/>
-            <img src="ex2-33.png"/>
+            <img src="ex2-11.png"/><img src="ex2-12.png"/><img src="ex2-13.png"/><br>
+            <img src="ex2-21.png"/><img src="ex2-22.png"/><img src="ex2-23.png"/><br>
+            <img src="ex2-31.png"/><img src="ex2-32.png"/><img src="ex2-33.png"/>
         </div>
     </div>
-    <div class="slider" id="slider6" style="width:240px;height:240px;">
+    <div class="slider" id="slider6" style="max-width:240px;max-height:240px;">
         <div style="width:720px;">
-            <img src="ex3-11.png"/>
-            <img src="ex3-12.png"/>
-            <img src="ex3-13.png"/>
-
-            <img src="ex2-21.png"/>
-            <img src="ex2-22.png"/>
-            <img src="ex2-23.png"/>
-
-            <img src="ex3-31.png"/>
-            <img src="ex3-32.png"/>
-            <img src="ex3-33.png"/>
+            <img src="ex3-11.png"/><img src="ex3-12.png"/><img src="ex3-13.png"/><br>
+            <img src="ex2-21.png"/><img src="ex2-22.png"/><img src="ex2-23.png"/><br>
+            <img src="ex3-31.png"/><img src="ex3-32.png"/><img src="ex3-33.png"/>
         </div>
     </div>
     <br>
-    <input type="range" min=0 max=2 step=1 value=0 onload="console.log(this)" oninput="document.getElementById('slider5').scrollTop = this.value*240;"/>
+    <input type="range" min=0 max=2 step=1 value=0 onload="console.log(this)" oninput="document.getElementById('slider5').scrollTop = this.value*document.getElementById('slider5').clientWidth;"/>
     <label>rotate x (left book) [-120,-90,-60]</label>
     <br>
-    <input type="range" min=0 max=2 step=1 value=0 oninput="document.getElementById('slider6').scrollTop = this.value*240;"/>
+    <input type="range" min=0 max=2 step=1 value=0 oninput="document.getElementById('slider6').scrollTop = this.value*document.getElementById('slider5').clientWidth;"/>
     <label>rotate z (right book) [-120,-90,-60]</label>
     <br>
-    <input type="range" min=0 max=2 step=1 value=0 oninput="document.getElementById('slider6').scrollLeft = this.value*240;document.getElementById('slider5').scrollLeft = this.value*240;"/>
+    <input type="range" min=0 max=2 step=1 value=0 oninput="document.getElementById('slider6').scrollLeft = this.value*document.getElementById('slider5').clientWidth;document.getElementById('slider5').scrollLeft = this.value*document.getElementById('slider5').clientWidth;"/>
     <label>rotate y (both books) [0,45,90]</label>
 </div>
 
