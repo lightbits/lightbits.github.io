@@ -221,14 +221,14 @@ Try to rotate the book to match the photo:
 <div class="slider-wrap">
     <img src="book/book1.jpg" style="max-width:240px;">
     <div class="slider" id="slider3" style="max-width:240px;max-height:240px;">
-        <div style="width:720px;">
+        <div style="width:800px;">
             <img src="ex0-11.png"/><img src="ex0-12.png"/><img src="ex0-13.png"/><br>
             <img src="ex0-21.png"/><img src="ex0-22.png"/><img src="ex0-23.png"/><br>
             <img src="ex0-31.png"/><img src="ex0-32.png"/><img src="ex0-33.png"/>
         </div>
     </div>
     <div class="slider" id="slider4" style="max-width:240px;max-height:240px;">
-        <div style="width:720px;">
+        <div style="width:800px;">
             <img src="ex1-31.png"/><img src="ex1-32.png"/><img src="ex1-33.png"/><br>
             <img src="ex0-21.png"/><img src="ex0-22.png"/><img src="ex0-23.png"/><br>
             <img src="ex1-11.png"/><img src="ex1-12.png"/><img src="ex1-13.png"/>
@@ -255,14 +255,14 @@ Indeed, if we rotate -90 degrees about the z-axis and -90 degrees about the x-ax
 
 <div class="slider-wrap">
     <div class="slider" id="slider5" style="max-width:240px;max-height:240px;">
-        <div style="width:720px;">
+        <div style="width:800px;">
             <img src="ex2-11.png"/><img src="ex2-12.png"/><img src="ex2-13.png"/><br>
             <img src="ex2-21.png"/><img src="ex2-22.png"/><img src="ex2-23.png"/><br>
             <img src="ex2-31.png"/><img src="ex2-32.png"/><img src="ex2-33.png"/>
         </div>
     </div>
     <div class="slider" id="slider6" style="max-width:240px;max-height:240px;">
-        <div style="width:720px;">
+        <div style="width:800px;">
             <img src="ex3-11.png"/><img src="ex3-12.png"/><img src="ex3-13.png"/><br>
             <img src="ex2-21.png"/><img src="ex2-22.png"/><img src="ex2-23.png"/><br>
             <img src="ex3-31.png"/><img src="ex3-32.png"/><img src="ex3-33.png"/>
