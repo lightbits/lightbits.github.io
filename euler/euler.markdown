@@ -359,19 +359,30 @@ So if you happen to find yourself at that 90 degrees sideways angle, perhaps bec
 
 ## Next time
 
-In part two of this article we'll actually get to the point of this elaborate setup so far, and look at ways to solve the problem, and how gimbal lock is *not* the drawback of using Euler angles.
+In [part two](todo) we'll actually get to the point and look at ways to solve the problem.
 
-## (Bonus) How gimbal lock affects other optimization methods
+## (Aside) How gimbal lock affects other optimization methods
 
-There's a class of optimization methods called *derivative-free optimization*. Particle Swarm Optimization, for one, looks for the solution by evaluating your error function at semi-random locations in the parameter space, and sharing information between samples to pinpoint the precise solution. Another, the Nelder-Mead method, evaluates the function at the corners of a space-filling shape, and moves its corners based on the samples and a set of rules.
+There's a class of *derivative-free optimization* methods that are less affected by this problem. Particle Swarm Optimization, for one, works by evaluating your error function at semi-random locations in the parameter space, and sharing information between samples to pinpoint the precise solution. It's similar to genetic algorithms or simulated annealing. Another, the Nelder-Mead method, evaluates the error function at the corners of a space-filling shape, and moves its corners based on the samples and a set of rules.
 
-Both of these are less prone to getting stuck when using Euler angles because they are not confined to studying local changes of the error: they can jump (more or less) to the solution (or to a close vicinity) directly.
+I think these methods are less prone to getting stuck when using Euler angles because they are not confined to studying local changes of the error, as with gradient descent. They can jump to the solution (or to a close vicinity) and bypass places where, locally, it would seem like you're stuck. But without looking into it too closely, I think it *helps* to have three degrees of rotational freedom everywhere: if the solution is actually near, you don't want to force the algorithm to make a leap of faith to somewhere else.
 
-Gradient-based methods, like gradient descent, try find the optimal parameters by looking at the current local vicinity. Other popular methods in this category are Gauss-Newton and Levenberg-Marquardt for nonlinear least-squares problems&mdash;the type we dealt with here. I often see these in papers about visual odometry and SLAM, much more so than gradient descent, so here's a couple of words about them.
+<!-- todo: image of global methods? -->
 
-When we use Gauss-Newton to find the optimal pose, the goal is again to adjust the parameters with small updates that decrease the error. However, instead of just moving in the (opposite) direction of the gradient, Gauss-Newton solves a system of linear equations that adjusts the direction, which tends to make it converge much faster.
+*Gradient-based methods*, like gradient descent, try find the solution by making local improvements. Other popular methods in this category are Gauss-Newton and Levenberg-Marquardt. An explanation of these is better had from an actual book than what I can type at the end of a blog post, but intuitively the difference between them and gradient descent can be illustrated by this picture:
 
-An introduction to Gauss-Newton is better obtained from an actual book than what I can reasonably type up here, so without getting into too many details, the system of equations look like this:
+![](gradientdescent.png)
+
+Gauss-Newton and Levenberg-Marquardt are both based on fitting a quadratic bowl to the error function around the current estimate, and heading straight to the basin in one step. Gradient descent only looks at the slope, and makes a bunch of roundabout steps.
+<!-- well not really, cause you want to do a line search... -->
+
+<!--  E = sum (u' - u)^2 + (v' - v)^2
+   = sum du^2 + dv^2
+
+du(x+h) ~ u' + Du'h - u
+dv(x+h) ~ v' + Dv'h - v -->
+
+Doing this involves solving for the location of the basin, which is done by solving a matrix equation
 
     Hx = b
 
@@ -380,12 +391,6 @@ where H is called the Hessian, and is formed by taking the sum of inner-products
     H = sum J'J
 
 The Jacobian says how each error term (i.e. the difference between predicted and observed pixel patch centers) changes for a change in the parameters (the book's rotation and translation).
-
-<!--  E = sum (u' - u)^2 + (v' - v)^2
-   = sum du^2 + dv^2
-
-du(x+h) ~ u' + Du'h - u
-dv(x+h) ~ v' + Dv'h - v -->
 
 In this case, we would take the derivative of our predicted coordinates, u' and v', which gives us the motion that would occur if we were to adjust any one of our parameters.
 
