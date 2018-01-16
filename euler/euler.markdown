@@ -363,24 +363,23 @@ In [part two](todo) we'll actually get to the point and look at ways to solve th
 
 ## (Aside) How gimbal lock affects other optimization methods
 
-There's a class of *derivative-free optimization* methods that are less affected by this problem. Particle Swarm Optimization, for one, works by evaluating your error function at semi-random locations in the parameter space, and sharing information between samples to pinpoint the precise solution. It's similar to genetic algorithms or simulated annealing. Another, the Nelder-Mead method, evaluates the error function at the corners of a space-filling shape, and moves its corners based on the samples and a set of rules.
+I used gradient descent for this article because I didn't want too much mathematical baggage to get in the way, but I actually can't think of any paper that uses it for these types of problems (involving pose estimation). More often I see people use Gauss-Newton or Levenberg-Marquardt.
 
-I think these methods are less prone to getting stuck when using Euler angles because they are not confined to studying local changes of the error, as with gradient descent. They can jump to the solution (or to a close vicinity) and bypass places where, locally, it would seem like you're stuck. But without looking into it too closely, I think it *helps* to have three degrees of rotational freedom everywhere: if the solution is actually near, you don't want to force the algorithm to make a leap of faith to somewhere else.
+todo: ceres solvers
 
-<!-- todo: image of global methods? -->
-
-*Gradient-based methods*, like gradient descent, try find the solution by making local improvements. Other popular methods in this category are Gauss-Newton and Levenberg-Marquardt. An explanation of these is better had from an actual book than what I can type at the end of a blog post, but intuitively the difference between them and gradient descent can be illustrated by this picture:
+<!-- *Gradient-based methods*, like gradient descent, try find the solution by making local improvements. Other popular methods in this category are Gauss-Newton and Levenberg-Marquardt. An explanation of these is better had from an actual book than what I can type at the end of a blog post, but intuitively the difference between them and gradient descent can be illustrated by this picture:
 
 ![](gradientdescent.png)
 
 Gauss-Newton and Levenberg-Marquardt are both based on fitting a quadratic bowl to the error function around the current estimate, and heading straight to the basin in one step. Gradient descent only looks at the slope, and makes a bunch of roundabout steps.
-<!-- well not really, cause you want to do a line search... -->
 
-<!--  E = sum (u' - u)^2 + (v' - v)^2
-   = sum du^2 + dv^2
+todo: well not really, line search
 
-du(x+h) ~ u' + Du'h - u
-dv(x+h) ~ v' + Dv'h - v -->
+    E = sum (u' - u)^2 + (v' - v)^2
+       = sum du^2 + dv^2
+
+    du(x+h) ~ u' + Du'h - u
+    dv(x+h) ~ v' + Dv'h - v
 
 Doing this involves solving for the location of the basin, which is done by solving a matrix equation
 
@@ -425,4 +424,8 @@ One way to "fix" this problem generally, is to add a *damping* factor to the Hes
         +2.0000 -1.0001
     H = -1.0001 +2.0000
 
-which is totally invertible. Of course, this doesn't fix the fundamental issue&mdash;which is that you can't adjust the parameters in the correct direction. Adding a damping factor will stabilize the solver, by "slowing down" the step, but that doesn't help if the direction is wrong.
+which is totally invertible. Of course, this doesn't fix the fundamental issue&mdash;which is that you can't adjust the parameters in the correct direction. Adding a damping factor will stabilize the solver, by "slowing down" the step, but that doesn't help if the direction is wrong. -->
+
+There's also a class of *derivative-free optimization* methods. Particle Swarm Optimization, for one, works by evaluating the error at random locations in the parameter space, and sharing information between samples to pinpoint the precise solution. It's similar to genetic algorithms or Simulated Annealing. Another, the Nelder-Mead method, is similar in that it evaluates the error at corners of a space-filling shape, but it differs in that it moves the shape deterministically based on a set of rules.
+
+I think these methods are less prone to getting stuck when using Euler angles because they are not confined to studying local changes of the error, as with gradient descent. Instead, they can jump to the solution (or nearby) and bypass places where, locally, it would seem like you're stuck. But without looking into it too closely, I think it *helps* to have three degrees of rotational freedom always: if the solution is visually similar to the current estimate, you don't want to require a leap of faith to somewhere else, just because your parameters don't reflect that similarity.
