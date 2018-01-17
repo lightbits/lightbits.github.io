@@ -283,8 +283,6 @@ But alas, we find ourselves in the same rut at (-90,90,-90), where the book is s
 
 ## How gimbal lock affects gradient descent
 
-<!-- In the example from the previous section we didn't run into any issues because the true rotation was nowhere near gimbal lock. But what if the book is standing on its side and we take our photo from a 45 degree pitch: -->
-
 While we can always *find* a set of angles that exactly reproduce the photo (as there is no rotation Euler angles cannot describe), the problem, in the context of gradient descent, is that those angles can be unintuitively far away from our current guess.
 
 Remember, gradient descent only looks at small changes of the parameters&mdash;how the error increases or decreases in the small vicinity of our current estimate.
@@ -297,14 +295,9 @@ but the true rotation is at (-90, 45, -90)
 
 ![](sideways45.png)
 
-<!-- todo: overlay of translucent possible motions? -->
-<!-- todo: or JS slider -->
-
 then gradient descent will have trouble getting there, because neither of the motions you can produce with small changes of your parameters will tilt it backward.
 
 If those motions both increase the error, it means the optimization gets stuck, unable to progress. Alternatively, it'll start adjusting the wrong parameters, say, the translation, because they are the only ones that decrease the error.
-
-<!-- Intuitively, adjusting these parameters is less work than adjusting the gimbal-locked parameters. -->
 
 Unless you're able to jump to the right solution directly, getting there might involve things getting worse before getting better: an intermediate rotation, say at (-45,45,-45), will look like this
 
@@ -314,8 +307,6 @@ which is worse than the initial guess.
 
 So if you happen to find yourself at that 90 degrees sideways angle, perhaps because you've been tracking the book for a while, then you're stuck!
 
-<!-- Also a problem in Gauss Newton and Gradient-based methods in general. Show non-invertible Hessian. -->
-
 ## Next time
 
 In [part two](todo) we'll actually get to the point and look at ways to solve the problem.
@@ -324,77 +315,16 @@ In [part two](todo) we'll actually get to the point and look at ways to solve th
 
 I used gradient descent for this article because I didn't want too much mathematical baggage to get in the way, but I can't think of any paper that uses it on these types of problems (those involving pose estimation). More often I see people prefer Gauss-Newton or Levenberg-Marquardt.
 
-Like gradient descent, these also calculate the gradient of the error, but the way they use it to step toward the solution is more involved, and assumes that the error function is of a specific form (a sum of squared errors, like the one we looked at). The result is that they typically converge in much fewer steps, although each step now requires more computation.
+Like gradient descent, these also calculate the gradient of the error, but the way they use it to step toward the solution is more involved, and assumes that the error function is a sum of squared errors (the type we looked at). Because of this they typically converge in fewer steps, although each step now requires more computation.
 
-You can read more about these methods, and some computer vision problems they're used in, at this documentation page for Ceres&mdash;an optimization library. todo. All I'll say about them is that they also suffer from this gimbal lock problem, but the way it manifests itself is actually more clear; in fact, the math shouts at you when it happens!
+You can read more about these methods (and some computer vision problems they're used for) at this documentation page for Ceres, an optimization library. todo. All I'll say is that these are also affected by the gimbal lock problem, but the way it manifests itself is actually more evident than in gradient descent; in fact, the math tells you very clearly when it happens.
 
-Skipping some details (because either you already know and you'll find it boring, or you don't know and a paragraph in a blog post won't be much help) both methods involve solving a linear system of equations, like
-
-    J'J x = -J'y
-
-<!-- where x is a small parameter update (that we want to find) and J is a matrix where the columns are the derivatives of each error term (distance between predicted point and observed point on the book) evaluated at the current estimate. With six parameters and 5 of those point-point correspondences, it means J will be a 6x5 matrix. -->
-
-<!-- If you recall, what happens in gimbal lock is that two of the angle parameters produce identical rotations (although in opposite directions). This means that the derivative of the error function, with respect to those parameters, will -->
-
-<!-- *Gradient-based methods*, like gradient descent, try find the solution by making local improvements. Other popular methods in this category are Gauss-Newton and Levenberg-Marquardt. An explanation of these is better had from an actual book than what I can type at the end of a blog post, but intuitively the difference between them and gradient descent can be illustrated by this picture:
-
-![](gradientdescent.png)
-
-Gauss-Newton and Levenberg-Marquardt are both based on fitting a quadratic bowl to the error function around the current estimate, and heading straight to the basin in one step. Gradient descent only looks at the slope, and makes a bunch of roundabout steps.
-
-todo: well not really, line search
-
-    E = sum (u' - u)^2 + (v' - v)^2
-       = sum du^2 + dv^2
-
-    du(x+h) ~ u' + Du'h - u
-    dv(x+h) ~ v' + Dv'h - v
-
-Doing this involves solving for the location of the basin, which is done by solving a matrix equation
-
-    Hx = b
-
-where H is called the Hessian, and is formed by taking the sum of inner-products between the Jacobians
-
-    H = sum J'J
-
-The Jacobian says how each error term (i.e. the difference between predicted and observed pixel patch centers) changes for a change in the parameters (the book's rotation and translation).
-
-In this case, we would take the derivative of our predicted coordinates, u' and v', which gives us the motion that would occur if we were to adjust any one of our parameters.
-
-Suppose our estimated state is currently located at $r_y=90^\circ$. Remember earlier how we could adjust either rx or rz and only ever produce one type of motion? This will affect the derivatives in a way that has bad consequences for the numerical stability of the optimization problem.
-
-Intuitively, the loss of being able to move our image coordinates freely about all three axes, means that any direction we would like to move the coordinate, i.e. in order to minimize the objective, must be expressable as a linear combination of only those degrees of freedom. Otherwise, we cannot achieve that motion!
-
-Another way to see the problem is to look at what happens to the Hessian. For a point at the top of the plate, adjusting rx alone will cause the point to move along (1,0), whereas adjusting rz alone will cause it to move exactly opposite along (-1,0). The Jacobian for this coordinate will therefore contain this submatrix inside it:
-
-    +1 -1
-     0  0
-
-When we form the Hessian, we take the outer product of these Jacobians, which in this case would then contain the following submatrix:
-
-    |+1 0||+1 -1|   |+1 -1|
-    |-1 0|| 0  0| = |-1 +1|
-
-Suppose we had an optimization problem where the above was our Hessian. Calculating the Gauss-Newton step involves solving the equation Hx = b for a small step x. However, H, in this case, is not invertible; there is only one degree of freedom, as Hx can only ever produce vectors of the form
-
-         |+x1| + |-x2|   |x1-x2|   | (x1-x2)|
-    Hx = |-x1| + |+x2| = |x2-x1| = |-(x1-x2)|
-
-So we cannot even solve for an update, because there is no unique solution! Moreover, even if we were not exactly at the singular point, but nearby, H would have bad numerical properties, in that it looks like this
-
-        +1.0000 -1.0001
-    H = -1.0001 +1.0000
-
-Matrices like this are called ill-conditioned, and have the nasty property that you will get really large values in your x vector.
-
-One way to "fix" this problem generally, is to add a *damping* factor to the Hessian (depending on the damping factor the resulting method is then usually called Levenberg-Marquardt). For example, if we add the identity to H, we get
-
-        +2.0000 -1.0001
-    H = -1.0001 +2.0000
-
-which is totally invertible. Of course, this doesn't fix the fundamental issue&mdash;which is that you can't adjust the parameters in the correct direction. Adding a damping factor will stabilize the solver, by "slowing down" the step, but that doesn't help if the direction is wrong. -->
+<span style="color:#999;">
+Skipping some details&mdash;because either you already know about these methods and you'll find it boring, or you don't know and a paragraph in a blog post won't be much help&mdash;both methods are based on solving a linear system of equations, like `Ax = b`. The effect of gimbal lock is that the Hessian `A` becomes ill-conditioned, in that two of its columns are close to, or exactly, identical but with opposite sign. Those two columns correspond to the two angles that are gimbal-locking.
+</span>
 
 There's also a class of *derivative-free optimization* methods. Particle Swarm Optimization, for one, works by evaluating the error at random locations in the parameter space, and sharing information between samples to pinpoint the precise solution. It's similar to genetic algorithms or Simulated Annealing. Another, the Nelder-Mead method, is similar in that it evaluates the error at corners of a space-filling shape, but it differs in that it moves the shape deterministically based on a set of rules.
 
-I think these methods are less prone to getting stuck when using Euler angles because they are not confined to studying local changes of the error, as with gradient descent. Instead, they can jump to the solution (or nearby) and bypass places where, locally, it would seem like you're stuck. But without looking into it too closely, I think it *helps* to have three degrees of rotational freedom always: if the solution is visually similar to the current estimate, you don't want to require a leap of faith to somewhere else, just because your parameters don't reflect that similarity.
+I thought that these methods would be less prone to getting stuck with Euler angles, because they're not confined to studying local changes of the error, as with gradient descent. Instead, they can jump to the solution (or nearby) and bypass places where, locally, it would seem like you're stuck.
+
+But I believe it's still problematic: if the solution is visually similar to the current estimate, you don't want to require a leap of faith to some completely different set of angles, just because your parameters don't reflect that similarity. I.e. that if two orientations look visually similar to you, the parameters defining them should be similar as well.
