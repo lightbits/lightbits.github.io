@@ -1,4 +1,4 @@
-# The space in which rotations are: Getting stuck
+# The space of rotations
 
 **"If all you have is a hammer, everything looks like a nail."**
 
@@ -322,9 +322,19 @@ In [part two](todo) we'll actually get to the point and look at ways to solve th
 
 ## (Aside) How gimbal lock affects other optimization methods
 
-I used gradient descent for this article because I didn't want too much mathematical baggage to get in the way, but I actually can't think of any paper that uses it for these types of problems (involving pose estimation). More often I see people use Gauss-Newton or Levenberg-Marquardt.
+I used gradient descent for this article because I didn't want too much mathematical baggage to get in the way, but I can't think of any paper that uses it on these types of problems (those involving pose estimation). More often I see people prefer Gauss-Newton or Levenberg-Marquardt.
 
-todo: ceres solvers
+Like gradient descent, these also calculate the gradient of the error, but the way they use it to step toward the solution is more involved, and assumes that the error function is of a specific form (a sum of squared errors, like the one we looked at). The result is that they typically converge in much fewer steps, although each step now requires more computation.
+
+You can read more about these methods, and some computer vision problems they're used in, at this documentation page for Ceres&mdash;an optimization library. todo. All I'll say about them is that they also suffer from this gimbal lock problem, but the way it manifests itself is actually more clear; in fact, the math shouts at you when it happens!
+
+Skipping some details (because either you already know and you'll find it boring, or you don't know and a paragraph in a blog post won't be much help) both methods involve solving a linear system of equations, like
+
+    J'J x = -J'y
+
+<!-- where x is a small parameter update (that we want to find) and J is a matrix where the columns are the derivatives of each error term (distance between predicted point and observed point on the book) evaluated at the current estimate. With six parameters and 5 of those point-point correspondences, it means J will be a 6x5 matrix. -->
+
+<!-- If you recall, what happens in gimbal lock is that two of the angle parameters produce identical rotations (although in opposite directions). This means that the derivative of the error function, with respect to those parameters, will -->
 
 <!-- *Gradient-based methods*, like gradient descent, try find the solution by making local improvements. Other popular methods in this category are Gauss-Newton and Levenberg-Marquardt. An explanation of these is better had from an actual book than what I can type at the end of a blog post, but intuitively the difference between them and gradient descent can be illustrated by this picture:
 
