@@ -122,12 +122,12 @@ This works for any ugly function you can reasonably code up. In fact, our error 
 
 You know that feeling when you realize something is harder than you first thought?
 
-How do we take the derivative with respect to a rotation matrix? It's not a 3x3 pile of numbers we can choose freely, since not all 3x3 matrices is a valid rotation matrix; there's some constraints between the elements. So we can't just do finite differences on 9 numbers `r11, r12, r13 ...` for each element in the matrix, and use that for our gradient &sup1;.
+How do we take the derivative with respect to a rotation matrix? It's not a bunch of numbers we can choose freely because not all 3x3 matrices are valid rotation matrices; there are constraints between the elements&sup1;. So we can't just do finite differences on 9 numbers `r11, r12, r13 ...` for each element in the matrix, and use that for our gradient.
 
-What people usually do at this point is to parametrize the rotation matrix in terms of something else - like Euler angles.
+What people usually do at this point is to parametrize the rotation matrix in terms of some other numbers that *can* be chosen freely, like Euler angles.
 
 <span style="color:#999;">
-&sup1; We could, but then we get a *constrained* optimization problem to ensure that `r11, r12, ...` are kept in the space of valid rotation matrices. We have tools to solve those, but for some reason I never see people do it for estimating rotations. Quaternions calls for constrained optimization, but I've only seen people treat it as unconstrained and normalize the quaternion after each update.
+&sup1; Particularly, that the columns (or axes) of the matrix are perpendicular to each other and unit length.
 </span>
 
 Using Euler angles
