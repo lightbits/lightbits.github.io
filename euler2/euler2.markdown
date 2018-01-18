@@ -32,13 +32,12 @@ On the other hand, if I had chosen the default orientation to be sideways, we ge
 <!-- todo: 3d model+axes seen from tilted angle with camera as well? -->
 <img style="max-width:240px;" src="../euler/model.png"/>
 
-We found the true solution by adding small increments to our angle estimates.
-
 What if the model's default orientation followed us around?
 
-<!-- todo: replace with 3D textured book. -->
-<!-- todo: show book rotating into singularity, with euler angle printed on the side -->
-<!-- todo: show that we have lost a degree of freedom -->
+We found the true solution by adding small increments to our angle estimates.
+
+Choosing a different default orientation is equivalent to pre-rotating the model before each optimization step.
+
 <!-- todo: Let R0 = singularity rotation. And left-mul variable R -->
 
 What we did above was to parametrize our pose estimate with a set of minimal global parameters (absolute Euler angles). During optimization we would then update these directly, using the Gauss-Newton step. Another approach, if we still want to use Euler angles, is to optimize with respect to *local* Euler angles, that are afterwards used to update our *global* Euler angles. We can do this by concatenating two rotations: a local rotation, that is expressed with our optimization variables, and the global rotation, that stays constant during an optimization iteration. In other words, we parametrize an incremental rotation around a stationary orientation:
@@ -57,11 +56,13 @@ The red plate is adjusting ez, the green is adjusting ey and the blue is adjusti
 
 Reducing computational cost
 ---------------------------
-The above is fine if you're doing finite differences. But if you want analytic derivatives, or you're doing automatic differentiation, you'll find it to be kinda computationally nasty&mdash;with all those cosines and sines.
+The above is fine if you're doing finite differences. But if you want analytic derivatives, or you're doing automatic differentiation, you'll find it to be kinda computationally nasty&mdash;with all those cosines and sines. However, with our assumption that the optimization parameters remain small, we can make some useful approximations.
 
-The local parametrization above is pretty intuitive, but it's not very practical from a computing standpoint since exactly evaluating the derivative will involve all sorts of costly sines and cosines. However, with our assumption that the optimization parameters remain small, we can make some useful approximations.
+For small values of x: $\cos(x) \approx 1$ and $\sin(x) \approx x$, so we can replace all those nasty trigonmetric functions in the local Euler matrix with linear expressions.
 
-For small values of x: $\cos(x) \approx 1$ and $\sin(x) \approx x$, so we can replace all those nasty trigonmetric functions in the local Euler matrix with linear expressions. We could also parametrize our local rotation in terms of an angle-axis rotation:
+<!-- todo? -->
+
+We could also parametrize our local rotation in terms of an angle-axis rotation:
 
     R = (I + sin(|w|) K + (1-cos(|w|)) KK ) R0
     K = (w/|w|)^x
