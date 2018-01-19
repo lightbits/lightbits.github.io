@@ -80,27 +80,22 @@ In other words we use a rotation matrix to keep track of the book's orientation,
                  E(euler(-drx, 0, 0)*R0, [tx, ty, tz])) / 2drx
         dedry = (E(euler(0, +dry, 0)*R0, [tx, ty, tz]) -
                  E(euler(0, -dry, 0)*R0, [tx, ty, tz])) / 2drx
-             ...
+        dedrz = (E(euler(0, 0, +drz)*R0, [tx, ty, tz]) -
+                 E(euler(0, 0, -drz)*R0, [tx, ty, tz])) / 2drx
 
         rx = gain*dedrx
         ry = gain*dedry
         rz = gain*dedrz
         R0 = euler(rx,ry,rz)*R0
-        ...
+
+<!-- dedtx = ...
+dedty = ...
+dedtz = ...
+tx -= gain*dedtx
+ty -= gain*dedty
+tz -= gain*dedtz -->
 
 This solves the gimbal lock issue because the Euler angles are always kept close to zero.
-
-<!-- Because gradient descent looks for small increments to the parameters, the Euler angles are always kept close to zero. -->
-
-    R = Rz(drz)*Ry(0)*Rx(0) * R0
-    R = Rz(-drz)*Ry(0)*Rx(0) * R0
-
-    R = Rz(0)*Ry(dry)*Rx(0) * R0
-    R = Rz(0)*Ry(-dry)*Rx(0) * R0
-
-    R = Rz(0)*Ry(0)*Rx(drx) * R0
-    R = Rz(0)*Ry(0)*Rx(-drx) * R0
-
 
 ## Alternative explanation (mention problem of jumps later...)
 
