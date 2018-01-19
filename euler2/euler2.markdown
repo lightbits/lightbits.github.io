@@ -38,18 +38,30 @@ If, in the last example, the default orientation had been sideways, we would hav
 
 So you could imagine fixing the issue by changing the model itself, to have a different default orientation, based on what orientation you're currently estimating around.
 
-If you're around (0,0,0), you use the model with its cover facing the camera. But as you get close enough to (0, 90, 0), you change the model to the one seen from the side.
+If you're around (0,0,0), you use the model with its cover facing the camera. But as you get close enough to (0, 90, 0), you switch the model to the one seen from the side.
 
-Of course, you don't need to actually store seperate 3D models, each one with a different default orientation, since the only difference between them is a constant rotation matrix pre-applied to the 3D coordinates.
+Of course, you don't need to actually store seperate 3D models for each default orientation, since the only difference between them is a constant rotation matrix pre-applied to the 3D coordinates.
 <!-- the textures and vertices themselves stay the same. -->
+
+In code, this means the final rotation matrix would be calculated in one way among a number of branches:
+
+    if default orientation a:
+        R = Rz(rz)*Ry(ry)*Rx(rx) * Ra
+    if default orientation b:
+        R = Rz(rz)*Ry(ry)*Rx(rx) * Rb
+    ...
 
 <!-- This is what they do on aircraft? -->
 
-This would be well and good, except that our Euler angle estimates would need to change as well: if our current estimate is close to sideways, or (0, 90, 0), and we change the model so that (0,0,0) means sideways, then our current estimate has to go back to (0,0,0) again.
+This would be well and good, except that our Euler angle estimates would need to change as well: if our current estimate is close to sideways, or (0, 90, 0), and we switch model so that (0,0,0) means sideways, then our angles have to go back to (0,0,0) again.
 
 This sounds complicated and not very nice to implement...
 
 ## Absolute and relative rotations
+
+The problem with the above strategy is that we don't actually address the issue, which is that Euler angles suck at keeping track of absolute orientation. Any choice of Euler angles will, at some orientation away from zero, have weird nonintuitive properties.
+
+In other words, Euler angles are best when kept close to the origin.
 
 An alternative is
 
