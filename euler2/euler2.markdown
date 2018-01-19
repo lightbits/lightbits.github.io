@@ -38,9 +38,13 @@ If, in the last example, the default orientation had been sideways, we would hav
 
 So you could imagine fixing the issue by changing the model itself, to have a different default orientation, based on what orientation you're currently estimating around.
 
-If you're around (0,0,0), you use the model with its cover facing the camera. But as you get close enough to (0,90,0), you change the model to the one seen from the side.
+If you're around (0,0,0), you use the model with its cover facing the camera. But as you get close enough to (0, 90, 0), you change the model to the one seen from the side.
 
 <!-- This is what they do on aircraft? -->
+
+This would be well and good, except that our Euler angle estimates would need to change as well: if our current estimate is close to sideways, or (0, 90, 0), and we change the model so that (0,0,0) means sideways, then our current estimate has to go back to (0,0,0) again.
+
+## Alternative explanation (mention problem of jumps later...)
 
 Of course, you don't need to actually store seperate 3D models, each one with a different default orientation, since the only difference between them is a constant rotation matrix: the textures and vertices themselves stay the same.
 
