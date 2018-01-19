@@ -20,27 +20,28 @@ Fixing gimbal lock with local Euler angles
 When I made this textured 3D box, I subconsciously chose its "default" orientation (all angles set to zero) to be with its cover facing the camera, like so:
 
 <!-- todo: 3d model+axes seen from tilted angle with camera as well? -->
-<img style="max-width:240px;" src="../euler/model.png"/>
+![](model1.png)
 
-Although I made the choice without thinking, it happens to matter when we consider gimbal lock: we still have all three degrees of freedom around the zero orientation, but problems arise as we turn the book sideways.
+Although I made the choice without thinking, it happens to matter when we consider gimbal lock, the reason being that we have all three degrees of freedom when the book is facing the camera, but we lose one when we turn the book sideways.
 
 <!-- todo: three slider boxes. one slider per box. x,y,z. -->
 <!-- ![](../euler/plates1xyz.png) -->
 
-On the other hand, if I had chosen the default orientation to be sideways, we get all three degrees of freedom around the sideways orientation, and problems arise as we turn the book cover facing the camera.
+On the other hand, if the default orientation had been sideways, we would have three degrees of freedom at the sideways orientation, but not when the book is facing the camera.
 
 <!-- todo: 3d model+axes seen from tilted angle with camera as well? -->
-<img style="max-width:240px;" src="../euler/model.png"/>
+![](model2.png)
 
-If, in the last example, the default orientation had been sideways, we would have had no problems tilting the book backward, as we still have all three degrees of freedom at the zero orientation.
+If, in the last example, the default orientation had been sideways, gradient descent would have had no problems tilting the book backward slightly.
 
+<!-- todo: interactive puzzle? -->
 ![](../euler/sideways45.png)
 
-So you could imagine fixing the issue by changing the model itself, to have a different default orientation, based on what orientation you're currently estimating around.
+So you could imagine that a fix is to change the model itself, to have a different default orientation, based on what orientation we're currently estimating around.
 
-If you're around (0,0,0), you use the model with its cover facing the camera. But as you get close enough to (0, 90, 0), you switch the model to the one seen from the side.
+If we're around (0,0,0), we use the model with its cover facing the camera. But as we get close enough to (0, 90, 0), we switch the model to the one seen from the side.
 
-Of course, you don't need to actually store seperate 3D models for each default orientation, since the only difference between them is a constant rotation matrix pre-applied to the 3D coordinates.
+Of course, we don't need to actually store seperate 3D models for each default orientation, since the only difference between them is a constant rotation matrix pre-applied to the 3D coordinates.
 <!-- the textures and vertices themselves stay the same. -->
 
 In code, this means the final rotation matrix would be calculated in one way among a number of branches:
