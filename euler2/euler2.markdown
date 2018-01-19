@@ -63,21 +63,34 @@ The problem with the above strategy is that we don't actually address the issue,
 
 In other words, Euler angles are best when kept close to the origin.
 
-An alternative is
+An alternative is to keep track of the absolute orientation as a rotation matrix.
 
-We keep track of the absolute orientation as a rotation matrix.
+During one optimization step we use the current absolute orientation as the 'default orientation', and look for a small incremental rotation around that.
 
-During one optimization step we use the current estimated absolute orientation as the 'default orientation', and look for a small incremental rotation around that.
-
-![](cv-why-not-euler-anim3.gif)
+<!-- ![](cv-why-not-euler-anim3.gif) -->
 
     R = Rz(rz)*Ry(ry)*Rx(rx) * R0
 
-After one step (of taking finite differences and finding the small increments to each parameter) we update R0 with the above, giving a new stationary point for the next optimization step.
+After one step (of taking finite differences and finding the small increments to each parameter) we update R0, giving a new stationary point for the next optimization step, and 'resetting' the Euler angles.
 
-In other words we only use Euler angles inside one optimization step.
+In other words we use a rotation matrix to keep track of the book's orientation, and switch to Euler angles only inside one optimization step. Once we're done, we switch back to a rotation matrix, but update it with the Euler angles.
 
-Because gradient descent looks for small increments to the parameters, the Euler angles are always kept close to zero.
+    update_parameters(R0, tx,ty,tz):
+        dedrx = (E(euler(+drx, 0, 0)*R0, [tx, ty, tz]) -
+                 E(euler(-drx, 0, 0)*R0, [tx, ty, tz])) / 2drx
+        dedry = (E(euler(0, +dry, 0)*R0, [tx, ty, tz]) -
+                 E(euler(0, -dry, 0)*R0, [tx, ty, tz])) / 2drx
+             ...
+
+        rx = gain*dedrx
+        ry = gain*dedry
+        rz = gain*dedrz
+        R0 = euler(rx,ry,rz)*R0
+        ...
+
+This solves the gimbal lock issue because the Euler angles are always kept close to zero.
+
+<!-- Because gradient descent looks for small increments to the parameters, the Euler angles are always kept close to zero. -->
 
     R = Rz(drz)*Ry(0)*Rx(0) * R0
     R = Rz(-drz)*Ry(0)*Rx(0) * R0
