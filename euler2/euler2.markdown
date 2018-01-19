@@ -40,6 +40,9 @@ So you could imagine fixing the issue by changing the model itself, to have a di
 
 If you're around (0,0,0), you use the model with its cover facing the camera. But as you get close enough to (0, 90, 0), you change the model to the one seen from the side.
 
+Of course, you don't need to actually store seperate 3D models, each one with a different default orientation, since the only difference between them is a constant rotation matrix pre-applied to the 3D coordinates.
+<!-- the textures and vertices themselves stay the same. -->
+
 <!-- This is what they do on aircraft? -->
 
 This would be well and good, except that our Euler angle estimates would need to change as well: if our current estimate is close to sideways, or (0, 90, 0), and we change the model so that (0,0,0) means sideways, then our current estimate has to go back to (0,0,0) again.
