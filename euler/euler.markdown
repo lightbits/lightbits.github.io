@@ -287,25 +287,27 @@ While we can always *find* a set of angles that exactly reproduce the photo (as 
 
 Remember, gradient descent only looks at small changes of the parameters&mdash;how the error increases or decreases in the small vicinity of our current estimate.
 
-So if you're at (0, 90, 0)
+If you're at (0, 90, 0)&mdash;head-on sideways
 
 ![](gimballock-book.png)
 
-but the true rotation is at (-90, 45, -90)
+but the true rotation is at (-90, 45, -90)&mdash;sideways and tilted slightly backward
 
 ![](sideways45.png)
 
 then gradient descent will have trouble getting there, because neither of the motions you can produce with small changes of your parameters will tilt it backward.
 
-If those motions both increase the error, it means the optimization gets stuck, unable to progress. Alternatively, it'll start adjusting the wrong parameters, say, the translation, because they are the only ones that decrease the error.
-
-Unless you're able to jump to the right solution directly, getting there might involve things getting worse before getting better: an intermediate rotation, say at (-45,45,-45), will look like this
+If those motions both increase the error, it means the optimization gets stuck, unable to progress. In fact, unless you can jump directly to the solution, getting there might involve things getting worse before getting better: an intermediate rotation, say at (-45,45,-45), will look like this
 
 ![](gimballock3.png)
 
-which is worse than the initial guess.
+which is worse than the initial guess, so gradient descent will prefer to stay put. Alternatively, it'll start adjusting the wrong parameters, say, the translation, because they are the only ones that decrease the error.
 
-So if you happen to find yourself at that 90 degrees sideways angle, perhaps because you've been tracking the book for a while, then you're stuck!
+![](translation.png)
+
+For example, maybe there were relatively fewer point correspondences on the blank underside of the book than on the side, so that, in terms of the error, it is more beneficial to move the book up and back so as to align the ones on the side with each other.
+
+<!-- So if you happen to find yourself at that 90 degrees sideways angle, perhaps because you've been tracking the book for a while, then you're stuck! -->
 
 ## Next time
 
