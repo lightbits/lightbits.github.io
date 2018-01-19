@@ -17,7 +17,7 @@ But a solution to this problem can be found right where we started.
 Fixing gimbal lock with local Euler angles
 ------------------------------------------
 
-When I made coded up this textured 3D box I subconsciously chose that its "default" orientation (all angles set to zero) should be with its cover facing the camera, like so:
+When I made this textured 3D box, I subconsciously chose its "default" orientation (all angles set to zero) to be with its cover facing the camera, like so:
 
 <!-- todo: 3d model+axes seen from tilted angle with camera as well? -->
 <img style="max-width:240px;" src="../euler/model.png"/>
@@ -25,18 +25,45 @@ When I made coded up this textured 3D box I subconsciously chose that its "defau
 Although I made the choice without thinking, it happens to matter when we consider gimbal lock: we still have all three degrees of freedom around the zero orientation, but problems arise as we turn the book sideways.
 
 <!-- todo: three slider boxes. one slider per box. x,y,z. -->
-![](../euler/plates1xyz.png)
+<!-- ![](../euler/plates1xyz.png) -->
 
-On the other hand, if I had chosen the default orientation to be sideways, we get all three degrees of freedom around the sideways orientation, and problems arise as we turn the cover to face the camera.
+On the other hand, if I had chosen the default orientation to be sideways, we get all three degrees of freedom around the sideways orientation, and problems arise as we turn the book cover facing the camera.
 
 <!-- todo: 3d model+axes seen from tilted angle with camera as well? -->
 <img style="max-width:240px;" src="../euler/model.png"/>
 
-What if the model's default orientation followed us around?
+If, in the last example, the default orientation had been sideways, we would have had no problems tilting the book backward, as we still have all three degrees of freedom at the zero orientation.
 
-We found the true solution by adding small increments to our angle estimates.
+![](../euler/sideways45.png)
 
-Choosing a different default orientation is equivalent to pre-rotating the model before each optimization step.
+So you could imagine fixing the issue by changing the model itself, to have a different default orientation, based on what orientation you're currently estimating around.
+
+If you're around (0,0,0), you use the model with its cover facing the camera. But as you get close enough to (0,90,0), you change the model to the one seen from the side.
+
+<!-- This is what they do on aircraft? -->
+
+Of course, you don't need to actually store seperate 3D models, each one with a different default orientation, since the only difference between them is a constant rotation matrix: the textures and vertices themselves stay the same.
+
+Let's make this happen. Recall our error function:
+
+    measure_quality(matrix3x3 R, vector3 T):
+        e = 0
+        for u,v,p in patches
+            u_est,v_est = camera_projection(R*p + T)
+            du = u_est-u
+            dv = v_est-v
+            e += du*du + dv*dv
+        return e / num_patches
+
+The line of interest is the one where we transform and project the 3D model coordinate p. Changing the model's default orientation is the same as applying a constant rotation matrix to p, before applying any of the other transformations:
+
+    u_est,v_est = camera_projection(R*R0*p + T)
+
+Both R and R0 are variable rotations, in the sense that their values change as we update our Euler angle estimates: R is directly a function of the Euler angles and is always changing, while R0 is changed on a need-basis (if we are sufficiently close to a different orientation).
+
+But R0 isn't really a parameter we want to estimate, it's just a *fix* to let us rotate more freely, so we treat R0 as constant when take the derivative and stuff.
+
+<!-- Oh but wait, doesn't this mean that the Euler angles will jump when we change model? -->
 
 <!-- todo: Let R0 = singularity rotation. And left-mul variable R -->
 
