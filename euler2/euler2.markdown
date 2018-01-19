@@ -8,9 +8,9 @@
 3. CONCLUSION. Rotations are weird. Curious? Read barfoot, lie group and lie algebra.
     Global optimization, solving for rotation matrices. Existence of local minima. Global uniqueness. -->
 
-The take-home message from the last example was that Euler angles can  gimbal lock, whereby you lost the ability to rotate around all three axes. Instead, near a gimbal lock point, adjusting any single angle in isolation can only ever give you two distinct motions, instead of the three you started with.
+The take-home message from the last example was that Euler angles can  gimbal lock, whereby you lose the ability to rotate around all three axes. Instead, near gimbal lock, adjusting any single angle in isolation can only ever give you two distinct motions, instead of the three you started with.
 
-This can cause gradient descent to slow to a stop, or, adjust the wrong parameters because they are the only ones that are able to reduce the error. The reason for this is that gradient descent looks at how making small changes to any single angle affects the error, so the direction toward the solution has to be attainable in terms of the local motions you can produce, which is not always the case.
+This can cause gradient descent to slow to a stop, or, adjust the wrong parameters because they are the only ones that reduce the error. The reason for this is that gradient descent looks at how making small changes to any single angle affects the error, so the direction toward the solution has to be obtained in terms of the local motions you can produce, which is not always the case.
 
 But a solution to this problem can be found right where we started.
 
