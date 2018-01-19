@@ -44,6 +44,36 @@ If you're around (0,0,0), you use the model with its cover facing the camera. Bu
 
 This would be well and good, except that our Euler angle estimates would need to change as well: if our current estimate is close to sideways, or (0, 90, 0), and we change the model so that (0,0,0) means sideways, then our current estimate has to go back to (0,0,0) again.
 
+This sounds complicated and not very nice to implement...
+
+## Absolute and relative rotations
+
+An alternative is
+
+We keep track of the absolute orientation as a rotation matrix.
+
+During one optimization step we use the current estimated absolute orientation as the 'default orientation', and look for a small incremental rotation around that.
+
+![](cv-why-not-euler-anim3.gif)
+
+    R = Rz(rz)*Ry(ry)*Rx(rx) * R0
+
+After one step (of taking finite differences and finding the small increments to each parameter) we update R0 with the above, giving a new stationary point for the next optimization step.
+
+In other words we only use Euler angles inside one optimization step.
+
+Because gradient descent looks for small increments to the parameters, the Euler angles are always kept close to zero.
+
+    R = Rz(drz)*Ry(0)*Rx(0) * R0
+    R = Rz(-drz)*Ry(0)*Rx(0) * R0
+
+    R = Rz(0)*Ry(dry)*Rx(0) * R0
+    R = Rz(0)*Ry(-dry)*Rx(0) * R0
+
+    R = Rz(0)*Ry(0)*Rx(drx) * R0
+    R = Rz(0)*Ry(0)*Rx(-drx) * R0
+
+
 ## Alternative explanation (mention problem of jumps later...)
 
 Of course, you don't need to actually store seperate 3D models, each one with a different default orientation, since the only difference between them is a constant rotation matrix: the textures and vertices themselves stay the same.
