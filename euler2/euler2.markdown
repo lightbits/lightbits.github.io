@@ -1,16 +1,32 @@
 # The space of rotations: Taking small steps
 
-<!-- 1. INTRO. Getting around the problem with local Euler angles: store the current orientation and rotate around that. It's natural that it would work, considering how we could equivalently have pre-rotated our 3D model. Euler angles give you most rotational expressivity at the origin.
+<!--
+1. Fixing gimbal lock with switching models
+2. Fixing gimbal lock with absolute matrix and relative euler angles
+3. Reducing computational cost
+    a) small-angle approximation
+    orthogonalization
+    b) axis-angle
+4. But which order should you use, or should you use axis-angle?
+5. Well it doesn't matter
+    Local euler angle is identical to any other local euler angle ordering, axis-angle. Looking at it a different way, rotations commute (it doesn't matter which order you rotate in).
+6. Isn't that neat?
+    It's like there's a sort of "canonical" small step
+    In fact there is, and mathematicians gave a name to this discovery
+    The so3 lie algebra
+    We describe the "small step" in terms of three numbers. We've called them Euler angles and axis-angle. But they're exactly the same.
+    ...?
+    Exponential map
+7. Mathematicians like to generalize
+    Turns out we can describe lots of things in this way
+    Lie groups and lie algebras
+    Exponential map
+    Curious? Read barfoot. Lie Group and lie algebra.
 
-2. BODY. But which ordering should I choose? Well it doesn't matter. In fact, infinitesimally, there is a sort of "canonical" small step. Local Euler angle approach is identical to any other local Euler angle ordering, axis-angle and the exponential map.
-    Infinitesimally, rotations commute (it doesn't matter which order you rotate in). Let's dig in why... second order terms cancel.
+Q) Existence of local minima. Global uniqueness.
+Q) What about global optimization? Point cloud alignment. Closed-form solution for rotation matrix.
 
-se3 exponential map is harmful? shouldn't include rotation in translation or whatever it was?
-
-orthogonalization
-
-3. CONCLUSION. Rotations are weird. Curious? Read barfoot, lie group and lie algebra.
-    Global optimization, solving for rotation matrices. Existence of local minima. Global uniqueness. -->
+-->
 
 The take-home message from the last example was that Euler angles can  gimbal lock, whereby you lose the ability to rotate around all three axes. Instead, near gimbal lock, adjusting any single angle in isolation can only ever give you two distinct motions, instead of the three you started with.
 
