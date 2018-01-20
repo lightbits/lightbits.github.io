@@ -28,16 +28,21 @@
 
     "There are many ways of representing rotations mathematically, including matrices, axis-angle, Euler, unit-length quaternions. The most important fact to remember is that all these representations have the samy underlying rotation, which only has three degrees of freedom. A 3x3 rotation matrix has nine elements, but only three are independent. Unit-length quaternions have four parameters, but only three are independent (normalization)."
 
-    What we are really after here is to linearize rotation: translation is already linear, so we can add a small translation and get a new translation. But we can't do that with rotations.
+    What we are really after here is to linearize rotation: translation is already linear, so we can add a small translation and get a new translation. We can also find the midpoint between two translations by subtracting one from the other and dividing by two. We can't do that with rotation matrices.
+
     "The fact that rotations do not live in a vector space is fundamental when it comes to linearizing motion"
 
-    Can we generalize these statements somehow to other mathematical things? Yes: Lie groups and Lie algebras.
+    Can we generalize these statements somehow to other mathematical things? Yes: Lie groups and Lie algebras. While SO3 is not a vector space, it is a matrix Lie group. And there are other matrix Lie groups. And they all share some properties, and can be treated in similar ways.
+
+    Based on our discussion so far, one way you can begin to intuit Lie algebras, is that they encode what it means to take a small step. Knowing this encoding lets you do the tricks you're familiar with from vector spaces: you can interpolate between rotations, you can add or subtract rotations, you can take small steps.
 
     RVC Chapter 2.3
     Barfoot Chapter 6.2.5
+    Barfoot Chapter 7
 
 Q) Existence of local minima. Global uniqueness.
 Q) What about global optimization? Point cloud alignment. Closed-form solution for rotation matrix.
+Q) Interpolation can be important, because you might want to do a line search? (page 248). Or do you? What does it mean to 'continue' in a rotation?
 
 -->
 
