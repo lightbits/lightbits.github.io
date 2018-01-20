@@ -225,15 +225,15 @@ Wait what?
 ----------
 It turns out that for small angles, rotation matrices are actually commutative! This means that we really could have used any order we wanted in the above expression; they would all evaluate to roughly the same matrix. If you write out the matrix product Rz(ez)Ry(ey)Rx(ex), and replace the sines and cosines with the above approximations, you will get this:
 
-    [   1,   ex*ey - ez, ey + ex*ez]
-    [  ez, ex*ey*ez + 1, ey*ez - ex]
-    [ -ey,           ex,          1]
+    |   1      ex*ey - ez    ex*ez + ey |
+    |  ez    ex*ey*ez + 1    ey*ez - ex |
+    | -ey              ex             1 |
 
 Assuming ex,ey,ez are small, we'll drop everything but the first order terms to get:
 
-    [   1, -ez,  ey ]
-    [  ez,  1,  -ex ]
-    [ -ey,  ex,  1  ]
+    |   1   -ez    ey |
+    |  ez     1   -ex |
+    | -ey    ex     1 |
 
 And you will indeed get this same matrix no matter which order you apply the rotations. However, since the order appears to not matter, why should it matter if we use angle-axis over Euler angles? It turns out that it doesn't either! The matrix above is *exactly* the approximated angle-axis matrix for small rotations:
 
