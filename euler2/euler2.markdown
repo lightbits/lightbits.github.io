@@ -5,8 +5,8 @@
 2. Fixing gimbal lock with absolute matrix and relative euler angles
 3. Reducing computational cost
     a) small-angle approximation
-    orthogonalization
     b) axis-angle
+    c) orthogonalization: there are more accurate ways to do this [barfoor 250], but those are complicated to implement. Since we have a feedback loop anyway, it's ok to do a simple approach: inaccuracies will be corrected by the outer feedback loop. If we make a mistake and go too far, gradient descent (or whatever algorithm) will bring us back.
 4. But which order should you use, or should you use axis-angle?
 5. Well it doesn't matter
     Local euler angle is identical to any other local euler angle ordering, axis-angle. Looking at it a different way, rotations commute (it doesn't matter which order you rotate in).
