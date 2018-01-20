@@ -39,7 +39,48 @@ On the other hand, if the default orientation had been sideways, we would have t
 If, in the last example, the default orientation had been sideways, gradient descent would have had no problems tilting the book backward slightly.
 
 <!-- todo: interactive puzzle? -->
-![](../euler/sideways45.png)
+<!-- ![](../euler/sideways45.png) -->
+
+<style>
+.slider img {
+    display:inline;
+    max-width:none;
+    padding:0;
+    margin:0;
+}
+.slider {
+    display:inline-block;
+    overflow-y:hidden;
+    overflow-x:hidden;
+    border:1px solid #ccc;
+}
+.slider-wrap { width:fit-content; margin:0 auto; }
+input { vertical-align: middle; }
+@media screen and (max-width: 600px){
+.slider { width:160px; height:160px; }
+.slider img { width:160px; height:160px;}
+}
+</style>
+<div class="slider-wrap">
+    <div class="slider" id="slider1" style="max-width:160px;max-height:180px;">
+        <div style="width:700px;"><img src="x1.png"/><img src="x2.png"/><img src="x3.png"/></div>
+    </div>
+    <div class="slider" id="slider2" style="max-width:160px;max-height:180px;">
+        <div style="width:700px;"><img src="y1.png"/><img src="x2.png"/><img src="y3.png"/></div>
+    </div>
+    <div class="slider" id="slider3" style="max-width:160px;max-height:180px;">
+        <div style="width:700px;"><img src="z1.png"/><img src="x2.png"/><img src="z3.png"/></div>
+    </div>
+    <br>
+    <input type="range" min=0 max=2 step=1 value=0 oninput="document.getElementById('slider1').scrollLeft = this.value*160;"></input>
+    <label>rotate x</label>
+    <br>
+    <input type="range" min=0 max=2 step=1 value=0 oninput="document.getElementById('slider2').scrollLeft = this.value*160;"></input>
+    <label>rotate y</label>
+    <br>
+    <input type="range" min=0 max=2 step=1 value=0 oninput="document.getElementById('slider3').scrollLeft = this.value*160;"></input>
+    <label>rotate z</label>
+</div>
 
 So you could imagine that a fix is to change the model itself, to have a different default orientation, based on what orientation we're currently estimating around: If we're around (0,0,0), we use the model with its cover facing the camera. But as we get close enough to (0, 90, 0), we switch to the one seen from the side.
 
