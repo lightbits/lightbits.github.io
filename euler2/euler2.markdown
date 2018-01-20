@@ -20,7 +20,7 @@ Fixing gimbal lock with local Euler angles
 When I made this textured 3D box, I subconsciously chose its "default" orientation (all angles set to zero) to be with its cover facing the camera, like so:
 
 <!-- todo: 3d model+axes seen from tilted angle with camera as well? -->
-![](model1.png)
+![](model3.png)
 
 Although I made the choice without thinking, it happens to matter when we consider gimbal lock, the reason being that we have all three degrees of freedom when the book is facing the camera, but we lose one when we turn the book sideways.
 
@@ -30,7 +30,7 @@ Although I made the choice without thinking, it happens to matter when we consid
 On the other hand, if the default orientation had been sideways, we would have three degrees of freedom at the sideways orientation, but not when the book is facing the camera.
 
 <!-- todo: 3d model+axes seen from tilted angle with camera as well? -->
-![](model2.png)
+![](model4.png)
 
 If, in the last example, the default orientation had been sideways, gradient descent would have had no problems tilting the book backward slightly.
 
@@ -97,47 +97,6 @@ ty -= gain*dedty
 tz -= gain*dedtz -->
 
 This solves the gimbal lock issue because the Euler angles are always kept close to zero.
-
-## Alternative explanation (mention problem of jumps later...)
-
-Of course, you don't need to actually store seperate 3D models, each one with a different default orientation, since the only difference between them is a constant rotation matrix: the textures and vertices themselves stay the same.
-
-Let's make this happen. Recall our error function:
-
-    measure_quality(matrix3x3 R, vector3 T):
-        e = 0
-        for u,v,p in patches
-            u_est,v_est = camera_projection(R*p + T)
-            du = u_est-u
-            dv = v_est-v
-            e += du*du + dv*dv
-        return e / num_patches
-
-The line of interest is the one where we transform and project the 3D model coordinate p. Changing the model's default orientation is the same as applying a constant rotation matrix to p, before applying any of the other transformations:
-
-    u_est,v_est = camera_projection(R*R0*p + T)
-
-Both R and R0 are variable rotations, in the sense that their values change as we update our Euler angle estimates: R is directly a function of the Euler angles and is always changing, while R0 is changed on a need-basis (if we are sufficiently close to a different orientation).
-
-But R0 isn't really a parameter we want to estimate, it's just a *fix* to let us rotate more freely, so we treat R0 as constant when take the derivative and stuff.
-
-<!-- Oh but wait, doesn't this mean that the Euler angles will jump when we change model? -->
-
-<!-- todo: Let R0 = singularity rotation. And left-mul variable R -->
-
-What we did above was to parametrize our pose estimate with a set of minimal global parameters (absolute Euler angles). During optimization we would then update these directly, using the Gauss-Newton step. Another approach, if we still want to use Euler angles, is to optimize with respect to *local* Euler angles, that are afterwards used to update our *global* Euler angles. We can do this by concatenating two rotations: a local rotation, that is expressed with our optimization variables, and the global rotation, that stays constant during an optimization iteration. In other words, we parametrize an incremental rotation around a stationary orientation:
-
-    R = Rz(ez)Ry(ey)Rx(ex) R0
-
-The key that will make this work is to keep our local coordinates small, because if they were allowed to roam freely we might end up close to the singularity again. We avoid this problem by iteratively updating the stationary orientation after every time we solve for a Gauss-Newton step. R0 is treated as constant during each optimization iteration, and would be updated by the above equation successively after each iteration. In other words, each time we formulate our optimization problem we only search for a small perturbation away from zero, and reset the 'zero'-point after each iteration.
-
-If you try to visualize what happens here in our plate example, you will discover that even if R0 is located at the singular orientation, the left-hand matrix allows us to rotate the plate about any of the three axes, thereby recovering our lost degree of freedom! The following animation tries to illustrate this:
-
-![](cv-why-not-euler-anim3.gif)
-
-<!-- todo: replace with 3D textured cube. -->
-
-The red plate is adjusting ez, the green is adjusting ey and the blue is adjusting ex. As you can see, even though the nominal rotation is located at the singularity, we can rotate about all three axes. This ought to not be very surprising, since this is equivalent to just multiplying all your points with a constant rotation matrix R, and then doing a standard Euler rotation on the result. Again, this will have gimbal lock problems as soon as ey gets close to 90 degrees, but we're avoiding that by keeping our local parameters small!
 
 Reducing computational cost
 ---------------------------
