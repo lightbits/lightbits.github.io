@@ -43,10 +43,16 @@
     Barfoot Chapter 6.2.5
     Barfoot Chapter 7
     Barfoot Chapter 7.1.9: specific to optimization
+        (page 241 "A cleaner ways to carry out optimization is to find an update for C in the form of a small rotation on the left, rather than directly on the Lie algebra rotation vector representing C")
+        (I just decided to write 3000 words about one sentence: "... which has singularities associated with it")
 
 Q) Existence of local minima. Global uniqueness.
 Q) What about global optimization? Point cloud alignment. Closed-form solution for rotation matrix.
 Q) Interpolation can be important, because you might want to do a line search? (page 248). Or do you? What does it mean to 'continue' in a rotation?
+Q) Treating translation seperately from rotation (still as a vector space) is more beneficial I think. The se3 looks unnatural and makes it harder for optimization to achieve certain motions
+    Instead of having x y z correspond to translation and rx ry rz correspond to rotation, each along an intuitive axis, you need to do a weird mixture of perturbations, sometimes large, just to achieve motion along one axis.
+
+    Unwanted coupling: you don't want to have to rotate in order to translate.
 
 -->
 
