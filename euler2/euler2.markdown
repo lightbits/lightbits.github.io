@@ -16,12 +16,25 @@
     The so3 lie algebra
     We describe the "small step" in terms of three numbers. We've called them Euler angles and axis-angle. But they're exactly the same.
     ...?
+    What are these three numbers?
+    And what is this weird looking matrix they're placed inside?
     Exponential map
-7. Mathematicians like to generalize
-    Turns out we can describe lots of things in this way
-    Lie groups and lie algebras
-    Exponential map
-    Curious? Read barfoot. Lie Group and lie algebra.
+7. I'm going to leave you with some questions
+
+    What makes a small step in 'translation space' so much easier than a small step in 'rotation space'?
+    Why do translation vectors commute, but rotations do not?
+
+    "Rotations do not live in a vector space" [barfoot 6.2.5]
+
+    "There are many ways of representing rotations mathematically, including matrices, axis-angle, Euler, unit-length quaternions. The most important fact to remember is that all these representations have the samy underlying rotation, which only has three degrees of freedom. A 3x3 rotation matrix has nine elements, but only three are independent. Unit-length quaternions have four parameters, but only three are independent (normalization)."
+
+    What we are really after here is to linearize rotation: translation is already linear, so we can add a small translation and get a new translation. But we can't do that with rotations.
+    "The fact that rotations do not live in a vector space is fundamental when it comes to linearizing motion"
+
+    Can we generalize these statements somehow to other mathematical things? Yes: Lie groups and Lie algebras.
+
+    RVC Chapter 2.3
+    Barfoot Chapter 6.2.5
 
 Q) Existence of local minima. Global uniqueness.
 Q) What about global optimization? Point cloud alignment. Closed-form solution for rotation matrix.
@@ -102,7 +115,7 @@ So you could imagine that a fix is to change the model itself, to have a differe
 
 Of course, we don't need to actually store seperate 3D models for each default orientation, since the only difference between them is a constant rotation matrix pre-multiplied to the 3D coordinates in the original model.
 
-In code, this means that the book's actual orientation would be computed in one way or another, depending on which default orientation we are currently closest to:
+In code, this means that the book's actual orientation is computed in one way or another, depending on which default orientation we are currently closest to:
 
     if default orientation a:
         R = Rz(rz)*Ry(ry)*Rx(rx) * Ra
