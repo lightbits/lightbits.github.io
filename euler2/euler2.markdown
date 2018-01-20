@@ -188,10 +188,13 @@ This way we get the benefit of both: the expressivity of Euler angles around the
 
 Reducing computational cost
 ---------------------------
-<!-- actually it's not fine? what if you have tons of points? finite differences can actually be pretty expensive! would be nicer to get derivative through one and the same for loop -->
+<!-- actually it's not fine? what if you have tons of points? finite differences can actually be pretty expensive! would be nicer to get derivative through one and the same for loop. Oh but you can still do that with FD.... just take FD of each error term, or mix: take analytic derivative of one and FD of the other, and chain rule it. -->
 The above is fine if you're doing finite differences. But if you want analytic derivatives, or you're doing automatic differentiation, you'll find it to be kinda computationally nasty&mdash;with all those cosines and sines. However, with our assumption that the optimization parameters remain small, we can make some useful approximations.
 
 For small values of x: $\cos(x) \approx 1$ and $\sin(x) \approx x$, so we can replace all those nasty trigonmetric functions in the local Euler matrix with linear expressions.
+
+<!-- todo: what is a 'small' value? -->
+<!-- it's almost wasteful to use the trig terms when they're almost indistinguishable from the approximations. -->
 
 <!-- todo? -->
 
@@ -247,6 +250,9 @@ They look pretty similiar. But here's what happens if rz is linearly increased f
 ![](cv-why-not-euler-anim2.gif)
 
 As you can see, all three approaches are pretty close for small angles, but for angles above 45 degrees or so the approximation starts to break down to the point where it fails to accomplish a full 90 degree rotation.
+
+<!-- related: line search. what does it mean to rotate along a line in rotation space? -->
+<!-- related: this is mitigated by the fact that we do multiple iterations of optimization. So we don't expect to get to the solution in one step anyway. Understepping toward the solution is mitigated by taking another step. -->
 
 <!--
 ## Other questions
