@@ -76,9 +76,7 @@ We use Euler angles to express a small rotation around an absolute rotation matr
 
     R = Rz(rz)*Ry(ry)*Rx(rx) * R0
 
-To keep the Euler angles close to the origin (and prevent gimbal lock), we 'reset' them to zero after each step of gradient descent by left-multiplying the absolute matrix with the local matrix, giving a new stationary rotation for the next step.
-
-That is, we use a rotation matrix to keep track of the book's orientation, and switch to Euler angles only during one iteration of gradient descent. Once we're done, we switch back to a rotation matrix.
+To keep the Euler angles close to the origin (and prevent gimbal lock), we 'reset' them to zero after each step of gradient descent by left-multiplying the absolute matrix with the local matrix, giving a new stationary rotation for the next step:
 
     update_parameters(R0, tx,ty,tz):
         dedrx = (E(euler(+drx, 0, 0)*R0, [tx, ty, tz]) -
@@ -93,14 +91,11 @@ That is, we use a rotation matrix to keep track of the book's orientation, and s
         rz = gain*dedrz
         R0 = euler(rx,ry,rz)*R0
 
-We're essentially updating our model's default orientation after every step, instead of updating it only if we are close to a pre-defined switching point.
+This is not actually that different from our first strategy of switching models: in both cases we have the notion of an Euler angle 'offset' around some stationary rotation, some default orientation. But instead of updating our model's default orientation, and resetting the offset to zero, at pre-defined switching points, we update and reset after every optimization step.
 
-<!-- dedtx = ...
-dedty = ...
-dedtz = ...
-tx -= gain*dedtx
-ty -= gain*dedty
-tz -= gain*dedtz -->
+<!-- This is not actually that different from our first strategy of switching models: instead of changing our model's default orientation only if we are close to a pre-defined switching point, we change it after every optimization step. -->
+
+<!-- Also, in both strategies we have a notion of an Euler angle 'offset' from this default orientation, but instead of resetting the offset to zero at pre-defined switching points, we reset them after every step. -->
 
 Because we compute the gradient by adding or subtracting a small delta (this time around zero), we don't get gimbal locked as long as that delta is small enough.
 
