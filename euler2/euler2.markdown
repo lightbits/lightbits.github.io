@@ -7,6 +7,8 @@
 
 se3 exponential map is harmful? shouldn't include rotation in translation or whatever it was?
 
+orthogonalization
+
 3. CONCLUSION. Rotations are weird. Curious? Read barfoot, lie group and lie algebra.
     Global optimization, solving for rotation matrices. Existence of local minima. Global uniqueness. -->
 
@@ -39,11 +41,9 @@ If, in the last example, the default orientation had been sideways, gradient des
 <!-- todo: interactive puzzle? -->
 ![](../euler/sideways45.png)
 
-So you could imagine that a fix is to change the model itself, to have a different default orientation, based on what orientation we're currently estimating around.
+So you could imagine that a fix is to change the model itself, to have a different default orientation, based on what orientation we're currently estimating around: If we're around (0,0,0), we use the model with its cover facing the camera. But as we get close enough to (0, 90, 0), we switch to the one seen from the side.
 
-If we're around (0,0,0), we use the model with its cover facing the camera. But as we get close enough to (0, 90, 0), we switch the model to the one seen from the side.
-
-Of course, we don't need to actually store seperate 3D models for each default orientation, since the only difference between them is a constant rotation matrix pre-applied to the 3D coordinates.
+Of course, we don't need to actually store seperate 3D models for each default orientation, since the only difference between them is a constant rotation matrix pre-multiplied to the 3D coordinates in the original model.
 
 In code, this means we would check which default orientation we are closest to, and calculate the final rotation matrix in one way or another:
 
@@ -96,6 +96,8 @@ dedtz = ...
 tx -= gain*dedtx
 ty -= gain*dedty
 tz -= gain*dedtz -->
+
+This way we get the benefit of both: the expressivity of Euler angles around the origin, whilst keeping track of absolute orientation.
 
 This solves the gimbal lock issue because the Euler angles are always kept close to zero.
 
