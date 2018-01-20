@@ -45,7 +45,7 @@ So you could imagine that a fix is to change the model itself, to have a differe
 
 Of course, we don't need to actually store seperate 3D models for each default orientation, since the only difference between them is a constant rotation matrix pre-multiplied to the 3D coordinates in the original model.
 
-In code, this means we would check which default orientation we are closest to, and calculate the final rotation matrix in one way or another:
+In code, this means that the book's actual orientation would be computed in one way or another, depending on which default orientation we are currently closest to:
 
     if default orientation a:
         R = Rz(rz)*Ry(ry)*Rx(rx) * Ra
@@ -54,7 +54,9 @@ In code, this means we would check which default orientation we are closest to, 
 
 <!-- This is what they do on aircraft? -->
 
-This would be well and good, except that our Euler angles would need to change as well: if our current estimate is close to sideways, or (0, 90, 0), and we switch model so that (0,0,0) means sideways, then our angles have to go back to (0,0,0) again.
+This would be well and good, except that our Euler angles would need to change whenever we switch: if our current estimate is close to sideways, or (0, 90, 0), and we switch model so that (0,0,0) means sideways, then our angles have to go back to (0,0,0) again. <!--have to go back -->
+
+In other words, we would have to keep track of two things: 1) which default orientation we are currently based around, and 2) the Euler angle 'offset' around that. Whenever we switch default orientation, we need to reset the offset to zero.
 
 This sounds complicated and not very nice to implement...
 
@@ -68,12 +70,13 @@ Combining this insight with the idea of 'switching models', we can maybe think o
 
 The reason we dumped that in the first place was that we couldn't easily express a valid 'direction' to move in&mdash;a small incremental rotation. Meanwhile we have learned that Euler angles are great for that, but only around the origin.
 
-So here's one solution: we use Euler angles to express a small incremental rotation around our absolute rotation matrix:
+So here's one solution....
+
+We use Euler angles to express a small rotation around an absolute rotation matrix (like the 'default orientation' we talked about earlier):
 
     R = Rz(rz)*Ry(ry)*Rx(rx) * R0
 
-To keep the Euler angles close to the origin (and prevent gimbal lock), we 'reset' them to zero after each optimization step, by left-multiplying the absolute matrix with the local matrix, giving a new stationary rotation for the next step.
-<!-- After taking finite differences and finding small parameter increments, we update our absolute rotation by left-multiplying the local rotation, giving a new stationary point for the next optimization step, and 'resetting' the Euler angles to zero. -->
+To keep the Euler angles close to the origin (and prevent gimbal lock), we 'reset' them to zero after each step of gradient descent by left-multiplying the absolute matrix with the local matrix, giving a new stationary rotation for the next step.
 
 That is, we use a rotation matrix to keep track of the book's orientation, and switch to Euler angles only during one iteration of gradient descent. Once we're done, we switch back to a rotation matrix.
 
@@ -90,6 +93,8 @@ That is, we use a rotation matrix to keep track of the book's orientation, and s
         rz = gain*dedrz
         R0 = euler(rx,ry,rz)*R0
 
+We're essentially updating our model's default orientation after every step, instead of updating it only if we are close to a pre-defined switching point.
+
 <!-- dedtx = ...
 dedty = ...
 dedtz = ...
@@ -97,9 +102,9 @@ tx -= gain*dedtx
 ty -= gain*dedty
 tz -= gain*dedtz -->
 
-This way we get the benefit of both: the expressivity of Euler angles around the origin, whilst keeping track of absolute orientation.
+Because we compute the gradient by adding or subtracting a small delta (this time around zero), we don't get gimbal locked as long as that delta is small enough.
 
-This solves the gimbal lock issue because the Euler angles are always kept close to zero.
+This way we get the benefit of both: the expressivity of Euler angles around the origin while also keeping track of absolute orientation.
 
 Reducing computational cost
 ---------------------------
