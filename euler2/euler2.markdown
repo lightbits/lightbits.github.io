@@ -4,9 +4,12 @@
 1. Fixing gimbal lock with switching models
 2. Fixing gimbal lock with absolute matrix and relative euler angles
 3. Reducing computational cost
+    Automatic differentiation
+    Analytic derivatives
     a) small-angle approximation
     b) axis-angle
     c) orthogonalization: there are more accurate ways to do this [barfoor 250], but those are complicated to implement. Since we have a feedback loop anyway, it's ok to do a simple approach: inaccuracies will be corrected by the outer feedback loop. If we make a mistake and go too far, gradient descent (or whatever algorithm) will bring us back.
+    (we can do something much more complicated, but it only gives us like 5 percent more accuracy. Is it worth it? For the people reading your code?)
 4. But which order should you use, or should you use axis-angle?
 5. Well it doesn't matter
     Local euler angle is identical to any other local euler angle ordering, axis-angle. Looking at it a different way, rotations commute (it doesn't matter which order you rotate in).
@@ -39,6 +42,7 @@
     RVC Chapter 2.3
     Barfoot Chapter 6.2.5
     Barfoot Chapter 7
+    Barfoot Chapter 7.1.9: specific to optimization
 
 Q) Existence of local minima. Global uniqueness.
 Q) What about global optimization? Point cloud alignment. Closed-form solution for rotation matrix.
