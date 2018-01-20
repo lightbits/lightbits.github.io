@@ -5,6 +5,8 @@
 2. BODY. But which ordering should I choose? Well it doesn't matter. In fact, infinitesimally, there is a sort of "canonical" small step. Local Euler angle approach is identical to any other local Euler angle ordering, axis-angle and the exponential map.
     Infinitesimally, rotations commute (it doesn't matter which order you rotate in). Let's dig in why... second order terms cancel.
 
+se3 exponential map is harmful? shouldn't include rotation in translation or whatever it was?
+
 3. CONCLUSION. Rotations are weird. Curious? Read barfoot, lie group and lie algebra.
     Global optimization, solving for rotation matrices. Existence of local minima. Global uniqueness. -->
 
@@ -44,37 +46,38 @@ If we're around (0,0,0), we use the model with its cover facing the camera. But 
 Of course, we don't need to actually store seperate 3D models for each default orientation, since the only difference between them is a constant rotation matrix pre-applied to the 3D coordinates.
 <!-- the textures and vertices themselves stay the same. -->
 
-In code, this means the final rotation matrix would be calculated in one way among a number of branches:
+In code, this means we would check which default orientation we are closest to, and calculate the final rotation matrix in one way or another:
 
     if default orientation a:
         R = Rz(rz)*Ry(ry)*Rx(rx) * Ra
     if default orientation b:
         R = Rz(rz)*Ry(ry)*Rx(rx) * Rb
-    ...
 
 <!-- This is what they do on aircraft? -->
 
-This would be well and good, except that our Euler angle estimates would need to change as well: if our current estimate is close to sideways, or (0, 90, 0), and we switch model so that (0,0,0) means sideways, then our angles have to go back to (0,0,0) again.
+This would be well and good, except that our Euler angles would need to change as well: if our current estimate is close to sideways, or (0, 90, 0), and we switch model so that (0,0,0) means sideways, then our angles have to go back to (0,0,0) again.
 
 This sounds complicated and not very nice to implement...
 
 ## Absolute and relative rotations
 
-The problem with the above strategy is that we don't actually address the issue, which is that Euler angles suck at keeping track of absolute orientation. Any choice of Euler angles will, at some orientation away from zero, have weird nonintuitive properties.
+The problem with the above strategy is that we don't actually address the issue, which is that Euler angles suck at keeping track of absolute orientation: any choice of Euler angles will, at some rotation away from zero, degrade in their ability to express three degrees of freedom.
 
 In other words, Euler angles are best when kept close to the origin.
 
-An alternative is to keep track of the absolute orientation as a rotation matrix.
+...
 
-During one optimization step we use the current absolute orientation as the 'default orientation', and look for a small incremental rotation around that.
+Combining this insight with the idea of 'switching models', we can maybe think of another solution: if Euler angles are so poor at describing absolute orientation, what if we used a rotation matrix?
 
-<!-- ![](cv-why-not-euler-anim3.gif) -->
+The reason we dumped that in the first place, was that we couldn't easily express a valid 'direction' to move in&mdash;a small incremental rotation. But meanwhile we have learned that Euler angles are great for that, but only around the zero point.
+
+So here's one solution: during one optimization step we use the current absolute orientation as the 'default orientation', and look for a small incremental rotation around that, expressed with Euler angles.
 
     R = Rz(rz)*Ry(ry)*Rx(rx) * R0
 
-After one step (of taking finite differences and finding the small increments to each parameter) we update R0, giving a new stationary point for the next optimization step, and 'resetting' the Euler angles.
+After taking finite differences and finding small parameter increments, we update our absolute rotation by left-multiplying the local rotation, giving a new stationary point for the next optimization step, and 'resetting' the Euler angles to zero.
 
-In other words we use a rotation matrix to keep track of the book's orientation, and switch to Euler angles only inside one optimization step. Once we're done, we switch back to a rotation matrix, but update it with the Euler angles.
+In other words we use a rotation matrix to keep track of the book's orientation, and switch to Euler angles only during one iteration of gradient descent. Once we're done, we switch back to a rotation matrix, but update it with the Euler angles.
 
     update_parameters(R0, tx,ty,tz):
         dedrx = (E(euler(+drx, 0, 0)*R0, [tx, ty, tz]) -
