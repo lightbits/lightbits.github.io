@@ -44,7 +44,6 @@ So you could imagine that a fix is to change the model itself, to have a differe
 If we're around (0,0,0), we use the model with its cover facing the camera. But as we get close enough to (0, 90, 0), we switch the model to the one seen from the side.
 
 Of course, we don't need to actually store seperate 3D models for each default orientation, since the only difference between them is a constant rotation matrix pre-applied to the 3D coordinates.
-<!-- the textures and vertices themselves stay the same. -->
 
 In code, this means we would check which default orientation we are closest to, and calculate the final rotation matrix in one way or another:
 
@@ -63,21 +62,20 @@ This sounds complicated and not very nice to implement...
 
 The problem with the above strategy is that we don't actually address the issue, which is that Euler angles suck at keeping track of absolute orientation: any choice of Euler angles will, at some rotation away from zero, degrade in their ability to express three degrees of freedom.
 
-In other words, Euler angles are best when kept close to the origin.
-
-...
+In other words, Euler angles are best when kept close to the origin....
 
 Combining this insight with the idea of 'switching models', we can maybe think of another solution: if Euler angles are so poor at describing absolute orientation, what if we used a rotation matrix?
 
-The reason we dumped that in the first place, was that we couldn't easily express a valid 'direction' to move in&mdash;a small incremental rotation. But meanwhile we have learned that Euler angles are great for that, but only around the zero point.
+The reason we dumped that in the first place was that we couldn't easily express a valid 'direction' to move in&mdash;a small incremental rotation. Meanwhile we have learned that Euler angles are great for that, but only around the origin.
 
-So here's one solution: during one optimization step we use the current absolute orientation as the 'default orientation', and look for a small incremental rotation around that, expressed with Euler angles.
+So here's one solution: we use Euler angles to express a small incremental rotation around our absolute rotation matrix:
 
     R = Rz(rz)*Ry(ry)*Rx(rx) * R0
 
-After taking finite differences and finding small parameter increments, we update our absolute rotation by left-multiplying the local rotation, giving a new stationary point for the next optimization step, and 'resetting' the Euler angles to zero.
+To keep the Euler angles close to the origin (and prevent gimbal lock), we 'reset' them to zero after each optimization step, by left-multiplying the absolute matrix with the local matrix, giving a new stationary rotation for the next step.
+<!-- After taking finite differences and finding small parameter increments, we update our absolute rotation by left-multiplying the local rotation, giving a new stationary point for the next optimization step, and 'resetting' the Euler angles to zero. -->
 
-In other words we use a rotation matrix to keep track of the book's orientation, and switch to Euler angles only during one iteration of gradient descent. Once we're done, we switch back to a rotation matrix, but update it with the Euler angles.
+That is, we use a rotation matrix to keep track of the book's orientation, and switch to Euler angles only during one iteration of gradient descent. Once we're done, we switch back to a rotation matrix.
 
     update_parameters(R0, tx,ty,tz):
         dedrx = (E(euler(+drx, 0, 0)*R0, [tx, ty, tz]) -
@@ -103,6 +101,7 @@ This solves the gimbal lock issue because the Euler angles are always kept close
 
 Reducing computational cost
 ---------------------------
+<!-- actually it's not fine? what if you have tons of points? finite differences can actually be pretty expensive! would be nicer to get derivative through one and the same for loop -->
 The above is fine if you're doing finite differences. But if you want analytic derivatives, or you're doing automatic differentiation, you'll find it to be kinda computationally nasty&mdash;with all those cosines and sines. However, with our assumption that the optimization parameters remain small, we can make some useful approximations.
 
 For small values of x: $\cos(x) \approx 1$ and $\sin(x) \approx x$, so we can replace all those nasty trigonmetric functions in the local Euler matrix with linear expressions.
