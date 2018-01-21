@@ -191,13 +191,11 @@ Analytic derivatives
 a) small-angle approximation
 b) axis-angle -->
 
-Until now I've kept an aggressively *positive* attitude towards laziness and inefficiency. But sometimes, say, because your algorithm takes an entire day to run, you don't need to write code faster, but write faster code.
+Until now I've kept an aggressively *positive* attitude towards laziness and inefficiency. But sometimes, like when your algorithm takes an entire day to run, you don't need to write code faster, but write faster code.
 
-<p style="max-width:400px;margin:0 auto;color:#999;">
-Actually that is only a cover story. We're going to take this as an excuse to go on a wild mathematical tangent and learn more about the world of rotations. So buckle up.
-</p>
+<!-- Actually that is only a cover story. We're going to take this as an excuse to go on a wild mathematical tangent and learn more about the world of rotations. So buckle up. -->
 
-So what does the above solution (because it does solve the problem) actually involve, in terms of stuff that your CPU has to do?
+So what does our solution actually involve in terms of stuff that the CPU has to do?
 
 First, we see that we evaluate the error function E twelve times (two for each parameter and six parameters). In our toy example this is not an issue because it was just a loop over like five points.
 
