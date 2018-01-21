@@ -4,12 +4,6 @@
 1. Fixing gimbal lock with switching models
 2. Fixing gimbal lock with absolute matrix and relative euler angles
 3. Reducing computational cost
-    Automatic differentiation
-    Analytic derivatives
-    a) small-angle approximation
-    b) axis-angle
-    c) orthogonalization: there are more accurate ways to do this [barfoor 250], but those are complicated to implement. Since we have a feedback loop anyway, it's ok to do a simple approach: inaccuracies will be corrected by the outer feedback loop. If we make a mistake and go too far, gradient descent (or whatever algorithm) will bring us back.
-    (we can do something much more complicated, but it only gives us like 5 percent more accuracy. Is it worth it? For the people reading your code?)
 4. But which order should you use, or should you use axis-angle?
 5. Well it doesn't matter
     Local euler angle is identical to any other local euler angle ordering, axis-angle. Looking at it a different way, rotations commute (it doesn't matter which order you rotate in).
@@ -192,6 +186,15 @@ This way we get the benefit of both: the expressivity of Euler angles around the
 
 Reducing computational cost
 ---------------------------
+<!-- Automatic differentiation
+Analytic derivatives
+a) small-angle approximation
+b) axis-angle -->
+
+Until now I've kept an aggressively *positive* attitude towards laziness and inefficiency. But sometimes, say, because your algorithm takes an entire day to run, you don't need to write code faster, but write faster code.
+
+(That is only a cover story though. We're going to take this as an excuse to go on a wild mathematical tangent and learn more about the world of rotations. So buckle up.)
+
 <!-- actually it's not fine? what if you have tons of points? finite differences can actually be pretty expensive! would be nicer to get derivative through one and the same for loop. Oh but you can still do that with FD.... just take FD of each error term, or mix: take analytic derivative of one and FD of the other, and chain rule it. -->
 The above is fine if you're doing finite differences. But if you want analytic derivatives, or you're doing automatic differentiation, you'll find it to be kinda computationally nasty&mdash;with all those cosines and sines. However, with our assumption that the optimization parameters remain small, we can make some useful approximations.
 
@@ -225,8 +228,15 @@ In either case, since we are now updating our stationary point, R0, by concatena
 
 But before then, you might wonder which one of the above you should use: axis-angle or Euler? And if you use Euler, which order should you use? There seems to be too many choices here, and trying them all will take time! But I'll let you in on a little secret: it doesn't matter!
 
-Wait what?
-----------
+Aside: Orthogonalization
+------------------------
+
+<!-- there are more accurate ways to do this [barfoor 250], but those are complicated to implement. Since we have a feedback loop anyway, it's ok to do a simple approach: inaccuracies will be corrected by the outer feedback loop. If we make a mistake and go too far, gradient descent (or whatever algorithm) will bring us back. -->
+<!-- (we can do something much more complicated, but it only gives us like 5 percent more accuracy. Is it worth it? For the people reading your code? -->
+
+So many choices.... but does it matter?
+---------------------------------------
+
 It turns out that for small angles, rotation matrices are actually commutative! This means that we really could have used any order we wanted in the above expression; they would all evaluate to roughly the same matrix. If you write out the matrix product Rz(ez)Ry(ey)Rx(ex), and replace the sines and cosines with the above approximations, you will get this:
 
     |   1      ex*ey - ez    ex*ez + ey |
