@@ -161,9 +161,9 @@ But to keep the Euler angles close to zero (and prevent gimbal lock), we 'reset'
         dedrx = (E(euler(+drx, 0, 0)*R0, [tx, ty, tz]) -
                  E(euler(-drx, 0, 0)*R0, [tx, ty, tz])) / 2drx
         dedry = (E(euler(0, +dry, 0)*R0, [tx, ty, tz]) -
-                 E(euler(0, -dry, 0)*R0, [tx, ty, tz])) / 2drx
+                 E(euler(0, -dry, 0)*R0, [tx, ty, tz])) / 2dry
         dedrz = (E(euler(0, 0, +drz)*R0, [tx, ty, tz]) -
-                 E(euler(0, 0, -drz)*R0, [tx, ty, tz])) / 2drx
+                 E(euler(0, 0, -drz)*R0, [tx, ty, tz])) / 2drz
 
         // Move/Rotate in the opposite 'direction' by some amount
         rx = -gain*dedrx
@@ -190,22 +190,28 @@ Until now I've kept an aggressively *positive* attitude towards laziness and ine
 
 So what does our solution actually involve in terms of stuff that the CPU has to do?
 
-<pre style="margin:0 8px -8px 0;float:left;width:50%;"><code style="font-size:60%;">update_parameters(R0, tx,ty,tz):
-    dedrx = (E(euler(+drx,0,0)*R0, [tx,ty,tz]) -
-             E(euler(-drx,0,0)*R0, [tx,ty,tz]))/2drx
-    dedry = (E(euler(0,+dry,0)*R0, [tx,ty,tz]) -
-             E(euler(0,-dry,0)*R0, [tx,ty,tz]))/2drx
-    dedrz = (E(euler(0,0,+drz)*R0, [tx,ty,tz]) -
-             E(euler(0,0,-drz)*R0, [tx,ty,tz]))/2drx
+<pre style="margin:0 8px -8px 0;float:left;width:41%;"><code style="font-size:60%;">update_parameters(R, T):
+  dedrx = (E(euler(+drx,0,0)*R, T) -
+           E(euler(-drx,0,0)*R, T))/2drx
+  dedry = (E(euler(0,+dry,0)*R, T) -
+           E(euler(0,-dry,0)*R, T))/2dry
+  dedrz = (E(euler(0,0,+drz)*R, T) -
+           E(euler(0,0,-drz)*R, T))/2drz
+  dedtx = (E(R, T+[dtx,0,0]) -
+           E(R, T-[dtx,0,0]))/2dtx
+  dedty = (E(R, T+[0,dty,0]) -
+           E(R, T-[0,dty,0]))/2dty
+  dedtz = (E(R, T+[0,0,dtz]) -
+           E(R, T-[0,0,dtz]))/2dtz
 
-    rx = -gain*dedrx
-    ry = -gain*dedry
-    rz = -gain*dedrz
-
-    R0 = euler(rx,ry,rz)*R0
+  rx = -gain*dedrx
+  ry = -gain*dedry
+  rz = -gain*dedrz
+  R = euler(rx,ry,rz)*R
+  T -= gain*[dedtx, dedty, dedtz]
 </code></pre>
 
-First, we see that each optimization step evaluates the error function E twelve times (two for each parameter and six parameters). In our toy example this is not an issue because it was a trivial loop over five-or-so 2D-3D correspondences.
+Maybe most prominently, each optimization step will evaluate the error function E twelve times. In our toy example this is not an issue because it was a trivial loop over five-or-so 2D-3D correspondences.
 
 But let's look at a real algorithm, Direct Sparse Odometry. This algorithm is designed to track camera motion. At its core, what it does is not too different from our book example, but instead of a book, they have a 3D model of the world (a depth map that they estimate simultaneously). They use it to find how the camera moves between frames similar to how we find how the book was positioned: by aligning the model to the photo.
 
