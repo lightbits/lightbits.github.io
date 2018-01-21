@@ -213,12 +213,12 @@ So what does our solution actually involve in terms of stuff that the CPU has to
 
 Maybe most prominently, each optimization step will evaluate the error function E twelve times. In our toy example this is not an issue because it was a trivial loop over five-or-so 2D-3D correspondences.
 
-But let's look at a real algorithm, Direct Sparse Odometry. This algorithm is designed to track camera motion. At its core, what it does is not too different from our book example, but instead of a book, they have a 3D model of the world (a depth map that they estimate simultaneously). They use it to find how the camera moves between frames similar to how we find how the book was positioned: by aligning the model to the photo.
+But let's look at a real algorithm, Direct Sparse Odometry. This algorithm is designed to track camera motion. At its core, what it does is the same as our book example, but instead of a book, they have a 3D model of the world (a depth map). Similar to how we try to find how the book is positioned in a photo, they use their model of the world to find how the camera moves between frames: by aligning the model to the photo.
 
 ![](dso.jpg)
 
 <p style="max-width:500px;margin:0 auto;color:#999;">
-Figure from Direct Sparse Odometry paper showing color-coded depth maps.
+A figure from Direct Sparse Odometry paper showing color-coded depth maps. In addition to estimating the camera pose over time, they also estimate the depth maps themselves, in a process called bundle adjustment (called so because it adjusts the entire bundle of parameters: points *and* cameras.)
 </p>
 
 Our book model had five points, but their depth maps can have as many points as there are pixels in an image. Looping over all of those can be prohibitively slow, especially if we do it twelve times per optimization step!
