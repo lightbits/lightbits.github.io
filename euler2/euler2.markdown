@@ -125,9 +125,9 @@ input { vertical-align: middle; }
 
 So you could imagine that a fix is to change the model itself, to have a different default orientation, based on what orientation we're currently estimating around: If we're around (0,0,0), we use the model with its cover facing the camera. But as we get close enough to (0, 90, 0), we switch to the one seen from the side.
 
-Of course, we don't need to actually store seperate 3D models for each default orientation, since the only difference between them is a constant rotation matrix pre-multiplied to the 3D coordinates in the original model.
+Of course, we don't need to actually store seperate 3D models for each default orientation, since the only difference between them is a constant rotation matrix pre-multiplied to the 3D coordinates in the original model. In other words, we can get by with a bunch of `if`-statements, computing the book's orientation in one way or another based on which default orientation is closest:
 
-In code, this means that the book's actual orientation is computed in one way or another, depending on which default orientation we are currently closest to:
+<!-- In code, this means that the book's actual orientation is computed in one way or another, depending on which default orientation we are currently closest to: -->
 
     if default orientation a:
         R = Rz(rz)*Ry(ry)*Rx(rx) * Ra
@@ -144,17 +144,13 @@ This sounds complicated and not very nice to implement...
 
 ## Absolute and relative rotations
 
-The problem with the above strategy is that we don't actually address the issue, which is that Euler angles suck at keeping track of absolute orientation: any choice of Euler angles will degrade in their ability to express three degrees of freedom *somewhere*.
-
-In other words, Euler angles are best when kept close to the origin....
+The problem with the above strategy is that we don't actually address the issue, which is that Euler angles suck at keeping track of absolute orientation: any choice of Euler angles will degrade in their ability to express three degrees of freedom *somewhere*. In other words, Euler angles are best when kept close to the origin....
 
 Combining this insight with the idea of 'switching models', we can maybe think of another solution: if Euler angles are so poor at describing absolute orientation, what if we used a rotation matrix?
 
 The reason we dumped that in the first place was that we couldn't easily express a valid 'direction' to move in&mdash;a small incremental rotation. Meanwhile we have learned that Euler angles are great for that, but only around the origin.
 
-So here's one solution....
-
-We use Euler angles to express an 'offset' around an absolute rotation matrix (one like the default orientation we talked about earlier):
+So here's one solution: we use Euler angles to express an 'offset' around an absolute rotation matrix (one like the default orientation we talked about earlier):
 
     R = Rz(rz)*Ry(ry)*Rx(rx) * R0
 
@@ -183,9 +179,7 @@ This is not actually that different from our first strategy of switching models:
 
 <!-- Also, in both strategies we have a notion of an Euler angle 'offset' from this default orientation, but instead of resetting the offset to zero at pre-defined switching points, we reset them after every step. -->
 
-Because we compute the gradient by adding or subtracting a small delta (this time around zero), we don't get gimbal locked as long as that delta is small enough.
-
-This way we get the benefit of both: the expressivity of Euler angles around the origin while also keeping track of absolute orientation.
+Because we compute the gradient by adding or subtracting a small delta (this time around zero), we don't get gimbal locked as long as that delta is small enough. This way we get the benefit of both: the expressivity of Euler angles around the origin while also keeping track of absolute orientation.
 
 Reducing computational cost
 ---------------------------
@@ -240,6 +234,18 @@ Small rotations go to work
 --------------------------
 
 We might call ourselves satisfied at this point. But why did I choose that particular Euler angle ordering?
+
+It turns out that for small angles, rotation matrices *commute*. In other words, the order in which you apply rotations doesn't matter. If you write out the matrix product Rz(ez)Ry(ey)Rx(ex), and replace the sines and cosines with the above approximations, you will get this:
+
+    |   1      ex*ey - ez    ex*ez + ey |
+    |  ez    ex*ey*ez + 1    ey*ez - ex |
+    | -ey              ex             1 |
+
+Assuming ex,ey,ez are small, we'll drop everything but the first order terms to get:
+
+    |   1   -ez    ey |
+    |  ez     1   -ex |
+    | -ey    ex     1 |
 
 Axis-angle
 ----------
