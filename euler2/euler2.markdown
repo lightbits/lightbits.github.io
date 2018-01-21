@@ -147,7 +147,7 @@ This sounds complicated and not very nice to implement...
 
 ## Absolute and relative rotations
 
-The problem with the above strategy is that we don't actually address the issue, which is that Euler angles suck at keeping track of absolute orientation: any choice of Euler angles will, at some rotation away from zero, degrade in their ability to express three degrees of freedom.
+The problem with the above strategy is that we don't actually address the issue, which is that Euler angles suck at keeping track of absolute orientation: any choice of Euler angles will degrade in their ability to express three degrees of freedom *somewhere*.
 
 In other words, Euler angles are best when kept close to the origin....
 
@@ -157,13 +157,14 @@ The reason we dumped that in the first place was that we couldn't easily express
 
 So here's one solution....
 
-We use Euler angles to express a small rotation around an absolute rotation matrix (like the 'default orientation' we talked about earlier):
+We use Euler angles to express an 'offset' around an absolute rotation matrix (one like the default orientation we talked about earlier):
 
     R = Rz(rz)*Ry(ry)*Rx(rx) * R0
 
-To keep the Euler angles close to the origin (and prevent gimbal lock), we 'reset' them to zero after each step of gradient descent by left-multiplying the absolute matrix with the local matrix, giving a new stationary rotation for the next step:
+But to keep the Euler angles close to zero (and prevent gimbal lock), we 'reset' the offset to zero after each step of gradient descent by left-multiplying the offset rotation with the absolute rotation, and using that as the stationary point for the next step:
 
     update_parameters(R0, tx,ty,tz):
+        // Find the gradient by finite differences
         dedrx = (E(euler(+drx, 0, 0)*R0, [tx, ty, tz]) -
                  E(euler(-drx, 0, 0)*R0, [tx, ty, tz])) / 2drx
         dedry = (E(euler(0, +dry, 0)*R0, [tx, ty, tz]) -
@@ -171,12 +172,15 @@ To keep the Euler angles close to the origin (and prevent gimbal lock), we 'rese
         dedrz = (E(euler(0, 0, +drz)*R0, [tx, ty, tz]) -
                  E(euler(0, 0, -drz)*R0, [tx, ty, tz])) / 2drx
 
-        rx = gain*dedrx
-        ry = gain*dedry
-        rz = gain*dedrz
+        // Move/Rotate in the opposite 'direction' by some amount
+        rx = -gain*dedrx
+        ry = -gain*dedry
+        rz = -gain*dedrz
+
+        // Update the absolute rotation matrix
         R0 = euler(rx,ry,rz)*R0
 
-This is not actually that different from our first strategy of switching models: in both cases we have the notion of an Euler angle 'offset' around some stationary rotation, some default orientation. But instead of updating our model's default orientation, and resetting the offset to zero, at pre-defined switching points, we update and reset after every optimization step.
+This is not actually that different from our first strategy of switching models: in both cases we have the notion of an Euler angle 'offset' around some stationary rotation, some default orientation. But instead of updating the default orientation and resetting the offset to zero at pre-defined switching points, we update and reset after every optimization step.
 
 <!-- This is not actually that different from our first strategy of switching models: instead of changing our model's default orientation only if we are close to a pre-defined switching point, we change it after every optimization step. -->
 
