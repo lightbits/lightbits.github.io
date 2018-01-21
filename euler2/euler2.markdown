@@ -4,9 +4,12 @@
 1. Fixing gimbal lock with switching models
 2. Fixing gimbal lock with absolute matrix and relative euler angles
 3. Reducing computational cost
-4. But which order should you use, or should you use axis-angle?
+4. But which order should you use? I arbitrarily chose xyz!
 5. Well it doesn't matter
-    Local euler angle is identical to any other local euler angle ordering, axis-angle. Looking at it a different way, rotations commute (it doesn't matter which order you rotate in).
+    Local euler angle is identical to any other local euler angle ordering. Looking at it a different way, rotations commute (it doesn't matter which order you rotate in).
+
+    In fact, let's look at another parametrization: axis-angle.
+    Huh, it's the same!!
 6. Isn't that neat?
     It's like there's a sort of "canonical" small step
     In fact there is, and mathematicians gave a name to this discovery
@@ -186,10 +189,6 @@ This way we get the benefit of both: the expressivity of Euler angles around the
 
 Reducing computational cost
 ---------------------------
-<!-- Automatic differentiation
-Analytic derivatives
-a) small-angle approximation
-b) axis-angle -->
 
 Until now I've kept an aggressively *positive* attitude towards laziness and inefficiency. But sometimes, like when your algorithm takes an entire day to run, you don't need to write code faster, but write faster code.
 
@@ -197,9 +196,9 @@ Until now I've kept an aggressively *positive* attitude towards laziness and ine
 
 So what does our solution actually involve in terms of stuff that the CPU has to do?
 
-First, we see that we evaluate the error function E twelve times (two for each parameter and six parameters). In our toy example this is not an issue because it was just a loop over like five points.
+First, we see that each optimization step evaluates the error function E twelve times (two for each parameter and six parameters). In our toy example this is not an issue because it was a trivial loop over five-or-so 2D-3D correspondences.
 
-But let's look at a real algorithm, Direct Sparse Odometry. This algorithm is designed to track camera motion. At its core, what it does is not too different from our book example, but instead of a book, they have a 3D model of the world (a depth map that they estimate simultaneously). They find how the camera moves between frames similar to how we find how the book was positioned: by aligning the model to the photo.
+But let's look at a real algorithm, Direct Sparse Odometry. This algorithm is designed to track camera motion. At its core, what it does is not too different from our book example, but instead of a book, they have a 3D model of the world (a depth map that they estimate simultaneously). They use it to find how the camera moves between frames similar to how we find how the book was positioned: by aligning the model to the photo.
 
 ![](dso.jpg)
 
@@ -209,26 +208,53 @@ Figure from Direct Sparse Odometry paper showing color-coded depth maps.
 
 Our book model had five points, but their depth maps can have as many points as there are pixels in an image. Looping over all of those can be prohibitively slow, especially if we do it twelve times per optimization step!
 
-<!-- actually it's not fine? what if you have tons of points? finite differences can actually be pretty expensive! would be nicer to get derivative through one and the same for loop. Oh but you can still do that with FD.... just take FD of each error term, or mix: take analytic derivative of one and FD of the other, and chain rule it. -->
-The above is fine if you're doing finite differences. But if you want analytic derivatives, or you're doing automatic differentiation, you'll find it to be kinda computationally nasty&mdash;with all those cosines and sines. However, with our assumption that the optimization parameters remain small, we can make some useful approximations.
+The derivative of a sum is the sum of derivatives.
 
-For small values of x: $\cos(x) \approx 1$ and $\sin(x) \approx x$, so we can replace all those nasty trigonmetric functions in the local Euler matrix with linear expressions.
+What would computing this actually involve?
 
-<!-- todo: what is a 'small' value? -->
-<!-- it's almost wasteful to use the trig terms when they're almost indistinguishable from the approximations. -->
+    euler = Rz(ez)Ry(ey)Rx(ex)
 
-<!-- todo? -->
+Could do FD, but that can be slow.
 
-We could also parametrize our local rotation in terms of an angle-axis rotation:
+Automatic differentiation or analytic derivatives both involve a bunch of cos and sin.
+
+Can mix FD with AD, chain rule.
+
+But we have additional knowledge: euler angles close to zero.
+
+For small values of x: `cos(x) = 1` and `sin(x) = x`.
+
+What's a small value? It's almost wasteful to use the full trig terms when the difference is so small!
+
+So we can replace our `euler` function with this matrix, bearing in mind that it's only valid for small values.
+
+Aside: Orthogonalization
+------------------------
+
+<!-- Is there really a need to do this? We can use the exact Euler function when accumulating. -->
+
+<!-- there are more accurate ways to do this [barfoor 250], but those are complicated to implement. Since we have a feedback loop anyway, it's ok to do a simple approach: inaccuracies will be corrected by the outer feedback loop. If we make a mistake and go too far, gradient descent (or whatever algorithm) will bring us back. -->
+<!-- (we can do something much more complicated, but it only gives us like 5 percent more accuracy. Is it worth it? For the people reading your code? -->
+
+Small rotations go to work
+--------------------------
+
+We might call ourselves satisfied at this point. But why did I choose that particular Euler angle ordering?
+
+Axis-angle
+----------
+For fun, let's look at another rotation parametrization.
+
+We could also parametrize our offset rotation using 'axis-angle':
 
     R = (I + sin(|w|) K + (1-cos(|w|)) KK ) R0
     K = (w/|w|)^x
 
-Again, we have some sines and cosines, and also a divide by the length of something, so this doesn't seem like an improvement. But again, for small parameters, |w| is close to zero, and we can approximate the above as
+We have some sines and cosines, and also a divide by the length of something, so this doesn't seem like an improvement. But again, for small parameters, |w| is close to zero, and we can approximate the above as
 
     R = (I + w^x) R0
 
-where w^x is the skew-symmetric form of a vector containing what we will be our local rotation parameters. The derivative of this with respect to our parameters is now extraordinarily simple, and involves no trigonometric functions whatsoever.
+where w^x is the skew-symmetric form of a vector containing what we will be our local rotation parameters. The derivative of this with respect to our parameters doesn't involve any trig:
 
     q' = (I + w^x) R0 p + T + dT
        = (I + w^x) (R0 p + T) + dT - (I + w^x) T
@@ -241,12 +267,6 @@ where w^x is the skew-symmetric form of a vector containing what we will be our 
 In either case, since we are now updating our stationary point, R0, by concatenating *approximations of* rotation matrices, we had better ensure that the resulting matrix stays orthogonal during our program lifetime. There's a neat and simple trick for doing this, that I can show later.
 
 But before then, you might wonder which one of the above you should use: axis-angle or Euler? And if you use Euler, which order should you use? There seems to be too many choices here, and trying them all will take time! But I'll let you in on a little secret: it doesn't matter!
-
-Aside: Orthogonalization
-------------------------
-
-<!-- there are more accurate ways to do this [barfoor 250], but those are complicated to implement. Since we have a feedback loop anyway, it's ok to do a simple approach: inaccuracies will be corrected by the outer feedback loop. If we make a mistake and go too far, gradient descent (or whatever algorithm) will bring us back. -->
-<!-- (we can do something much more complicated, but it only gives us like 5 percent more accuracy. Is it worth it? For the people reading your code? -->
 
 So many choices.... but does it matter?
 ---------------------------------------
