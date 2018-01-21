@@ -190,6 +190,21 @@ Until now I've kept an aggressively *positive* attitude towards laziness and ine
 
 So what does our solution actually involve in terms of stuff that the CPU has to do?
 
+<pre style="margin:0 8px -8px 0;float:left;width:50%;"><code style="font-size:60%;">update_parameters(R0, tx,ty,tz):
+    dedrx = (E(euler(+drx,0,0)*R0, [tx,ty,tz]) -
+             E(euler(-drx,0,0)*R0, [tx,ty,tz]))/2drx
+    dedry = (E(euler(0,+dry,0)*R0, [tx,ty,tz]) -
+             E(euler(0,-dry,0)*R0, [tx,ty,tz]))/2drx
+    dedrz = (E(euler(0,0,+drz)*R0, [tx,ty,tz]) -
+             E(euler(0,0,-drz)*R0, [tx,ty,tz]))/2drx
+
+    rx = -gain*dedrx
+    ry = -gain*dedry
+    rz = -gain*dedrz
+
+    R0 = euler(rx,ry,rz)*R0
+</code></pre>
+
 First, we see that each optimization step evaluates the error function E twelve times (two for each parameter and six parameters). In our toy example this is not an issue because it was a trivial loop over five-or-so 2D-3D correspondences.
 
 But let's look at a real algorithm, Direct Sparse Odometry. This algorithm is designed to track camera motion. At its core, what it does is not too different from our book example, but instead of a book, they have a 3D model of the world (a depth map that they estimate simultaneously). They use it to find how the camera moves between frames similar to how we find how the book was positioned: by aligning the model to the photo.
@@ -297,11 +312,11 @@ Now you might ask, when can I use this approximation? How small is 'small'? And 
 
 Here's a comparison for you where ex, ey and ez are each varied between -25 and +25 degrees. The red cube uses the Euler rotation R = Rz(rz)Ry(ry)Rx(rx). The green and the blue cubes are using the exact axis-angle rotation formula, (I + sin(|w|) K + (1-cos(|w|)) K^2 ), and its approximation, (I + w^x), respectively. The blue cube orthogonalizes the result to ensure that it remains a proper rotation matrix.
 
-![](cv-why-not-euler-anim1.gif)
+<!-- ![](cv-why-not-euler-anim1.gif) -->
 
 They look pretty similiar. But here's what happens if rz is linearly increased forever:
 
-![](cv-why-not-euler-anim2.gif)
+<!-- ![](cv-why-not-euler-anim2.gif) -->
 
 As you can see, all three approaches are pretty close for small angles, but for angles above 45 degrees or so the approximation starts to break down to the point where it fails to accomplish a full 90 degree rotation.
 
