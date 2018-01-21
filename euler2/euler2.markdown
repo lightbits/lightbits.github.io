@@ -193,7 +193,23 @@ b) axis-angle -->
 
 Until now I've kept an aggressively *positive* attitude towards laziness and inefficiency. But sometimes, say, because your algorithm takes an entire day to run, you don't need to write code faster, but write faster code.
 
-(That is only a cover story though. We're going to take this as an excuse to go on a wild mathematical tangent and learn more about the world of rotations. So buckle up.)
+<p style="max-width:400px;margin:0 auto;color:#999;">
+Actually that is only a cover story. We're going to take this as an excuse to go on a wild mathematical tangent and learn more about the world of rotations. So buckle up.
+</p>
+
+So what does the above solution (because it does solve the problem) actually involve, in terms of stuff that your CPU has to do?
+
+First, we see that we evaluate the error function E twelve times (two for each parameter and six parameters). In our toy example this is not an issue because it was just a loop over like five points.
+
+But let's look at a real algorithm, Direct Sparse Odometry. This algorithm is designed to track camera motion. At its core, what it does is not too different from our book example, but instead of a book, they have a 3D model of the world (a depth map that they estimate simultaneously). They find how the camera moves between frames similar to how we find how the book was positioned: by aligning the model to the photo.
+
+![](dso.jpg)
+
+<p style="max-width:500px;margin:0 auto;color:#999;">
+Figure from Direct Sparse Odometry paper showing color-coded depth maps.
+</p>
+
+Our book model had five points, but their depth maps can have as many points as there are pixels in an image. Looping over all of those can be prohibitively slow, especially if we do it twelve times per optimization step!
 
 <!-- actually it's not fine? what if you have tons of points? finite differences can actually be pretty expensive! would be nicer to get derivative through one and the same for loop. Oh but you can still do that with FD.... just take FD of each error term, or mix: take analytic derivative of one and FD of the other, and chain rule it. -->
 The above is fine if you're doing finite differences. But if you want analytic derivatives, or you're doing automatic differentiation, you'll find it to be kinda computationally nasty&mdash;with all those cosines and sines. However, with our assumption that the optimization parameters remain small, we can make some useful approximations.
