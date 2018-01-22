@@ -174,11 +174,7 @@ Because we compute the gradient by adding or subtracting a small delta (this tim
 Reducing computational cost
 ---------------------------
 
-Until now I've kept an aggressively *positive* attitude towards laziness and inefficiency. But sometimes, like when your algorithm takes an entire day to run, you don't need to write code faster, but write faster code.
-
-<!-- Actually that is only a cover story. We're going to take this as an excuse to go on a wild mathematical tangent and learn more about the world of rotations. So buckle up. -->
-
-So what does our solution actually involve in terms of stuff that the CPU has to do?
+Until now I've kept an aggressively *positive* attitude towards laziness and inefficiency. But sometimes, like when your algorithm takes an entire day to run, you don't need to write code faster, but write faster code. So what does our solution involve in terms of stuff that the CPU has to do?
 
 <pre style="margin:0 8px -8px 0;float:left;width:41%;"><code style="font-size:60%;">update_parameters(R, T):
   dedrx = (E(euler(+drx,0,0)*R, T) -
@@ -201,9 +197,9 @@ So what does our solution actually involve in terms of stuff that the CPU has to
   T -= gain*[dedtx, dedty, dedtz]
 </code></pre>
 
-Maybe most prominently, each optimization step will evaluate the error function E twelve times. In our toy example this is not an issue because it was a trivial loop over five-or-so 2D-3D correspondences.
+Maybe most prominently, each optimization step will evaluate the error function E twelve times. In our toy example this is not an issue because it was a trivial loop over five-or-so 2D-3D correspondences. But let's look at a real example...
 
-But let's look at a real algorithm, Direct Sparse Odometry. This algorithm is designed to track camera motion. At its core, what it does is the same as our book example, but instead of a book, they have a 3D model of the world (a depth map). Similar to how we try to find how the book is positioned in a photo, they use their model of the world to find how the camera moves between frames: by aligning the model to the photo.
+*Direct Sparse Odometry* is algorithm is designed to track camera motion. At its core, what it does is the same as our book example, but instead of a book, they have a 3D model of the world (a depth map). Similar to how we try to find how the book is positioned in a photo, they use their model of the world to find how the camera moves between frames: by aligning the model to the photo.
 
 ![](dso.jpg)
 
@@ -211,9 +207,20 @@ But let's look at a real algorithm, Direct Sparse Odometry. This algorithm is de
 A figure from Direct Sparse Odometry paper showing color-coded depth maps. In addition to estimating the camera pose over time, they also estimate the depth maps themselves, in a process called bundle adjustment (called so because it adjusts the entire bundle of parameters: points *and* cameras.)
 </p>
 
-Our book model had five points, but their depth maps can have as many points as there are pixels in an image. Looping over all of those can be prohibitively slow, especially if we do it twelve times per optimization step!
+Our book model had five points, but their depth maps can have as many points as there are pixels in an image. Looping over all of those can be prohibitively slow if we do it twelve times per step. To remind you, this is what our error function looked like:
 
-The derivative of a sum is the sum of derivatives.
+    E(R, T):
+        e = 0
+        for u,v,p in patches
+            u_est,v_est = camera_projection(R*p + T)
+            du = u_est-u
+            dv = v_est-v
+            e += du*du + dv*dv
+        return e / num_patches
+
+The first transformation we can make is to exploit the fact that the derivative of a sum is the sum of derivatives: instead of calling E twelve times, we can call it once and return all derivatives along with it. That is, we find the derivative of each `e` term, add them together, and return that as well.
+
+We could calculate the derivatives as we've done so far, using finite differences, or maybe we're writing this code in a library that has automatic differentiation?
 
 What would computing this actually involve?
 
