@@ -218,11 +218,21 @@ Our book model had five points, but their depth maps can have as many points as 
             e += du*du + dv*dv
         return e / num_patches
 
-The first transformation we can make is to exploit the fact that the derivative of a sum is the sum of derivatives: instead of calling E twelve times, we can call it once and return all derivatives along with it. That is, we find the derivative of each `e` term, add them together, and return that as well.
+The first transformation we can make is to exploit the fact that the derivative of a sum is the sum of derivatives: instead of calling E twelve times, we can call it once and return all derivatives along with it. That is, we find the derivative of each `e` term, add them together, and return that as well. Something like this:
 
-We could calculate the derivatives as we've done so far, using finite differences, or maybe we're writing this code in a library that has automatic differentiation?
+    E(R, T):
+        e = 0, dedrx = 0, dedry = 0, ... dedtz = 0
+        for u,v,p in patches
+            // something...
+        return [e / num_patches, dedrx, dedry, ..., dedtz]
 
-What would computing this actually involve?
+.... Maybe that's faster? We could calculate each derivative as we've done so far, using finite differences, or maybe we're writing in a library that has automatic differentiation? Or maybe we want analytic derivatives this time? In fact, maybe we shouldn't rewrite this error function at all. Maybe we've SIMD-optimized it so even if we do call it twelve times it's still fast?
+
+<p style="text-align:center;font-size:300%;">...</p>
+
+To be honest this entire section is a cover story. I'm using it as an excuse to take you on a wild mathematical tangent, but you can use it as a rope, if you want, to reel yourself back into the world of practicality (or to reassure yourself that it still exists), if you were to lose your way inside the abstract manifolds of rotation space.
+
+Let's go on a mathematical detour and see what the latter routes would involve (automatic or analytic).
 
     euler = Rz(ez)Ry(ey)Rx(ex)
 
