@@ -43,8 +43,8 @@
         (page 241 "A cleaner ways to carry out optimization is to find an update for C in the form of a small rotation on the left, rather than directly on the Lie algebra rotation vector representing C")
         (I just decided to write 3000 words about one sentence: "... which has singularities associated with it")
 
-Q) Existence of local minima. Global uniqueness.
-Q) What about global optimization? Point cloud alignment. Closed-form solution for rotation matrix.
+Q) Existence of local minima. Global uniqueness. (page 307). Dips within humps.
+Q) What about global optimization? Point cloud alignment. Closed-form solution for rotation matrix. But our problem involves perspective projection with lens distortion, which requires iterative?
 Q) Interpolation can be important, because you might want to do a line search? (page 248). Or do you? What does it mean to 'continue' in a rotation?
 Q) Treating translation seperately from rotation (still as a vector space) is more beneficial I think. The se3 looks unnatural and makes it harder for optimization to achieve certain motions
     Instead of having x y z correspond to translation and rx ry rz correspond to rotation, each along an intuitive axis, you need to do a weird mixture of perturbations, sometimes large, just to achieve motion along one axis.
@@ -64,23 +64,15 @@ Fixing gimbal lock with local Euler angles
 
 When I made this textured 3D box, I subconsciously chose its "default" orientation (all angles set to zero) to be with its cover facing the camera, like so:
 
-<!-- todo: 3d model+axes seen from tilted angle with camera as well? -->
 ![](model3.png)
 
 Although I made the choice without thinking, it happens to matter when we consider gimbal lock, the reason being that we have all three degrees of freedom when the book is facing the camera, but we lose one when we turn the book sideways.
 
-<!-- todo: three slider boxes. one slider per box. x,y,z. -->
-<!-- ![](../euler/plates1xyz.png) -->
-
 On the other hand, if the default orientation had been sideways, we would have three degrees of freedom at the sideways orientation, but not when the book is facing the camera.
 
-<!-- todo: 3d model+axes seen from tilted angle with camera as well? -->
 ![](model4.png)
 
 If, in the last example, the default orientation had been sideways, gradient descent would have had no problems tilting the book backward slightly.
-
-<!-- todo: interactive puzzle? -->
-<!-- ![](../euler/sideways45.png) -->
 
 <style>
 .slider img {
@@ -127,16 +119,14 @@ So you could imagine that a fix is to change the model itself, to have a differe
 
 Of course, we don't need to actually store seperate 3D models for each default orientation, since the only difference between them is a constant rotation matrix pre-multiplied to the 3D coordinates in the original model. In other words, we can get by with a bunch of `if`-statements, computing the book's orientation in one way or another based on which default orientation is closest:
 
-<!-- In code, this means that the book's actual orientation is computed in one way or another, depending on which default orientation we are currently closest to: -->
-
     if default orientation a:
         R = Rz(rz)*Ry(ry)*Rx(rx) * Ra
     if default orientation b:
         R = Rz(rz)*Ry(ry)*Rx(rx) * Rb
 
-<!-- This is what they do on aircraft? -->
+<!-- todo: is this done on aircraft? -->
 
-This would be well and good, except that our Euler angles would need to change whenever we switch: if our current estimate is close to sideways, or (0, 90, 0), and we switch model so that (0,0,0) means sideways, then our angles have to go back to (0,0,0) again. <!--have to go back -->
+This would be well and good, except that our Euler angles would need to change whenever we switch: if our current estimate is close to sideways, or (0, 90, 0), and we switch model so that (0,0,0) means sideways, then our angles have to go back to (0,0,0) again.
 
 In other words, we would have to keep track of two things: 1) which default orientation we are currently based around, and 2) the Euler angle 'offset' around that. Whenever we switch default orientation, we need to reset the offset to zero.
 
