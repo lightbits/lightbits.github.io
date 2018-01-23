@@ -174,7 +174,7 @@ Because we compute the gradient by adding or subtracting a small delta (this tim
 Reducing computational cost
 ---------------------------
 
-Until now I've kept an aggressively *positive* attitude towards laziness and inefficiency. But sometimes, like when your algorithm takes an entire day to run, you don't need to write code faster, but write faster code. So what does our solution involve in terms of stuff that the CPU has to do?
+Until now I've kept an aggressively *positive* attitude towards laziness and inefficiency. But sometimes, like when your algorithm takes an entire day to run, you don't need to write code faster, you need to write faster code. So let's break down our solution in terms of stuff that the CPU has to do.
 
 <pre style="margin:0 8px -8px 0;float:left;width:41%;"><code style="font-size:60%;">update_parameters(R, T):
   dedrx = (E(euler(+drx,0,0)*R, T) -
@@ -197,9 +197,9 @@ Until now I've kept an aggressively *positive* attitude towards laziness and ine
   T -= gain*[dedtx, dedty, dedtz]
 </code></pre>
 
-Maybe most prominently, each optimization step will evaluate the error function E twelve times. In our toy example this is not an issue because it was a trivial loop over five-or-so 2D-3D correspondences. But let's look at a real example...
+Maybe most prominently, each optimization step will evaluate the error function E twelve times. In our toy example this is not a big deal because it was a trivial loop over five-or-so 2D-3D correspondences. But let's look at a real example...
 
-*Direct Sparse Odometry* is algorithm is designed to track camera motion. At its core, what it does is the same as our book example, but instead of a book, they have a 3D model of the world (a depth map). Similar to how we try to find how the book is positioned in a photo, they use their model of the world to find how the camera moves between frames: by aligning the model to the photo.
+*Direct Sparse Odometry* is an algorithm designed to track camera motion. At its core, what it does is the same as our book problem, but instead of a book, they have a 3D model of the world. Similar to how we try to find how the book is positioned in a photo, they use their model of the world to find how the camera moves between frames: by aligning the model to the photo.
 
 ![](dso.jpg)
 
@@ -207,7 +207,7 @@ Maybe most prominently, each optimization step will evaluate the error function 
 A figure from Direct Sparse Odometry paper showing color-coded depth maps. In addition to estimating the camera pose over time, they also estimate the depth maps themselves, in a process called bundle adjustment (called so because it adjusts the entire bundle of parameters: points *and* cameras.)
 </p>
 
-Our book model had five points, but their depth maps can have as many points as there are pixels in an image. Looping over all of those can be prohibitively slow if we do it twelve times per step. To remind you, this is what our error function looked like:
+Our book model had five points, but their model can have as many points as there are pixels in an image. Looping over all of those can be prohibitively slow if done twelve times per step, even if the work done per point is small&mdash;as a reminder, this is what our error function looks like:
 
     E(R, T):
         e = 0
@@ -218,7 +218,7 @@ Our book model had five points, but their depth maps can have as many points as 
             e += du*du + dv*dv
         return e / num_patches
 
-The first transformation we can make is to exploit the fact that the derivative of a sum is the sum of derivatives: instead of calling E twelve times, we can call it once and return all derivatives along with it. That is, we find the derivative of each `e` term, add them together, and return that as well. Something like this:
+The first transformation we can make is to exploit the fact that the derivative of a sum is the sum of derivatives: instead of calling E twelve times, we can call it once and return all derivatives along with it. Something like this:
 
     E(R, T):
         e = 0, dedrx = 0, dedry = 0, ... dedtz = 0
@@ -226,11 +226,11 @@ The first transformation we can make is to exploit the fact that the derivative 
             // something...
         return [e / num_patches, dedrx, dedry, ..., dedtz]
 
-.... Maybe that's faster? We could calculate each derivative as we've done so far, using finite differences, or maybe we're writing in a library that has automatic differentiation? Or maybe we want analytic derivatives this time? In fact, maybe we shouldn't rewrite this error function at all. Maybe we've SIMD-optimized it so even if we do call it twelve times it's still fast?
+That could be faster? We could differentiate each term in the sum as we did for the sum itself, using finite differences, or maybe we want to use a library with automatic differentiation? Maybe we want analytic derivatives this time? In fact, maybe we shouldn't rewrite this error function at all. Maybe we've SIMD-optimized it so even if we do call it twelve times it's faster than the alternatives?
 
 <p style="text-align:center;font-size:300%;">...</p>
 
-To be honest this entire section is a cover story. I'm using it as an excuse to take you on a wild mathematical tangent, but you can use it as a rope, if you want, to reel yourself back into the world of practicality (or to reassure yourself that it still exists), if you were to lose your way inside the abstract manifolds of rotation space.
+To be honest, the premise of this section is a cover story. I'm using it as an excuse to take you on a wild mathematical tangent, but you can use it as a rope, if you want, to reel yourself back into the world of practicality (or just tug on it to reassure yourself that it still exists), if you lose your way inside the abstract manifolds of rotation space.
 
 Let's go on a mathematical detour and see what the latter routes would involve (automatic or analytic).
 
