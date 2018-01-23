@@ -224,13 +224,33 @@ The first transformation we can make is to exploit the fact that the derivative 
         e = 0, dedrx = 0, dedry = 0, ... dedtz = 0
         for u,v,p in patches
             // something...
-        return [e / num_patches, dedrx, dedry, ..., dedtz]
+        return [e, dedrx, dedry, ..., dedtz] / num_patches
 
 That could be faster? We could differentiate each term in the sum as we did for the sum itself, using finite differences, or maybe we want to use a library with automatic differentiation? Maybe we want analytic derivatives this time? In fact, maybe we shouldn't rewrite this error function at all. Maybe we've SIMD-optimized it so even if we do call it twelve times it's faster than the alternatives?
 
-<p style="text-align:center;font-size:300%;">...</p>
+<!-- Maybe you are using a different optimization method, like Gauss-Newton or Levenberg-Marquardt, in which case you may want to ... -->
 
+<!-- <p style="text-align:center;font-size:300%;">...</p> -->
+
+<p style="color:#999;">
 To be honest, the premise of this section is a cover story. I'm using it as an excuse to take you on a wild mathematical tangent, but you can use it as a rope, if you want, to reel yourself back into the world of practicality (or just tug on it to reassure yourself that it still exists), if you lose your way inside the abstract manifolds of rotation space.
+</p>
+
+There are many alternative routes to go; which one is best depends on your specific problem.
+
+    u_est,v_est = camera_projection(R*p + T)
+    du = u_est-u
+    dv = v_est-v
+    e += du*du + dv*dv
+
+u and v are constant (with respect to our parameters, not the loop).
+
+    2*u_est*diff(u_est,[R,T]) + 2*v_est*diff(v_est,[R,T])
+
+u_est and v_est are some functions f1 and f2:
+
+    u_est = f1(R*p + T)
+    v_est = f2(R*p + T)
 
 Let's go on a mathematical detour and see what the latter routes would involve (automatic or analytic).
 
