@@ -171,8 +171,20 @@ This is not actually that different from our first strategy of switching models:
 
 Because we compute the gradient by adding or subtracting a small delta (this time around zero), we don't get gimbal locked as long as that delta is small enough. This way we get the benefit of both: the expressivity of Euler angles around the origin while also keeping track of absolute orientation.
 
-Reducing computational cost
----------------------------
+Route #1: Options
+-----------------
+
+Why did we choose that particular Euler angle ordering? Are there better orderings? And I've that quaternions are super popular and useful, but we're not using them?? What about axis-angle?
+
+The answer to all of these is that it doesn't really matter?
+
+Let's look at a different Euler angle order.
+
+todo: animation of the two. show that they are very tight for 'small angles'.
+todo: define small angle
+
+Route #2: Reducing computational cost
+-------------------------------------
 
 Until now I've kept an aggressively *positive* attitude towards laziness and inefficiency. But sometimes, like when your algorithm takes an entire day to run, you don't need to write code faster, you need to write faster code. So let's break down our solution in terms of stuff that the CPU has to do.
 
@@ -280,8 +292,6 @@ Aside: Orthogonalization
 
 Small rotations go to work
 --------------------------
-
-We might call ourselves satisfied at this point. But why did I choose that particular Euler angle ordering?
 
 It turns out that for small angles, rotation matrices *commute*. In other words, the order in which you apply rotations doesn't matter. If you write out the matrix product Rz(ez)Ry(ey)Rx(ex), and replace the sines and cosines with the above approximations, you will get this:
 
