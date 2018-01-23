@@ -299,12 +299,21 @@ Axis-angle
 ----------
 For fun, let's look at another rotation parametrization.
 
-We could also parametrize our offset rotation using 'axis-angle':
+We could also parametrize our offset rotation using 'axis-angle': a vector of three numbers I'll call `w`.
 
-    R = (I + sin(|w|) K + (1-cos(|w|)) KK ) R0
+<p style="color:#999;">
+The intuition behind this is that you describe your rotation as an axis and an angle about that axis (coincidentally, Euler showed that you can always do this). But instead of storing this information as four numbers (three for the axis and one for the angle), you exploit that the axis is unit length and multiply in the angle, giving a vector of three. You can extract the angle as the length of this vector, and the axis itself by normalizing it.
+</p>
+
+Similar to Euler angles, it has a formula to convert it into a rotation matrix (which I have copied from wikipedia):
+
+    R = I + sin(|w|) K + (1-cos(|w|)) KK
     K = (w/|w|)^x
 
-We have some sines and cosines, and also a divide by the length of something, so this doesn't seem like an improvement. But again, for small parameters, |w| is close to zero, and we can approximate the above as
+
+We have some sines and cosines, and also a divide by the length of something, so this doesn't seem like an improvement.... But if the angle to rotate (|w| = the length of the 'axis')
+
+But again, for small parameters, |w| is close to zero, and we can approximate the above as
 
     R = (I + w^x) R0
 
