@@ -66,7 +66,7 @@ When I made this textured 3D box, I subconsciously chose its "default" orientati
 
 ![](model3.png)
 
-Although I made the choice without thinking, it happens to matter when we consider gimbal lock, the reason being that we have all three degrees of freedom when the book is facing the camera, but we lose one when we turn the book sideways.
+I made this choice arbitrarily, but it happens to matter when we consider gimbal lock. The reason is that we have all three degrees of freedom when the book is facing the camera, but we lose one when we turn the book sideways.
 
 On the other hand, if the default orientation had been sideways, we would have three degrees of freedom at the sideways orientation, but not when the book is facing the camera.
 
