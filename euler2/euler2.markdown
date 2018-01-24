@@ -167,8 +167,8 @@ This is not that different from our first strategy: in both cases we have the no
 
 By doing this we avoid having to keep track of both a rotation matrix *and* the offset around it; the offset is only ever used within gradient descent. And, because we compute the gradient by adding or subtracting a small delta (now around zero), we won't get gimbal locked as long as that delta is small enough.
 
-Route #1: Options
------------------
+But why?
+--------
 
 Why did we choose that particular Euler angle ordering? Are there better orderings? And I've that quaternions are super popular and useful, but we're not using them?? What about axis-angle?
 
