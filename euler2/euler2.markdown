@@ -66,13 +66,11 @@ When I made this textured 3D box, I subconsciously chose its "default" orientati
 
 ![](model3.png)
 
-I made this choice arbitrarily, but it happens to matter when we consider gimbal lock. The reason is that we have all three degrees of freedom when the book is facing the camera, but we lose one when we turn the book sideways.
-
-On the other hand, if the default orientation had been sideways, we would have three degrees of freedom at the sideways orientation, but not when the book is facing the camera.
+I made this choice arbitrarily, but it happens to matter when we consider gimbal lock. The reason is that we have all three degrees of freedom when the book is facing the camera, but not when we turn the book sideways. On the other hand, if the default orientation had been sideways....
 
 ![](model4.png)
 
-If, in the last example, the default orientation had been sideways, gradient descent would have had no problems tilting the book backward slightly.
+we would *not* have three degrees when the book is facing the camera, but instead at the sideways orientation, as you can verify for yourself:
 
 <style>
 .slider img {
@@ -115,7 +113,9 @@ input { vertical-align: middle; }
     <label>rotate z</label>
 </div>
 
-So you could imagine that a fix is to change the model itself, to have a different default orientation, based on what orientation we're currently estimating around: If we're around (0,0,0), we use the model with its cover facing the camera. But as we get close enough to (0, 90, 0), we switch to the one seen from the side.
+<!-- So in the last example, if the default orientation had been sideways, gradient descent would have had no problems tilting the book backward slightly. -->
+
+So you could imagine a fix where we change the model to have a different default orientation, based on what orientation we're currently estimating around: If we're around (0,0,0), we use the model with its cover facing the camera. But as we get close enough to (0, 90, 0), we switch to the one seen from the side.
 
 Of course, we don't need to actually store seperate 3D models for each default orientation, since the only difference between them is a constant rotation matrix pre-multiplied to the 3D coordinates in the original model. In other words, we can get by with a bunch of `if`-statements, computing the book's orientation in one way or another based on which default orientation is closest:
 
