@@ -144,7 +144,7 @@ So here's one solution: we use Euler angles to express an 'offset' around an abs
 
     R = Rz(rz)*Ry(ry)*Rx(rx) * R0
 
-But to keep the Euler angles close to zero (and prevent gimbal lock), we 'reset' the offset to zero after each step of gradient descent by left-multiplying the offset rotation with the absolute rotation, and using that as the stationary point for the next step:
+But to keep the Euler angles close to zero (and prevent gimbal lock), we 'reset' the offset to zero after each step of gradient descent by left-multiplying the offset into our absolute rotation, using that as the stationary point for the next step:
 
     update_parameters(R0, tx,ty,tz):
         // Find the gradient by finite differences
@@ -163,13 +163,11 @@ But to keep the Euler angles close to zero (and prevent gimbal lock), we 'reset'
         // Update the absolute rotation matrix
         R0 = euler(rx,ry,rz)*R0
 
-This is not actually that different from our first strategy of switching models: in both cases we have the notion of an Euler angle 'offset' around some stationary rotation, some default orientation. But instead of updating the default orientation and resetting the offset to zero at pre-defined switching points, we update and reset after every optimization step.
+This is not that different from our first strategy: in both cases we have the notion of an Euler angle 'offset' around some stationary rotation, some default orientation. But instead of updating the default orientation and resetting the offset to zero at pre-defined switching points, we update and reset after every optimization step.
 
-<!-- This is not actually that different from our first strategy of switching models: instead of changing our model's default orientation only if we are close to a pre-defined switching point, we change it after every optimization step. -->
+By doing this we avoid having to keep track of both a rotation matrix *and* the offset around it; the offset is only ever used within gradient descent. And, because we compute the gradient by adding or subtracting a small delta (this time around zero), we don't get gimbal locked as long as that delta is small enough.
 
-<!-- Also, in both strategies we have a notion of an Euler angle 'offset' from this default orientation, but instead of resetting the offset to zero at pre-defined switching points, we reset them after every step. -->
-
-Because we compute the gradient by adding or subtracting a small delta (this time around zero), we don't get gimbal locked as long as that delta is small enough. This way we get the benefit of both: the expressivity of Euler angles around the origin while also keeping track of absolute orientation.
+<!-- This way we get the benefit of both: the expressivity of Euler angles around the origin while also keeping track of absolute orientation. -->
 
 Route #1: Options
 -----------------
