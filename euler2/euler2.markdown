@@ -165,9 +165,7 @@ But to keep the Euler angles close to zero (and prevent gimbal lock), we 'reset'
 
 This is not that different from our first strategy: in both cases we have the notion of an Euler angle 'offset' around some stationary rotation, some default orientation. But instead of updating the default orientation and resetting the offset to zero at pre-defined switching points, we update and reset after every optimization step.
 
-By doing this we avoid having to keep track of both a rotation matrix *and* the offset around it; the offset is only ever used within gradient descent. And, because we compute the gradient by adding or subtracting a small delta (this time around zero), we don't get gimbal locked as long as that delta is small enough.
-
-<!-- This way we get the benefit of both: the expressivity of Euler angles around the origin while also keeping track of absolute orientation. -->
+By doing this we avoid having to keep track of both a rotation matrix *and* the offset around it; the offset is only ever used within gradient descent. And, because we compute the gradient by adding or subtracting a small delta (now around zero), we won't get gimbal locked as long as that delta is small enough.
 
 Route #1: Options
 -----------------
@@ -184,7 +182,7 @@ todo: define small angle
 Route #2: Reducing computational cost
 -------------------------------------
 
-Until now I've kept an aggressively *positive* attitude towards laziness and inefficiency. But sometimes, like when your algorithm takes an entire day to run, you don't need to write code faster, you need to write faster code. So let's break down our solution in terms of stuff that the CPU has to do.
+So far I've kept an aggressively *positive* attitude towards laziness and inefficiency. But sometimes, like when your algorithm takes an entire day to run, you don't need to write code faster, you need to write faster code. So let's break down our solution in terms of what the computer has to do.
 
 <pre style="margin:0 8px -8px 0;float:left;width:41%;"><code style="font-size:60%;">update_parameters(R, T):
   dedrx = (E(euler(+drx,0,0)*R, T) -
@@ -207,15 +205,21 @@ Until now I've kept an aggressively *positive* attitude towards laziness and ine
   T -= gain*[dedtx, dedty, dedtz]
 </code></pre>
 
-Maybe most prominently, each optimization step will evaluate the error function E twelve times. In our toy example this is not a big deal because it was a trivial loop over five-or-so 2D-3D correspondences. But let's look at a real example...
+Maybe most prominently, each optimization step will evaluate the error function E twelve times. In our toy example this is not a big deal because it was a loop over five-or-so 2D-3D correspondences with not a lot of work each. But let's look at a real example...
 
-*Direct Sparse Odometry* is an algorithm designed to track camera motion. At its core, what it does is the same as our book problem, but instead of a book, they have a 3D model of the world. Similar to how we try to find how the book is positioned in a photo, they use their model of the world to find how the camera moves between frames: by aligning the model to the photo.
+*Direct Sparse Odometry* is an algorithm designed to track camera motion. At its core, what it does is the same as in our book problem, but instead of a book, they have a 3D model of the world. Similar to how we try to find how the book is positioned in a photo, they try to find how the world moved between frames (assuming it is caused by the camera moving).
 
 ![](dso.jpg)
 
 <p style="max-width:500px;margin:0 auto;color:#999;">
 A figure from Direct Sparse Odometry paper showing color-coded depth maps. In addition to estimating the camera pose over time, they also estimate the depth maps themselves, in a process called bundle adjustment (called so because it adjusts the entire bundle of parameters: points *and* cameras.)
 </p>
+
+Just like we use an error function to judge how good our alignment was, they use an error function to judge how well the world model fits with the photo, at a given translation and rotation.
+
+There's one key difference though: our book model had five points, but their model can have as many points as there are pixels in an image. Looping over all of those can be prohibitively slow if done twelve times per step, even if the work done per point is small&mdash;as a reminder, this is what our error function looks like:
+
+## Route #3: ways to optimize our optimization
 
 Our book model had five points, but their model can have as many points as there are pixels in an image. Looping over all of those can be prohibitively slow if done twelve times per step, even if the work done per point is small&mdash;as a reminder, this is what our error function looks like:
 
