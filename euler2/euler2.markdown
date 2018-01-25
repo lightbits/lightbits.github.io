@@ -181,8 +181,20 @@ todo: define small angle
 
 <!-- I think I prefer this explanation, as it doesn't get into "oh let's take the derivative of our error function analytically". Instead it keeps the discussion at the level of "what do small rotations look like?" -->
 
+Aside: Quaternions
+------------------
+
+We could use quaternions to keep track of our absolute orientation, instead of the rotation matrix R0. Unlike Euler angles, quaternions do not suck at this, and are often the storage format of choice in e.g. video game and animation systems, because they use less bytes than rotation matrices.
+
 Aside: Orthogonalization
 ------------------------
+
+Once we made the move to keep track of a rotation matrix, instead of a minimal parametrization, you might be worried that
+
+If you are an expert in scientific computing you probably know that floating point numbers are not perfect realizations of the real numbers: 1+1!=2 and so on.
+
+In the same way that you want to keep your unit quaternions unit length, you want to keep your rotation matrix a valid rotation.
+If you've dealt with floating point numbers you probably know that they're not perfect:
 
 <!-- Is there really a need to do this? We can use the exact Euler function when accumulating. -->
 
