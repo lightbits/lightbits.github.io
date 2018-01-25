@@ -186,20 +186,26 @@ Aside: Quaternions
 
 We could use quaternions to keep track of our absolute orientation, instead of the rotation matrix R0. Unlike Euler angles, quaternions do not suck at this, and are often the storage format of choice in e.g. video game and animation systems, because they use less bytes than rotation matrices.
 
-Aside: Orthogonalization
-------------------------
+Aside: Normalization
+--------------------
 
-Once we made the move to keep track of a rotation matrix, instead of a minimal parametrization, you might be worried that
+This line of code might worry you:
 
-If you are an expert in scientific computing you probably know that floating point numbers are not perfect realizations of the real numbers: 1+1!=2 and so on.
+    R0 = euler(rx,ry,rz)*R0
 
-In the same way that you want to keep your unit quaternions unit length, you want to keep your rotation matrix a valid rotation.
-If you've dealt with floating point numbers you probably know that they're not perfect:
+If you are an expert in floating point numbers you probably know that they are not perfect realizations of the real numbers: for example, `0.1+0.1` is not `0.2`, but `0.20000000298023224`.
 
-<!-- Is there really a need to do this? We can use the exact Euler function when accumulating. -->
+Imperfections like these can be a concern when you deal with rotation matrices or quaternions over longer periods of time&sup1;, in the sense that repeatedly appending rotations will accumulate errors and cause the matrix (or quaternion) to stray from a valid rotation: the columns are no longer unit-length and pair-wise perpendicular, and objects appear slightly deformed after rotation.
 
-<!-- there are more accurate ways to do this [barfoor 250], but those are complicated to implement. Since we have a feedback loop anyway, it's ok to do a simple approach: inaccuracies will be corrected by the outer feedback loop. If we make a mistake and go too far, gradient descent (or whatever algorithm) will bring us back. -->
-<!-- (we can do something much more complicated, but it only gives us like 5 percent more accuracy. Is it worth it? For the people reading your code? -->
+<p style="color:#999;">
+&sup1;I also mean time in the literal sense: bits flipped by radiation  can be a real concern. So even if you don't touch that rotation matrix, you might want to check up on it from time to time!
+</p>
+
+If you use quaternions you can do a renormalization (just calculate the length and divide by it). The equivalent for rotation matrices is called orthogonalization.
+
+There are different ways to orthogonalize a matrix, depending on if you want higher accuracy or simpler code. Here's a simple one, used in the Robotics, Vision and Control matlab toolbox:
+
+<!-- todo: stack overflow, rvc -->
 
 Small rotations go to work
 --------------------------
