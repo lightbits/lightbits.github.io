@@ -122,6 +122,7 @@ This works for any ugly function you can reasonably code up. In fact, our error 
 
 You know that feeling when you realize something is harder than you first thought?
 
+<!-- A function of a matrix is no harder than the function of a vector: it's just a bunch of numbers, and we can take the derivative with respect to each one. But... -->
 How do we take the derivative with respect to a rotation matrix? It's not a bunch of numbers we can choose freely because not all 3x3 matrices are valid rotation matrices; there are constraints between the elements&sup1;. So we can't just do finite differences on 9 numbers `r11, r12, r13 ...` for each element in the matrix, and use that for our gradient.
 
 What people usually do at this point is to parametrize the rotation matrix in terms of some other numbers that *can* be chosen freely, like Euler angles.
