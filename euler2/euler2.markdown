@@ -222,41 +222,35 @@ Assuming ex,ey,ez are small, we'll drop everything but the first order terms to 
     |  ez     1   -ex |
     | -ey    ex     1 |
 
+Other Euler angles
+------------------
+
+XYX, XZX, YXY... The particular sequence is often a convention in the community. This begs the question, which one is best for us?
+
 Axis-angle
 ----------
-For fun, let's look at another rotation parametrization.
+<!-- todo: what are we after? A minimal parametrization (three numbers). We can choose the numbers freely. Why? To take the derivative? explain... -->
 
-We could also parametrize our offset rotation using 'axis-angle': a vector of three numbers I'll call `w`.
+Euler angles concatenate three rotations about three axes, but Euler did a lot of thinking about rotations (as he did with many other things) and proved that any rotation can also be described as a rotation about a single axis.
 
-<p style="color:#999;">
-The intuition behind this is that you describe your rotation as an axis and an angle about that axis (coincidentally, Euler showed that you can always do this). But instead of storing this information as four numbers (three for the axis and one for the angle), you exploit that the axis is unit length and multiply in the angle, giving a vector of three. You can extract the angle as the length of this vector, and the axis itself by normalizing it.
-</p>
+So we could alternatively parametrize our offset rotation in terms of an angle `a` and an axis `r`. To convert it to a rotation matrix we can use this formula from wikipedia:
 
-Similar to Euler angles, it has a formula to convert it into a rotation matrix (which I have copied from wikipedia):
+    R = I + sin(a) S(r) + (1-cos(a)) S(r)S(r)
 
-    R = I + sin(|w|) K + (1-cos(|w|)) KK
-    K = (w/|w|)^x
+Similar to quaternions and rotation matrices, this is not a minimal parametrization: in this case the constraint lies on the axis to be unit-length This means we can't choose the numbers all freely and find a nice derivative of our error function. But let's ignore this for now, because it turns out to not matter.
+
+Let's again consider a small rotation: that is, the angle `a` is close to zero, and the axis is...well something. Pulling up our trig identities again we know that approximately `sin(a) = a` and `cos(a) = 1`, so the formula above simplifies to:
+
+    R = I + a S(r)
+
+What's this `S(r)` thing you ask? It's ...
 
 
-We have some sines and cosines, and also a divide by the length of something, so this doesn't seem like an improvement.... But if the angle to rotate (|w| = the length of the 'axis')
+<!-- But storing `a` as one number and `r` as three numbers leads us into a similar problem we had with rotation matrices: we can't choose them all freely. In this case, the constraint lies on `r` to be unit-length.
 
-But again, for small parameters, |w| is close to zero, and we can approximate the above as
+So a trick that's commonly used is to multiply the angle into the axis vector, giving three numbers that can all be chosen freely. To recover the angle, you take the length of the vector. To find the axis, you normalize it.
 
-    R = (I + w^x) R0
-
-where w^x is the skew-symmetric form of a vector containing what we will be our local rotation parameters. The derivative of this with respect to our parameters doesn't involve any trig:
-
-    q' = (I + w^x) R0 p + T + dT
-       = (I + w^x) (R0 p + T) + dT - (I + w^x) T
-       = (I + w^x) q + (dT - w^x T) - T
-       = (I + w^x) q + v - T
-
-    diff(q',w) = diff(w^x q,w) = diff(-q^x w,w) = -q^x
-    diff(q',v) = I
-
-In either case, since we are now updating our stationary point, R0, by concatenating *approximations of* rotation matrices, we had better ensure that the resulting matrix stays orthogonal during our program lifetime. There's a neat and simple trick for doing this, that I can show later.
-
-But before then, you might wonder which one of the above you should use: axis-angle or Euler? And if you use Euler, which order should you use? There seems to be too many choices here, and trying them all will take time! But I'll let you in on a little secret: it doesn't matter!
+If we call this vector `w` -->
 
 So many choices.... but does it matter?
 ---------------------------------------
