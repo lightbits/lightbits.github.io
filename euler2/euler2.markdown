@@ -140,7 +140,7 @@ In other words, Euler angles are best when kept close to the origin&mdash;combin
 
 The reason we dumped that in the first place was that we couldn't easily express a valid 'direction' to move in&mdash;a small incremental rotation. Meanwhile we have learned that Euler angles are great for that, but only around the origin.
 
-So here's one solution: we use a rotation matrix to track absolute orientation, and use Euler angles to express an 'offset' around this orientation (so far, like the above strategy):
+So here's one solution: we use a rotation matrix to track absolute orientation&sup1;, and use Euler angles to express an 'offset' around this orientation (so far, like the above strategy):
 
     R = Rz(rz)*Ry(ry)*Rx(rx) * R0
 
@@ -169,6 +169,10 @@ This is not that different from our first strategy: in both cases we have the no
 
 By doing this we avoid having to keep track of both a rotation matrix *and* the offset around it; the offset is only ever used within gradient descent. And, because we compute the gradient by adding or subtracting a small delta (now around zero), we won't get gimbal locked as long as that delta is small enough.
 
+<p style="color:#999;">
+&sup1;Alternatively, we could use unit-length quaternions to track absolute orientation. They are often the preferred representation in video game and animation systems because they use less bytes than rotation matrices. Like rotation matrices, they do not have gimbal lock or any weird problems at some particular orientation. But they also have constraints to keep them valid (vector must be unit-length), so we can't freely adjust its parameters to find a direction for gradient descent.
+</p>
+
 But why?
 --------
 
@@ -182,11 +186,6 @@ todo: animation of the two. show that they are very tight for 'small angles'.
 todo: define small angle
 
 <!-- I think I prefer this explanation, as it doesn't get into "oh let's take the derivative of our error function analytically". Instead it keeps the discussion at the level of "what do small rotations look like?" -->
-
-Aside: Quaternions
-------------------
-
-We could use quaternions to keep track of our absolute orientation, instead of the rotation matrix R0. Unlike Euler angles, quaternions do not suck at this, and are often the storage format of choice in e.g. video game and animation systems, because they use less bytes than rotation matrices.
 
 Aside: Normalization
 --------------------
