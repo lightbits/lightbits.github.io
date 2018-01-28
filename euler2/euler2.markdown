@@ -134,17 +134,19 @@ This sounds complicated and not very nice to implement...
 
 ## Absolute and relative rotations
 
-The problem with the above strategy is that we don't actually address the issue, which is that Euler angles suck at keeping track of absolute orientation: any choice of Euler angles will degrade in their ability to express three degrees of freedom *somewhere*. In other words, Euler angles are best when kept close to the origin....
+The problem with the above strategy is that it doesn't address the core issue, which is that Euler angles suck at tracking absolute orientation: any choice of Euler angles will degrade in their ability to express three degrees of freedom *somewhere*, yet we insist on using them anyway.
 
-Combining this insight with the idea of 'switching models', we can maybe think of another solution: if Euler angles are so poor at describing absolute orientation, what if we used a rotation matrix?
+In other words, Euler angles are best when kept close to the origin&mdash;combining this insight with the idea of 'switching models', we can maybe think of a less complicated strategy: if Euler angles are no good for absolute orientation, what if we used a rotation matrix?
 
 The reason we dumped that in the first place was that we couldn't easily express a valid 'direction' to move in&mdash;a small incremental rotation. Meanwhile we have learned that Euler angles are great for that, but only around the origin.
 
-So here's one solution: we use Euler angles to express an 'offset' around an absolute rotation matrix (one like the default orientation we talked about earlier):
+So here's one solution: we use a rotation matrix to track absolute orientation, and use Euler angles to express an 'offset' around this orientation (so far, like the above strategy):
 
     R = Rz(rz)*Ry(ry)*Rx(rx) * R0
 
-But to keep the Euler angles close to zero (and prevent gimbal lock), we 'reset' the offset to zero after each step of gradient descent by left-multiplying the offset into our absolute rotation, using that as the stationary point for the next step:
+But to keep the Euler angles close to zero (and prevent gimbal lock), we 'reset' the offset to zero after each step of gradient descent by left-multiplying the offset into our absolute rotation, and use that as the stationary point for the next step:
+
+<!-- todo: this code snippet is way too abrupt. Ease the reader in by describing why we only need to consider euler(+-drx, 0, 0) etc offsets around R0. -->
 
     update_parameters(R0, tx,ty,tz):
         // Find the gradient by finite differences
