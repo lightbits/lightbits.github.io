@@ -53,11 +53,11 @@ Q) Treating translation seperately from rotation (still as a vector space) is mo
 
 -->
 
-The take-home message from the last example was that Euler angles can  gimbal lock, whereby you lose the ability to rotate around all three axes. Instead, near gimbal lock, adjusting any single angle in isolation can only ever give you two distinct motions, instead of the three you started with.
+The take-home message from the last example was that Euler angles can  gimbal lock, whereby you lose the ability to rotate around all three axes: adjusting any angle in isolation could only generate two distinct motions, instead of the three you started with.
 
-This can cause gradient descent to slow to a stop, or, adjust the wrong parameters because they are the only ones that reduce the error. The reason for this is that gradient descent looks at how making small changes to any single angle affects the error, so the direction toward the solution has to be obtained in terms of the local motions you can produce, which is not always the case.
+This can cause gradient descent to slow to a stop, or, adjust the wrong parameters. This is because gradient descent looks at how making small changes to any single angle affects the error, so the direction toward the solution has to be obtainable in terms of the local motions you can generate, which is not always the case.
 
-But a solution to this problem can be found right where we started.
+In this part I'll take you on a wild mathematical tangent into abstract rotation spaces, under the pretense of finding a solution to this problem...
 
 Fixing gimbal lock with local Euler angles
 ------------------------------------------
@@ -70,7 +70,7 @@ I made this choice arbitrarily, but it happens to matter when we consider gimbal
 
 ![](model4.png)
 
-we would *not* have three degrees when the book is facing the camera, but instead at the sideways orientation, as you can verify for yourself:
+we would *not* have three degrees when the book is facing the camera, but instead at the sideways orientation. As you can verify for yourself, manipulating any one of the Euler angles can produce one of three distinct motions:
 
 <style>
 .slider img {
@@ -115,7 +115,7 @@ input { vertical-align: middle; }
 
 <!-- So in the last example, if the default orientation had been sideways, gradient descent would have had no problems tilting the book backward slightly. -->
 
-So you could imagine a fix where we change the model to have a different default orientation, based on what orientation we're currently estimating around: If we're around (0,0,0), we use the model with its cover facing the camera. But as we get close enough to (0, 90, 0), we switch to the one seen from the side.
+So you could imagine a fix where we change the model to have a different default orientation, based on what orientation we're currently estimating around: If we're close to facing the cover, we use the model with its cover facing the camera. But as we get close enough to sideways, we switch to the one seen from the side.
 
 Of course, we don't need to actually store seperate 3D models for each default orientation, since the only difference between them is a constant rotation matrix pre-multiplied to the 3D coordinates in the original model. In other words, we can get by with a bunch of `if`-statements, computing the book's orientation in one way or another based on which default orientation is closest:
 
@@ -128,7 +128,7 @@ Of course, we don't need to actually store seperate 3D models for each default o
 
 This would be well and good, except that our Euler angles would need to change whenever we switch: if our current estimate is close to sideways, or (0, 90, 0), and we switch model so that (0,0,0) means sideways, then our angles have to go back to (0,0,0) again.
 
-In other words, we would have to keep track of two things: 1) which default orientation we are currently based around, and 2) the Euler angle 'offset' around that. Whenever we switch default orientation, we need to reset the offset to zero.
+In other words, we would have to keep track of two things: (1) which default orientation we are currently based around, and (2) the Euler angle 'offset' around that. Whenever we switch default orientation, we need to reset the offset to zero.
 
 This sounds complicated and not very nice to implement...
 
