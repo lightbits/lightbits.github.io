@@ -140,37 +140,36 @@ In other words, Euler angles are best when kept close to the origin&mdash;combin
 
 The reason we dumped that in the first place was that we couldn't easily express a valid 'direction' to move in&mdash;a small incremental rotation. Meanwhile we have learned that Euler angles are great for that, but only around the origin.
 
-So here's one solution: we use a rotation matrix to track absolute orientation&sup1;, and use Euler angles to express an 'offset' around this orientation (so far, like the above strategy):
+So here's a way to simplify our strategy:
 
-    R = Rz(rz)*Ry(ry)*Rx(rx) * R0
+1. We start out with the book at the zero orientation (book cover facing us). So the Euler angles are zero, and the default orientation `R = identity`.
 
-But to keep the Euler angles close to zero (and prevent gimbal lock), we 'reset' the offset to zero after each step of gradient descent by left-multiplying the offset into our absolute rotation, and use that as the stationary point for the next step:
+2. Using gradient descent we solve for the change of our parameters that decreases the error. Like before, this gives us three delta Euler angles: `rx = -gain*dedrx`, `ry = -gain*dedry`, etc, as well as a delta translation.
 
-<!-- todo: this code snippet is way too abrupt. Ease the reader in by describing why we only need to consider euler(+-drx, 0, 0) etc offsets around R0. -->
+3. But, instead of accumulating the deltas into three global Euler angles, like we did before, we *apply* the rotation they represent to the current rotation matrix: `R = euler(rx,ry,rz)*R`.
 
-    update_parameters(R0, tx,ty,tz):
-        // Find the gradient by finite differences
-        dedrx = (E(euler(+drx, 0, 0)*R0, [tx, ty, tz]) -
-                 E(euler(-drx, 0, 0)*R0, [tx, ty, tz])) / 2drx
-        dedry = (E(euler(0, +dry, 0)*R0, [tx, ty, tz]) -
-                 E(euler(0, -dry, 0)*R0, [tx, ty, tz])) / 2dry
-        dedrz = (E(euler(0, 0, +drz)*R0, [tx, ty, tz]) -
-                 E(euler(0, 0, -drz)*R0, [tx, ty, tz])) / 2drz
+4. We then repeat, reset the Euler angles to zero, and use the updated matrix as the default orientation for the next step.
 
-        // Move/Rotate in the opposite 'direction' by some amount
-        rx = -gain*dedrx
-        ry = -gain*dedry
-        rz = -gain*dedrz
+This is not that different from our first strategy: we still have the notion of an Euler angle 'offset' around some default orientation, but instead of updating the default orientation and resetting the offset to zero at pre-defined switching points, we update and reset after every optimization step.
 
-        // Update the absolute rotation matrix
-        R0 = euler(rx,ry,rz)*R0
+This way we don't have to keep track of both a rotation matrix *and* an offset around it, since the offset is only ever used within one step of gradient descent.
 
-This is not that different from our first strategy: in both cases we have the notion of an Euler angle 'offset' around some stationary rotation, some default orientation. But instead of updating the default orientation and resetting the offset to zero at pre-defined switching points, we update and reset after every optimization step.
+Also, by keeping the offset always at zero we also avoid gimbal lock. Before, we computed the gradient by considering an offset around a set of global Euler angles, like so:
 
-By doing this we avoid having to keep track of both a rotation matrix *and* the offset around it; the offset is only ever used within gradient descent. And, because we compute the gradient by adding or subtracting a small delta (now around zero), we won't get gimbal locked as long as that delta is small enough.
+    dedrx = (E(euler(rx+drx, ry, rz), T) -
+             E(euler(rx-drx, ry, rz), T)) / 2drx
+    ...
+
+But now we can compute the gradient by adding or subtracting a small delta around zero, and left-multiplying the result to the current rotation matrix:
+
+    dedrx = (E(euler(+drx, 0, 0)*R, T) -
+             E(euler(-drx, 0, 0)*R, T)) / 2drx
+    ...
+
+As long as the deltas are small, we won't run into gimbal lock.
 
 <p style="color:#999;">
-&sup1;Alternatively, we could use unit-length quaternions to track absolute orientation. They are often the preferred representation in video game and animation systems because they use less bytes than rotation matrices. Like rotation matrices, they do not have gimbal lock or any weird problems at some particular orientation. But they also have constraints to keep them valid (vector must be unit-length), so we can't freely adjust its parameters to find a direction for gradient descent.
+Alternatively, we could use unit-length quaternions to track absolute orientation. They are often the preferred representation in video game and animation systems because they use less bytes than rotation matrices. Like rotation matrices, they do not have gimbal lock or any weird problems at some particular orientation. But they also have constraints to keep them valid (vector must be unit-length), so we can't freely adjust its parameters to find a direction for gradient descent.
 </p>
 
 But why?
