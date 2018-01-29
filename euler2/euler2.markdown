@@ -1,4 +1,4 @@
-# The space of rotations: Taking small steps
+# Stepping through rotations: Part II
 
 <!--
 1. Fixing gimbal lock with switching models
@@ -186,8 +186,6 @@ todo: define small angle
 
 Aside: Normalization
 --------------------
-
-<!-- Minimal representations have the benefit that the parameters used to define a rotation are unconstrained. Meaning, they always represent a 'valid' rotation. -->
 
 While gimbal lock is not one of them, tracking orientation with a rotation matrix, rather than Euler angles, does not come without its own set of issues. In particular, you might be worried by this piece of code that 'accumulates' a rotation to the current one:
 

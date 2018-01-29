@@ -1,4 +1,4 @@
-# The space of rotations
+# Stepping through rotations: Part I
 
 **"If all you have is a hammer, everything looks like a nail."**
 
@@ -21,7 +21,7 @@ A common problem in computer vision is finding out how a thing is rotated and tr
 
 If you want to make a quadcopter [land on a robotic vacuum cleaner](todo: iarc) using a camera, part of the problem is calculating where you are relative to the robot&mdash;or where the robot is relative to you&mdash;so you know where you need to go.
 
-<!-- ![](lander.gif) -->
+![](lander.gif)
 
 If you want reconstruct a 3D model of a scene from photographs, part of the problem is calculating how the camera was rotated and translated between each photo. Using that you can triangulate the 3D coordinate of corresponding pixels by casting rays in the direction they came from and computing where they intersect in 3D.
 
