@@ -136,11 +136,11 @@ This sounds complicated and not very nice to implement...
 
 The problem with the above strategy is that it doesn't address the core issue, which is that Euler angles suck at tracking absolute orientation: any choice of Euler angles will degrade in their ability to express three degrees of freedom *somewhere*, yet we insist on using them anyway.
 
-In other words, Euler angles are best when kept close to the origin&mdash;combining this insight with the idea of 'switching models', we can maybe think of a less complicated strategy: if Euler angles are no good for absolute orientation, what if we used a rotation matrix?
+Let's step back and consider what we've seen so far. First of all, we dropped rotation matrices, in favor of Euler angles, because we couldn't easily express a valid gradient descent direction. Meanwhile, we saw that Euler angles are great for that, but they are best when close to zero.
 
-The reason we dumped that in the first place was that we couldn't easily express a valid 'direction' to move in&mdash;a small incremental rotation. Meanwhile we have learned that Euler angles are great for that, but only around the origin.
+On the other hand, rotation matrices are great at tracking absolute orientation; no unintuitive degradation anywhere, we can change the model's zero orientation to any orientation we want, and the Euler  offset behaves exactly the same.
 
-So here's a way to simplify our strategy:
+Thinking through this you realize that the first strategy was overcomplicated: what if we *continuously* update what we consider to be the zero orientation, and not bother with tracking an offset rotation at all? It would work like this:
 
 1. We start out with the book at the zero orientation (book cover facing us). So the Euler angles are zero, and the default orientation `R = identity`.
 
