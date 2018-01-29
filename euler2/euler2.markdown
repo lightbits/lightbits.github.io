@@ -173,16 +173,14 @@ Alternatively, we could use unit-length quaternions to track absolute orientatio
 But why?
 --------
 
-Why did we choose that particular Euler angle ordering? Are there better orderings? And I've that quaternions are super popular and useful, but we're not using them?? What about axis-angle?
+Satisfied with your progress you decide to call it a day. You get ready to head home in eager anticipation of a well-deserved dinner, or sipping some of that fancy tea you bought yesterday but didn't have the chance to try. After turning off your monitor&mdash;because you care about saving power and nothing irks you more than seeing your coworker leaving theirs on (again!)&mdash;as you finish tossing the last of your belongings into your bag, your mind starts wandering aimlessly, and you ask questions that you never considered to ask...
 
-The answer to all of these is that it doesn't really matter?
+Why did we choose that particular Euler angle ordering? Are there better orderings? I've heard that quaternions are super popular and useful, maybe they could help? And what about that weird thing on wikipedia... the *exponential map*? That was just confusing...
 
-Let's look at a different Euler angle order.
+There's a nice answer connecting all these questions and ideas together. To show you what I mean, let's look at a different Euler angle order.
 
 todo: animation of the two. show that they are very tight for 'small angles'.
 todo: define small angle
-
-<!-- I think I prefer this explanation, as it doesn't get into "oh let's take the derivative of our error function analytically". Instead it keeps the discussion at the level of "what do small rotations look like?" -->
 
 Aside: Normalization
 --------------------
