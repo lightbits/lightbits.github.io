@@ -187,13 +187,15 @@ todo: define small angle
 Aside: Normalization
 --------------------
 
-This line of code might worry you:
+<!-- Minimal representations have the benefit that the parameters used to define a rotation are unconstrained. Meaning, they always represent a 'valid' rotation. -->
 
-    R0 = euler(rx,ry,rz)*R0
+While gimbal lock is not one of them, tracking orientation with a rotation matrix, rather than Euler angles, does not come without its own set of issues. In particular, you might be worried by this piece of code that 'accumulates' a rotation to the current one:
+
+    R = euler(rx,ry,rz)*R
 
 If you are an expert in floating point numbers you probably know that they are not perfect realizations of the real numbers: for example, `0.1+0.1` is not `0.2`, but `0.20000000298023224`.
 
-Imperfections like these can be a concern when you deal with rotation matrices or quaternions over longer periods of time&sup1;, in the sense that repeatedly appending rotations will accumulate errors and cause the matrix (or quaternion) to stray from a valid rotation: the columns are no longer unit-length and pair-wise perpendicular, and objects appear slightly deformed after rotation.
+Imperfections like these can be a concern when you deal with rotation matrices (or quaternions) over longer periods of time&sup1;, in the sense that repeatedly appending rotations will accumulate errors and cause the matrix (or quaternion) to stray from a valid rotation: the columns are no longer unit-length and pair-wise perpendicular, and objects appear slightly deformed after rotation.
 
 <p style="color:#999;">
 &sup1;"Time" also in the literal sense: even if you don't touch that rotation matrix, you might want to check up on it from time to time if your hardware is operating in high-radiation environments (like space or a nuclear reactor), because an occasional bit-flip is a real risk.
