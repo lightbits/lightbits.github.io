@@ -142,19 +142,17 @@ On the other hand, rotation matrices are great at tracking absolute orientation;
 
 Thinking through this you realize that the first strategy was overcomplicated: what if we *continuously* update what we consider to be the zero orientation, and not bother with tracking an offset rotation at all? It would work like this:
 
-1. We start out with the book at the zero orientation (book cover facing us). So the Euler angles are zero, and the default orientation `R = identity`.
+1. We start out with the book cover facing us: Euler angles are zero, rotation `R = identity`.
 
-2. Using gradient descent we solve for the change of our parameters that decreases the error. Like before, this gives us three delta Euler angles: `rx = -gain*dedrx`, `ry = -gain*dedry`, etc, as well as a delta translation.
+2. Using gradient descent we solve for the descent direction. Like before, this gives us three delta Euler angles: `rx = -gain*dedrx`, `ry = -gain*dedry`, etc, as well as a delta translation.
 
-3. But, instead of accumulating the deltas into three global Euler angles, like we did before, we *apply* the rotation they represent to the current rotation matrix: `R = euler(rx,ry,rz)*R`.
+3. But here's the trick: instead of accumulating the deltas into three global Euler angles, we apply the rotation they represent to the current rotation matrix: `R = euler(rx,ry,rz)*R`.
 
 4. We then repeat, reset the Euler angles to zero, and use the updated matrix as the default orientation for the next step.
 
 This is not that different from our first strategy: we still have the notion of an Euler angle 'offset' around some default orientation, but instead of updating the default orientation and resetting the offset to zero at pre-defined switching points, we update and reset after every optimization step.
 
-This way we don't have to keep track of both a rotation matrix *and* an offset around it, since the offset is only ever used within one step of gradient descent.
-
-Also, by keeping the offset always at zero we also avoid gimbal lock. Before, we computed the gradient by considering an offset around a set of global Euler angles, like so:
+This way we don't have to keep track of a rotation matrix *and* an offset around it, since the offset is only non-zero inside a step of gradient descent. This also avoids gimbal lock. See, before, when we computed the gradient, we considered an offset around a set of global Euler angles, like so:
 
     dedrx = (E(euler(rx+drx, ry, rz), T) -
              E(euler(rx-drx, ry, rz), T)) / 2drx
