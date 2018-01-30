@@ -73,13 +73,13 @@ I made this choice arbitrarily, but it happens to matter when we consider gimbal
 we would *not* have three degrees when the book is facing the camera, but instead at the sideways orientation. As you can verify for yourself, manipulating any one of the Euler angles can produce one of three distinct motions:
 
 <style>
-.slider,.slider-fixed img {
+.slider img {
     display:inline;
     max-width:none;
     padding:0;
     margin:0;
 }
-.slider,.slider-fixed {
+.slider {
     display:inline-block;
     overflow-y:hidden;
     overflow-x:hidden;
@@ -87,10 +87,6 @@ we would *not* have three degrees when the book is facing the camera, but instea
 }
 .slider-wrap { width:fit-content; margin:0 auto; }
 input { vertical-align: middle; }
-@media screen and (max-width: 600px){
-.slider { width:160px; height:160px; }
-.slider img { width:160px; height:160px;}
-}
 </style>
 <div class="slider-wrap">
     <div class="slider" id="slider1" style="max-width:160px;max-height:180px;">
@@ -153,7 +149,7 @@ Thinking through this you realize that the first strategy was overcomplicated: w
 To put it differently, it's kinda like having a rotator *gizmo* (like in CAD or Blender) that uses local Euler angles. When you click and start dragging, the Euler angles start from zero, and you can rotate the thing around its current orientation. But when you release, its orientation is saved, and used as the origin the next time you click and drag.
 
 <div class="slider-wrap">
-    <div class="slider-fixed" id="slider4" style="max-width:240px;max-height:260px;">
+    <div class="slider" id="slider4" style="max-width:240px;max-height:260px;">
         <div style="width:1700px;"><img src="gimbals1.png"/><img src="gimbals1-2.png"/><img src="gimbals2.png"/><img src="gimbals3.png"/><img src="gimbals3-4.png"/><img src="gimbals4.png"/><img src="gimbals5.png"/></div>
     </div>
     <br>
