@@ -159,19 +159,17 @@ To put it differently, it's kinda like having a rotator *gizmo* (like in CAD or 
 
 This is not that different from our first strategy: we still have the notion of an Euler angle 'offset' around some default orientation, but instead of updating the default orientation and resetting the offset to zero at pre-defined switching points, we update and reset after every optimization step.
 
-This way we don't have to keep track of a rotation matrix *and* an offset around it, since the offset is only non-zero inside a step of gradient descent. This also avoids gimbal lock. See, before, when we computed the gradient, we considered an offset around a set of global Euler angles, like so:
+This way we don't have to keep track of a rotation matrix *and* an offset around it, since the offset is only non-zero inside a step of gradient descent. This also avoids gimbal lock: when we last computed the gradient, we did it by adding and subtracting a delta around the global Euler angle estimates, like so:
 
     dedrx = (E(euler(rx+drx, ry, rz), T) -
-             E(euler(rx-drx, ry, rz), T)) / 2drx
-    ...
+             E(euler(rx-drx, ry, rz), T)) / 2drx ...
 
 But now we can compute the gradient by adding or subtracting a small delta around zero, and left-multiplying the result to the current rotation matrix:
 
     dedrx = (E(euler(+drx, 0, 0)*R, T) -
-             E(euler(-drx, 0, 0)*R, T)) / 2drx
-    ...
+             E(euler(-drx, 0, 0)*R, T)) / 2drx ...
 
-As long as the deltas are small, we won't run into gimbal lock.
+As long as the deltas are small, the Euler matrix preserves its superb three degrees of freedom around zero, and we never get close to gimbal lock.
 
 <p style="color:#999;">
 Alternatively, we could use unit-length quaternions to track absolute orientation. They are often the preferred representation in video game and animation systems because they use less bytes than rotation matrices. Like rotation matrices, they do not have gimbal lock or any weird problems at some particular orientation. But they also have constraints to keep them valid (vector must be unit-length), so we can't freely adjust its parameters to find a direction for gradient descent.
