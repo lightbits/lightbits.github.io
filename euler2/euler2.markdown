@@ -175,17 +175,27 @@ As long as the deltas are small, the Euler matrix preserves its superb three deg
 Alternatively, we could use unit-length quaternions to track absolute orientation. They are often the preferred representation in video game and animation systems because they use less bytes than rotation matrices. Like rotation matrices, they do not have gimbal lock or any weird problems at some particular orientation. But they also have constraints to keep them valid (vector must be unit-length), so we can't freely adjust its parameters to find a direction for gradient descent.
 </p>
 
-But why?
---------
+Upon closer inspection...
+-------------------------
 
 Satisfied with your progress you decide to call it a day. You get ready to head home in eager anticipation of a well-deserved dinner, or sipping some of that fancy tea you bought yesterday but didn't have the chance to try. After turning off your monitor&mdash;because you care about saving power and nothing irks you more than seeing your coworker leaving theirs on (again!)&mdash;as you finish tossing the last of your belongings into your bag, your mind starts wandering aimlessly, and you ask questions that you never considered to ask...
 
 Why did we choose that particular Euler angle ordering? Are there better orderings? I've heard that quaternions are super popular and useful, maybe they could help? And what about that weird thing on wikipedia... the *exponential map*? That was just confusing...
 
-There's a nice answer connecting all these questions and ideas together. To show you what I mean, let's look at a different Euler angle order.
+It turns out that there's a nice answer connecting all these questions and ideas together. To show you what I mean, let's look at a different Euler angle order.
 
-todo: animation of the two. show that they are very tight for 'small angles'.
-todo: define small angle
+There are many possible Euler angle variants, XYX, XZX, YXY. Some of them are popular, others will make people look at you like you're an excentric mad person (YXY... seriously?). Nevertheless, the number of choices might make you worry that the one we chose is not as good as another one.
+
+Here are two different variants, XYZ and ZYX. As you drag the sliders and rotate the two, you realize that they look vastly different, for the same values.
+
+<!-- todo: gizmo one, big angles -->
+<!-- todo: not just adjusting any single angle in isolation -->
+
+But looking more closely around the area that we're interested in, that of 'small angles'.
+
+<!-- todo: gizmo two, small angles -->
+
+Huh, within this 5-10 degree range, you almost can't tell them apart!
 
 Small rotations go to work
 --------------------------
@@ -202,13 +212,11 @@ Assuming ex,ey,ez are small, we'll drop everything but the first order terms to 
     |  ez     1   -ex |
     | -ey    ex     1 |
 
-Other Euler angles
-------------------
-
-XYX, XZX, YXY... The particular sequence is often a convention in the community. This begs the question, which one is best for us?
-
 Axis-angle
 ----------
+
+But, but! What about axis-angle? And the exponential map? And all these other weird things?
+
 <!-- todo: what are we after? A minimal parametrization (three numbers). We can choose the numbers freely. Why? To take the derivative? explain... -->
 
 Euler angles concatenate three rotations about three axes, but Euler did a lot of thinking about rotations (as he did with many other things) and proved that any rotation can also be described as a rotation about a single axis.
