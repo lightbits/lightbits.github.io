@@ -238,14 +238,9 @@ So we could alternatively parametrize our offset rotation in terms of an angle `
 
     R = I + sin(a) S(r) + (1-cos(a)) S(r)S(r)
 
-Similar to quaternions and rotation matrices, this is not a minimal parametrization: in this case the constraint lies on the axis to be unit-length This means we can't choose the numbers all freely and find a nice derivative of our error function. But let's ignore this for now, because it turns out to not matter.
+Similar to quaternions and rotation matrices, this is not a minimal parametrization: in this case the constraint lies on the axis to be unit-length.
 
-Let's again consider a small rotation: that is, the angle `a` is close to zero, and the axis is...well something. Pulling up our trig identities again we know that approximately `sin(a) = a` and `cos(a) = 1`, so the formula above simplifies to:
-
-    R = I + a S(r)
-
-What's this `S(r)` thing you ask? It's ...
-
+Multiply angle in with axis. `w`, three free numbers.
 
 <!-- But storing `a` as one number and `r` as three numbers leads us into a similar problem we had with rotation matrices: we can't choose them all freely. In this case, the constraint lies on `r` to be unit-length.
 
@@ -253,25 +248,22 @@ So a trick that's commonly used is to multiply the angle into the axis vector, g
 
 If we call this vector `w` -->
 
+Consider a small `|w|`.
+
+<!-- Let's again consider a small rotation: that is, the angle `a` is close to zero, and the axis is...well something. Pulling up our trig identities again we know that approximately `sin(a) = a` and `cos(a) = 1`, so the formula above simplifies to: -->
+
+    R = I + S(w)
+
+What's this `S(w)` thing you ask? It's the skew symmetric form of `w`. What's that? Well if `w = (x,y,z)`, wikipedia tells us that `S(w)` is
+
+    |  0   -z    y |
+    |  z    0   -x |
+    | -y    x    0 |
+
+And what do you know, if we add the identity to that, we get the exact same matrix as before. Weird!
+
 So many choices.... but does it matter?
 ---------------------------------------
-
-It turns out that for small angles, rotation matrices are actually commutative! This means that we really could have used any order we wanted in the above expression; they would all evaluate to roughly the same matrix. If you write out the matrix product Rz(ez)Ry(ey)Rx(ex), and replace the sines and cosines with the above approximations, you will get this:
-
-    |   1      ex*ey - ez    ex*ez + ey |
-    |  ez    ex*ey*ez + 1    ey*ez - ex |
-    | -ey              ex             1 |
-
-Assuming ex,ey,ez are small, we'll drop everything but the first order terms to get:
-
-    |   1   -ez    ey |
-    |  ez     1   -ex |
-    | -ey    ex     1 |
-
-And you will indeed get this same matrix no matter which order you apply the rotations. However, since the order appears to not matter, why should it matter if we use angle-axis over Euler angles? It turns out that it doesn't either! The matrix above is *exactly* the approximated angle-axis matrix for small rotations:
-
-    (I + w^x) where w=(ex,ey,ez)
-
 Now you might ask, when can I use this approximation? How small is 'small'? And how do I know if the incremental update I get from my optimization is compliant with that?
 
 Here's a comparison for you where ex, ey and ez are each varied between -25 and +25 degrees. The red cube uses the Euler rotation R = Rz(rz)Ry(ry)Rx(rx). The green and the blue cubes are using the exact axis-angle rotation formula, (I + sin(|w|) K + (1-cos(|w|)) K^2 ), and its approximation, (I + w^x), respectively. The blue cube orthogonalizes the result to ensure that it remains a proper rotation matrix.
