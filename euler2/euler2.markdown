@@ -195,25 +195,40 @@ But looking more closely around the area that we're interested in, that of 'smal
 
 Huh, within this 5-10 degree range, you almost can't tell them apart!
 
-Small rotations go to work
---------------------------
+Small rotations
+---------------
 
-It turns out that for small angles, rotation matrices *commute*. In other words, the order in which you apply rotations doesn't matter. If you write out the matrix product Rz(ez)Ry(ey)Rx(ex), and replace the sines and cosines with the above approximations, you will get this:
+It turns out that for small angles, rotation matrices *commute*. In other words, the order in which you apply rotations doesn't matter. We can see this mathematically. If we write out the matrix product `Rz(z)Ry(y)Rx(x)`, we get this nasty fellow (writing `cx` and `sx` as short of `cos(x)` and `sin(x)`):
 
-    |   1      ex*ey - ez    ex*ez + ey |
-    |  ez    ex*ey*ez + 1    ey*ez - ex |
-    | -ey              ex             1 |
+    | cy*cz   cz*sx*sy - cx*sz   sx*sz + cx*cz*sy |
+    | cy*sz   cx*cz + sx*sy*sz   cx*sy*sz - cz*sx |
+    |   -sy              cy*sx              cx*cy |
 
-Assuming ex,ey,ez are small, we'll drop everything but the first order terms to get:
+For small angles, `cos(x) = 1` and `sin(x) = x`. So within reasonable approximation, the above is equal to this:
 
-    |   1   -ez    ey |
-    |  ez     1   -ex |
-    | -ey    ex     1 |
+    |  1      x*y - z    x*z + y |
+    |  z    x*y*z + 1    y*z - x |
+    | -y            x          1 |
+
+Moreover, the product of two small numbers of them becomes really small compared to any one of them alone, so we can simplify again:
+
+    |  1   -z    y |
+    |  z    1   -x |
+    | -y    x    1 |
+
+(This is a special matrix that we will see again soon.) I'll leave it as a brain push-up (or sit-up...?) to verify that no matter what Euler angle permutation you consider, they are all (approximately) equal to this when you plug in small angles.
+
+So when we write
+
+    // update current rotation with offset from gradient descent
+    R = euler(rx,ry,rz)*R
+
+it doesn't really matter what ordering we choose&mdash;they all pretty much have the same effect, as long as `rx,ry,rz` are small.
 
 Axis-angle
 ----------
 
-But, but! What about axis-angle? And the exponential map? And all these other weird things?
+But, but! What about axis-angle? And the exponential map? And all these other weird things? Again driven by FOMO and an anxiety that somewhere, someone is using a better representation of three-dimensional rotation than you, you start probing deeper.
 
 <!-- todo: what are we after? A minimal parametrization (three numbers). We can choose the numbers freely. Why? To take the derivative? explain... -->
 
