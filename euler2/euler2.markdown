@@ -128,25 +128,13 @@ In other words, we would have to keep track of two things: (1) which default ori
 
 This sounds complicated and not very nice to implement...
 
-## Absolute and relative rotations
+## The Tumbler
 
-The problem with the above strategy is that it doesn't address the core issue, which is that Euler angles suck at tracking absolute orientation: any choice of Euler angles will degrade in their ability to express three degrees of freedom *somewhere*, yet we insist on using them anyway.
+The problem with the above strategy is that it doesn't address the core issue, which is that Euler angles suck at tracking absolute orientation: any choice of Euler angles will degrade in their ability to express three degrees of freedom *somewhere*.
 
-Let's step back and consider what we've seen so far. First of all, we dropped rotation matrices, in favor of Euler angles, because we couldn't easily express a valid gradient descent direction. Meanwhile, we saw that Euler angles are great for that, but they are best when close to zero.
+3D modelling software have had similar problems for a long time: how can the user, with their 2D mouse interface, rotate an object in 3D? One of their solutions (which is notoriously unintuitive and the only excuse you get for using it is [not knowing any better](todo: matt keeter)) is called the *Tumbler*.
 
-On the other hand, rotation matrices are great at tracking absolute orientation; no unintuitive degradation anywhere, we can change the model's zero orientation to any orientation we want, and the Euler  offset behaves exactly the same.
-
-Thinking through this you realize that the first strategy was overcomplicated: what if we *continuously* update what we consider to be the zero orientation, and not bother with tracking an offset rotation at all? It would work like this:
-
-1. We start out with the book cover facing us: Euler angles are zero, rotation `R = identity`.
-
-2. Using gradient descent we solve for the descent direction. Like before, this gives us three delta Euler angles: `rx = -gain*dedrx`, `ry = -gain*dedry`, etc, as well as a delta translation.
-
-3. But here's the trick: instead of accumulating the deltas into three global Euler angles, we apply the rotation they represent to the current rotation matrix: `R = euler(rx,ry,rz)*R`.
-
-4. We then repeat, reset the Euler angles to zero, and use the updated matrix as the default orientation for the next step.
-
-It's like a rotation [gizmo](todo: matt keeter, 3d rotation design) that uses *local* Euler angles. When you click and start dragging, the Euler angles start from zero and you can rotate the thing around its current orientation. When you release, its orientation is saved and used as the origin the next time you click and drag.
+It works like this. When you click and start dragging, the Euler angles start from zero and you can rotate the thing around its current orientation. When you release, the orientation is saved but the Euler angles are reset to zero. In other words, the coordinate frame you rotate around follow the object while you're rotating it, but as soon as you release, the frame resets.
 
 <div class="slider-wrap">
     <div class="slider" id="slider4" style="max-width:240px;max-height:260px;">
@@ -157,19 +145,29 @@ It's like a rotation [gizmo](todo: matt keeter, 3d rotation design) that uses *l
     <label>Click and drag</label>
 </div>
 
-This is not that different from our first strategy: we still have the notion of an Euler angle 'offset' around some default orientation, but instead of updating the default orientation and resetting the offset to zero at pre-defined switching points, we update and reset after every optimization step.
+It turns out that this is a terrible user interface. But in our case it's actually what we want, because by always starting rotations around a local coordinate frame, we get three degrees of freedom everywhere. For example, consider this strategy:
 
-This way we don't have to keep track of a rotation matrix *and* an offset around it, since the offset is only non-zero inside a step of gradient descent. This also avoids gimbal lock: when we last computed the gradient, we did it by adding and subtracting a delta around the global Euler angle estimates, like so:
+1. We start out with the book cover facing us: Euler angles are zero, rotation `R = identity`.
 
-    dedrx = (E(euler(rx+drx, ry, rz), T) -
-             E(euler(rx-drx, ry, rz), T)) / 2drx ...
+2. We solve for the gradient descent direction which, like before, gives us three delta Euler angles: `rx = -gain*dedrx`, `ry = -gain*dedry` ... and a delta translation.
 
-But now we can compute the gradient by adding or subtracting a small delta around zero, and left-multiplying the result to the current rotation matrix:
+3. But instead of accumulating the deltas into three global Euler angles, we apply the rotation they represent to the current rotation matrix: `R = euler(rx,ry,rz)*R`.
 
-    dedrx = (E(euler(+drx, 0, 0)*R, T) -
-             E(euler(-drx, 0, 0)*R, T)) / 2drx ...
+4. We then repeat, reset the Euler angles to zero, and use the updated matrix as the default orientation for the next step.
 
-As long as the deltas are small, the Euler matrix preserves its superb three degrees of freedom around zero, and we never get close to gimbal lock.
+<!-- This is not that different from our first strategy: we still have the notion of an Euler angle offset, but instead of updating the default orientation and resetting the offset to zero at pre-defined switching points, we update and reset after every step of gradient descent&mdash;one step of gradient descent is like one click-drag-release movement with the Tumbler. -->
+
+This way we don't need to track a rotation matrix *and* an offset around it, since the offset is only non-zero inside one step of gradient descent&mdash;one step is like one click-drag-release movement with the Tumbler. But how does it prevent gimbal lock? When we last computed the gradient, we did it by adding and subtracting a delta around the global Euler angle estimates, like so:
+
+    dedrx = (E(euler(rx+drx,ry,rz), T) -
+             E(euler(rx-drx,ry,rz), T)) / 2drx ...
+
+But now we can compute the gradient by adding or subtracting a small delta around zero:
+
+    dedrx = (E(euler(+drx,0,0) * R, T) -
+             E(euler(-drx,0,0) * R, T)) / 2drx ...
+
+and applying the offset to the current rotation. As long as the deltas are small, the Euler matrix preserves its superb three degrees of freedom around zero, and we never get close to gimbal lock.
 
 <p style="color:#999;">
 Alternatively, we could use unit-length quaternions to track absolute orientation. They are often the preferred representation in video game and animation systems because they use less bytes than rotation matrices. Like rotation matrices, they do not have gimbal lock or any weird problems at some particular orientation. But they also have constraints to keep them valid (vector must be unit-length), so we can't freely adjust its parameters to find a direction for gradient descent.
