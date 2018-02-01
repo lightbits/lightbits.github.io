@@ -146,7 +146,7 @@ Thinking through this you realize that the first strategy was overcomplicated: w
 
 4. We then repeat, reset the Euler angles to zero, and use the updated matrix as the default orientation for the next step.
 
-To put it differently, it's kinda like having a rotator *gizmo* (like in CAD or Blender) that uses local Euler angles. When you click and start dragging, the Euler angles start from zero, and you can rotate the thing around its current orientation. But when you release, its orientation is saved, and used as the origin the next time you click and drag.
+It's like a rotation [gizmo](todo: matt keeter, 3d rotation design) that uses *local* Euler angles. When you click and start dragging, the Euler angles start from zero and you can rotate the thing around its current orientation. When you release, its orientation is saved and used as the origin the next time you click and drag.
 
 <div class="slider-wrap">
     <div class="slider" id="slider4" style="max-width:240px;max-height:260px;">
