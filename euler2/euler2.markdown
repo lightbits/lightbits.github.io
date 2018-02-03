@@ -62,15 +62,15 @@ In this part I'll take you on a wild mathematical tangent into abstract rotation
 Fixing gimbal lock with local Euler angles
 ------------------------------------------
 
-When I made this textured 3D box, I subconsciously chose its "default" orientation (all angles set to zero) to be with its cover facing the camera, like so:
+When I made this textured 3D box, I inadvertently chose its "default" orientation (all angles zero) to be with its cover facing the camera, like so:
 
 ![](model3.png)
 
-I made this choice arbitrarily, but it happens to matter when we consider gimbal lock. The reason is that we have all three degrees of freedom when the book is facing the camera, but not when we turn the book sideways. On the other hand, if the default orientation had been sideways....
+This happens to have an impact on gimbal lock: for this choice, we have all three degrees of freedom when the book is facing the camera, but not when we turn the book sideways. On the other hand, if the default orientation had been sideways....
 
 ![](model4.png)
 
-we would *not* have three degrees when the book is facing the camera, but instead at the sideways orientation. As you can verify for yourself, manipulating any one of the Euler angles can produce one of three distinct motions:
+we would *not* have three degrees when the book is facing the camera, but instead at the sideways orientation. As you can verify for yourself, manipulating the Euler angles can produce three distinct motions, even though the book is at the "bad" orientation from last time:
 
 <style>
 .slider img {
@@ -109,32 +109,23 @@ input { vertical-align: middle; }
     <label>rotate z</label>
 </div>
 
-<!-- So in the last example, if the default orientation had been sideways, gradient descent would have had no problems tilting the book backward slightly. -->
+So you could imagine a fix where we change the model to have a different default orientation, based on which one is closest: if we're close to facing the cover, we use the model with its cover facing the camera, and so on.
 
-So you could imagine a fix where we change the model to have a different default orientation, based on what orientation we're currently estimating around: If we're close to facing the cover, we use the model with its cover facing the camera. But as we get close enough to sideways, we switch to the one seen from the side.
+<p style="color:#999;">
+Of course, we don't need to actually store seperate 3D models for each default orientation, since the only difference between them is a constant rotation matrix.
+</p>
 
-Of course, we don't need to actually store seperate 3D models for each default orientation, since the only difference between them is a constant rotation matrix pre-multiplied to the 3D coordinates in the original model. In other words, we can get by with a bunch of `if`-statements, computing the book's orientation in one way or another based on which default orientation is closest:
+This works, but our Euler angles need to change whenever we switch: if our current estimate is close to sideways (0,90,0), and we switch model so that (0,0,0) means sideways, then our angles must be reset to zero.
 
-    if default orientation a:
-        R = Rz(rz)*Ry(ry)*Rx(rx) * Ra
-    if default orientation b:
-        R = Rz(rz)*Ry(ry)*Rx(rx) * Rb
+In other words, we would have to keep track of two things: (1) which default orientation we are currently based around, and (2) the Euler angle "offset" around that. Whenever we switch default orientation, we need to reset the offset to zero.
 
-<!-- todo: is this done on aircraft? -->
-
-This would be well and good, except that our Euler angles would need to change whenever we switch: if our current estimate is close to sideways, or (0, 90, 0), and we switch model so that (0,0,0) means sideways, then our angles have to go back to (0,0,0) again.
-
-In other words, we would have to keep track of two things: (1) which default orientation we are currently based around, and (2) the Euler angle 'offset' around that. Whenever we switch default orientation, we need to reset the offset to zero.
-
-This sounds complicated and not very nice to implement...
+This sounds complicated. Maybe we can do better?
 
 ## The Tumbler
 
-The problem with the above strategy is that it doesn't address the core issue, which is that Euler angles suck at tracking absolute orientation: any choice of Euler angles will degrade in their ability to express three degrees of freedom *somewhere*.
+3D modelling software have tackled similar problems for a long time: how can the user, with their 2D mouse interface, rotate an object in 3D? One solution is called the *Tumbler*. It is notoriously unintuitive and the only excuse you get for using it is [not knowing any better](todo: matt keeter). It works like this:
 
-3D modelling software have had similar problems for a long time: how can the user, with their 2D mouse interface, rotate an object in 3D? One of their solutions (which is notoriously unintuitive and the only excuse you get for using it is [not knowing any better](todo: matt keeter)) is called the *Tumbler*.
-
-It works like this. When you click and start dragging, the Euler angles start from zero and you can rotate the thing around its current orientation. When you release, the orientation is saved but the Euler angles are reset to zero. In other words, the coordinate frame you rotate around follow the object while you're rotating it, but as soon as you release, the frame resets.
+When you click and start dragging, the Euler angles start from zero and you can rotate the thing around its current orientation. When you release, the orientation is saved but the Euler angles are reset to zero. In other words, the coordinate frame you rotate around follow the object while you're rotating it, but as soon as you release, the frame resets.
 
 <div class="slider-wrap">
     <div class="slider" id="slider4" style="max-width:240px;max-height:260px;">
