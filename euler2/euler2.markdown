@@ -147,10 +147,10 @@ Whether we use finite differences, automatic differentiation or analytic derivat
 We could also use unit-length quaternions to track orientation. They are often preferred because they use fewer bytes than rotation matrices and, like rotation matrices, they do not gimbal lock. But they also have constraints to keep them valid (must be unit-length), so we can't freely adjust its parameters to find a direction for gradient descent.
 </p>
 
-Upon closer inspection...
--------------------------
+Upon closer inspection
+----------------------
 
-Satisfied with your progress you decide to call it a day. You get ready to head home in eager anticipation of a well-deserved dinner, or sipping some of that fancy tea you bought yesterday but didn't have the chance to try. After turning off your monitor&mdash;because you care about saving power and nothing irks you more than seeing your coworker leaving theirs on (again!)&mdash;as you finish tossing the last of your belongings into your bag, your mind starts wandering aimlessly, and you ask questions that you never considered to ask...
+<!-- *Satisfied with your progress you decide to call it a day. You get ready to head home in eager anticipation of sipping some of that fancy tea you bought yesterday but didn't have the chance to try. After turning off your monitor&mdash;because you care about saving power and nothing irks you more than seeing your coworker leaving theirs on (again!)&mdash;as you finish tossing the last of your belongings into your bag, your mind starts to wander...* -->
 
 Why did we choose that particular Euler angle ordering? Are there better orderings? I've heard that quaternions are super popular and useful, maybe they could help? And what about that weird thing on wikipedia... the *exponential map*? That was just confusing...
 
@@ -172,11 +172,13 @@ Huh, within this 5-10 degree range, you almost can't tell them apart!
 Small rotations
 ---------------
 
-It turns out that for small angles, rotation matrices *commute*. In other words, the order in which you apply rotations doesn't matter. We can see this mathematically. If we write out the matrix product `Rz(z)Ry(y)Rx(x)`, we get this nasty fellow (writing `cx` and `sx` as short of `cos(x)` and `sin(x)`):
+It turns out that for small angles, the order you apply rotations doesn't matter. We can see this mathematically. If we write out the matrix product `Rz(z)Ry(y)Rx(x)`, we get this nasty fellow:
 
     | cy*cz   cz*sx*sy - cx*sz   sx*sz + cx*cz*sy |
     | cy*sz   cx*cz + sx*sy*sz   cx*sy*sz - cz*sx |
     |   -sy              cy*sx              cx*cy |
+
+<p style="color:#999;">(I wrote `cx` and `sx` instead of `cos(x)` and `sin(x)` and so on, for easier reading)</p>
 
 For small angles, `cos(x) = 1` and `sin(x) = x`. So within reasonable approximation, the above is equal to this:
 
@@ -190,9 +192,7 @@ Moreover, the product of two small numbers of them becomes really small compared
     |  z    1   -x |
     | -y    x    1 |
 
-(This is a special matrix that we will see again soon.) I'll leave it as a brain push-up (or sit-up...?) to verify that no matter what Euler angle permutation you consider, they are all (approximately) equal to this when you plug in small angles.
-
-So when we write
+I'll leave it to your curiosity to check that no matter what Euler angle order you consider, they are all (approximately) equal to this when you plug in small angles. So when we write
 
     // update current rotation with offset from gradient descent
     R = euler(rx,ry,rz)*R
@@ -202,39 +202,31 @@ it doesn't really matter what ordering we choose&mdash;they all pretty much have
 Axis-angle
 ----------
 
-But, but! What about axis-angle? And the exponential map? And all these other weird things? Again driven by FOMO and an anxiety that somewhere, someone is using a better representation of three-dimensional rotation than you, you start probing deeper.
+Euler angles are not the only minimal representation. Axis-angle is another popular one. For fun, let's take a look at what happens to it when the angle is small.
 
-<!-- todo: what are we after? A minimal parametrization (three numbers). We can choose the numbers freely. Why? To take the derivative? explain... -->
+Euler angles concatenate three rotations about three axes, but we can also parametrize our rotation in terms of an axis `r` and an angle `a` around it. There's a formula to convert this to a rotation matrix (copied from Wikipedia):
 
-Euler angles concatenate three rotations about three axes, but Euler did a lot of thinking about rotations (as he did with many other things) and proved that any rotation can also be described as a rotation about a single axis.
+    R = I + sin(a) skew(r) + (1-cos(a)) skew(r)^2
 
-So we could alternatively parametrize our offset rotation in terms of an angle `a` and an axis `r`. To convert it to a rotation matrix we can use this formula from wikipedia:
+<p style="color:#999;">We'll see what this `skew` function is in a bit...</p>
 
-    R = I + sin(a) S(r) + (1-cos(a)) S(r)S(r)
+This is not a minimal parametrization because it has four numbers, the constraint being that the axis must be unit-length. But if we multiply the angle into the axis we do get a minimal parametrization: a vector whose length is the original angle and direction is the original axis.
 
-Similar to quaternions and rotation matrices, this is not a minimal parametrization: in this case the constraint lies on the axis to be unit-length.
+    R = I + sin(|w|) skew(w/|w|) + (1-cos(|w|)) skew(w/|w|)^2
 
-Multiply angle in with axis. `w`, three free numbers.
+So what happens when the angle is small? Well, stuff becomes zero and we're left with the identity plus this `skew` thing.
 
-<!-- But storing `a` as one number and `r` as three numbers leads us into a similar problem we had with rotation matrices: we can't choose them all freely. In this case, the constraint lies on `r` to be unit-length.
+    R = I + skew(w)
 
-So a trick that's commonly used is to multiply the angle into the axis vector, giving three numbers that can all be chosen freely. To recover the angle, you take the length of the vector. To find the axis, you normalize it.
-
-If we call this vector `w` -->
-
-Consider a small `|w|`.
-
-<!-- Let's again consider a small rotation: that is, the angle `a` is close to zero, and the axis is...well something. Pulling up our trig identities again we know that approximately `sin(a) = a` and `cos(a) = 1`, so the formula above simplifies to: -->
-
-    R = I + S(w)
-
-What's this `S(w)` thing you ask? It's the skew symmetric form of `w`. What's that? Well if `w = (x,y,z)`, wikipedia tells us that `S(w)` is
+`skew(w)` is the skew-symmetric form of `w`. What's that? Well if `w = (x,y,z)`, wikipedia tells us that `S(w)` is
 
     |  0   -z    y |
     |  z    0   -x |
     | -y    x    0 |
 
 And what do you know, if we add the identity to that, we get the exact same matrix as before. Weird!
+
+<!-- this ties into physics. skew(w)*R is like taking the cross product between w and each axis of R. Remember from physics that the cross product of angular velocity with a vector points in the direction that vector moves. So this w is like an angular velocity, and skew(w)*R is how each axis changes. -->
 
 So many choices.... but does it matter?
 ---------------------------------------
