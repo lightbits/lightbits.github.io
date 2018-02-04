@@ -53,21 +53,19 @@ Q) Treating translation seperately from rotation (still as a vector space) is mo
 
 -->
 
-The take-home message from the previous part was that Euler angles can  *gimbal lock*, whereby you lose the ability to rotate around all three axes: adjusting any angle in isolation can only generate two distinct motions, instead of the three you started with.
-
-This can cause gradient descent to slow to a stop or adjust the wrong parameters, because it only tries to make adjustments around the current estimate; the direction toward the solution has to be expressed in terms of local motions, which is not always possible.
+The take-home message from last time was that Euler angles can *gimbal lock*, whereby you lose the ability to rotate around all three axes: adjusting any angle in isolation can only generate two distinct motions, instead of the three you started with. This could cause gradient descent, or similar optimization strategies, to slow to a stop, or adjust the wrong parameters.
 
 ...
 
-The problem we ran into was that Euler angles suck at keeping track of absolute orientation. See, when I made this textured 3D box, I inadvertently chose its "default" orientation (all angles zero) to be with its cover facing the camera, like so:
+Another way of saying it is: Euler angles suck at keeping track of absolute orientation. See, when I made this textured 3D box, I inadvertently chose its "default" orientation (all angles zero) to be with its cover facing the camera, like so:
 
 ![](model3.png)
 
-This happens to have an impact on gimbal lock: for this choice, we have all three degrees of freedom when the book is facing the camera, but not when we turn the book sideways. On the other hand, if the default orientation had been sideways....
+This happens to have an impact on gimbal lock: for this choice, we have all three degrees of freedom when the cover is facing the camera, but not when we turn the book sideways. On the other hand, if the default orientation had been sideways....
 
 ![](model4.png)
 
-we would *not* have three degrees when the book is facing the camera, but instead at the sideways orientation. As you can verify for yourself, manipulating the Euler angles can produce three distinct motions, even though the book is at the "bad" orientation from last time:
+we would have three degrees of freedom at the sideways orientation, but *not* when the cover is facing the camera.
 
 <style>
 .slider img {
@@ -85,6 +83,26 @@ we would *not* have three degrees when the book is facing the camera, but instea
 .slider-wrap { width:fit-content; margin:0 auto; }
 input { vertical-align: middle; }
 </style>
+
+In other words, Euler angles suck at keeping track of absolute orientation, but they are pretty good when kept close to zero...
+
+## The Tumbler
+
+3D modelling software have tackled similar problems for a long time: how can the user, with their 2D mouse interface, rotate an object in 3D? One solution is called the *Tumbler*. It is notoriously unintuitive and the only excuse you get for using it is [not knowing any better](todo: matt keeter). It works like this:
+
+When you click and start dragging, the Euler angles start from zero and you can rotate the thing around its current orientation. When you release, the orientation is saved but the Euler angles are reset to zero.
+
+<div class="slider-wrap">
+    <div class="slider" id="slider4" style="max-width:240px;max-height:260px;">
+        <div style="width:1700px;"><img src="gimbals1.png"/><img src="gimbals1-2.png"/><img src="gimbals2.png"/><img src="gimbals3.png"/><img src="gimbals3-4.png"/><img src="gimbals4.png"/><img src="gimbals5.png"/></div>
+    </div>
+    <br>
+    <input type="range" min=0 max=6 step=1 value=0 oninput="document.getElementById('slider4').scrollLeft = this.value*240;"></input>
+    <label>Click and drag</label>
+</div>
+
+In other words, the coordinate frame you rotate around follows the object while you're rotating it, but as soon as you release, the frame resets. No matter where you start rotating, you can theoretically generate all three distinct rotations:
+
 <div class="slider-wrap">
     <div class="slider" id="slider1" style="max-width:160px;max-height:180px;">
         <div style="width:700px;"><img src="x1.png"/><img src="x2.png"/><img src="x3.png"/></div>
@@ -106,24 +124,11 @@ input { vertical-align: middle; }
     <label>rotate z</label>
 </div>
 
-In other words, Euler angles are best when kept close to zero...
+It turns out that this is a **terrible** user interface, because, even though the object can theoretically be rotated in three distinct ways, the mouse's lack of a third dimension prevents the user from accessing more than two of those.
 
-## The Tumbler
+<p style="color:#999;">Particularly, the Tumbler lets the user control x-rotation by moving the mouse vertically, and y-rotation by moving the mouse horizontally. Whenever the user wants to rotate about z, they end up spinning their mouse like a methodic lunatic&mdash;a motion that gave the widget its name.</p>
 
-3D modelling software have tackled similar problems for a long time: how can the user, with their 2D mouse interface, rotate an object in 3D? One solution is called the *Tumbler*. It is notoriously unintuitive and the only excuse you get for using it is [not knowing any better](todo: matt keeter). It works like this:
-
-When you click and start dragging, the Euler angles start from zero and you can rotate the thing around its current orientation. When you release, the orientation is saved but the Euler angles are reset to zero. In other words, the coordinate frame you rotate around follow the object while you're rotating it, but as soon as you release, the frame resets.
-
-<div class="slider-wrap">
-    <div class="slider" id="slider4" style="max-width:240px;max-height:260px;">
-        <div style="width:1700px;"><img src="gimbals1.png"/><img src="gimbals1-2.png"/><img src="gimbals2.png"/><img src="gimbals3.png"/><img src="gimbals3-4.png"/><img src="gimbals4.png"/><img src="gimbals5.png"/></div>
-    </div>
-    <br>
-    <input type="range" min=0 max=6 step=1 value=0 oninput="document.getElementById('slider4').scrollLeft = this.value*240;"></input>
-    <label>Click and drag</label>
-</div>
-
-It turns out that this is a **terrible** user interface. But, if it weren't for the user's mouse lacking a third dimension, it's the ideal solution. Here's how:
+For us, however, it is an ideal solution, because whereever the user starts a click-drag rotation, the object can rotate
 
 1. We start out with the book cover facing us: `R = identity`.
 2. We solve for the gradient descent direction, which gives us three delta Euler angles and a delta translation. But instead of accumulating the deltas into three absolute Euler angles, we apply the rotation they represent to the current rotation matrix: `R = euler(rx,ry,rz)*R`.
