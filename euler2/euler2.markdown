@@ -126,22 +126,21 @@ In other words, the coordinate frame you rotate around follows the object while 
 
 It turns out that this is a **terrible** user interface, because, even though the object can theoretically be rotated in three distinct ways, the mouse's lack of a third dimension prevents the user from accessing more than two of those.
 
-<p style="color:#999;">Particularly, the Tumbler lets the user control x-rotation by moving the mouse vertically, and y-rotation by moving the mouse horizontally. Whenever the user wants to rotate about z, they end up spinning their mouse like a methodic lunatic&mdash;a motion that gave the widget its name.</p>
+<p style="color:#999;">In particular, the user controls x-rotation by moving the mouse vertically and y-rotation by moving the mouse horizontally. When the user tries to rotate about z, they end up spinning their mouse like a methodic lunatic&mdash;a motion that gave the widget its name.</p>
 
-For us, however, it is an ideal solution, because whereever the user starts a click-drag rotation, the object can rotate
+For us, however, it is an ideal solution, if we think of one step of gradient descent like one click-drag-release movement with the Tumbler. Here's how:
 
 1. We start out with the book cover facing us: `R = identity`.
-2. We solve for the gradient descent direction, which gives us three delta Euler angles and a delta translation. But instead of accumulating the deltas into three absolute Euler angles, we apply the rotation they represent to the current rotation matrix: `R = euler(rx,ry,rz)*R`.
-3. We then repeat and use the updated matrix as the default orientation for the next step, essentially "resetting" the Euler angles to zero.
+2. We solve for the gradient descent direction, which gives us three delta Euler angles and a delta translation.
+3. Instead of adding the deltas to three absolute angles, we apply the rotation they represent to the current rotation matrix: `R = euler(rx,ry,rz)*R`.
+4. We then repeat and use the updated `R` as the origin for the next step, "resetting" the Euler angles to zero.
 
-One step of gradient descent is like one click-drag-release movement with the Tumbler.
-
-How does this prevent gimbal lock? When we computed the gradient last time, we added or subtracted a delta around our absolute Euler angles, like so:
+This prevents gimbal lock because the Euler angles are always based around zero inside gradient descent. See, when we computed the gradient last time, we added or subtracted a delta around our absolute Euler angles, like so:
 
     dedrx = (E(euler(rx+drx,ry,rz), T) -
              E(euler(rx-drx,ry,rz), T)) / 2drx ...
 
-But now we can compute the gradient by adding or subtracting a small delta around zero, and applying that to the current rotation matrix:
+If the absolute angles were at a particular point (the `euler` matrix was close to gimbal lock) adding or subtracting a delta would not have the effect we wanted. But now we can compute the gradient by adding or subtracting a delta around zero, and applying that to the current rotation matrix:
 
     dedrx = (E(euler(+drx,0,0) * R, T) -
              E(euler(-drx,0,0) * R, T)) / 2drx ...
