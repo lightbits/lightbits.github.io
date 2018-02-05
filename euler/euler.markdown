@@ -1,8 +1,13 @@
 # Stepping through rotations: Part I
 
+<!-- “If the only tool you have is a hammer, you tend
+to see every problem as a nail.” Abraham Maslow -->
+<!-- requirements for this to be a good idea. a way of transforming problems into nails (MLCPs). a hammer (Lemke’s algorithm) -->
+<!-- hammers, by definition not the most optimal way. but compuers are very fast. we often don't care about optimality (prepro, prototypes, tools, not a profile hotspot). can always move to optimal solution after you verify it's a problem you actually want to solve. -->
+
 **"If all you have is a hammer, everything looks like a nail."**
 
-A familiar proverb that, as noted by Chris Hecker in his [GDC talk](todo), has an unappreciated cousin:
+A familiar proverb that, as noted by Chris Hecker in his [GDC talk](http://chrishecker.com/The_Mixed_Linear_Complementarity_Problem), has an unappreciated cousin:
 
 **"If you can turn anything into a nail, all you need is a hammer."**
 
@@ -106,7 +111,7 @@ The derivative of a rotation matrix
 
 The derivative of `x^2` is simple, but it might take you longer than you'd like to differentiate more complex expressions, possibly involving matrix multiplications and stuff. Luckily we have some pretty neat tools to do that for us&mdash;gone are the days when it was a symbol of hard work and dedication if your paper had pages upon pages of calculus, rigorously deriving each expression by hand (I still see papers like that for some reason).
 
-Look for libraries with *automatic differentiation*. Or, use a *symbolic processor* (found in MATLAB and Octave) to derive analytic expressions and translate them into your code. There's also an online [matrix calculus tool](todo). But the simplest solution might just be botch it with finite differences:
+Look for libraries with *automatic differentiation*. Or, use a *symbolic processor* (found in MATLAB and Octave) to derive analytic expressions and translate them into your code. There's also an online [matrix calculus tool](http://www.matrixcalculus.org/). But the simplest solution might just be botch it with finite differences:
 
     dfdx = (f(x+dx) - f(x-dx)) / 2dx
 
@@ -320,6 +325,7 @@ I used gradient descent for this article because I didn't want too much mathemat
 
 Like gradient descent, these also calculate the gradient of the error, but the way they use it to step toward the solution is more involved, and assumes that the error function is a sum of squared errors (the type we looked at). Because of this they typically converge in fewer steps, although each step now requires more computation.
 
+<!-- http://ceres-solver.org/nnls_solving.html -->
 You can read more about these methods (and some computer vision problems they're used for) at this documentation page for Ceres, an optimization library. todo. All I'll say is that these are also affected by the gimbal lock problem, but the way it manifests itself is actually more evident than in gradient descent; in fact, the math tells you very clearly when it happens.
 
 <span style="color:#999;">
