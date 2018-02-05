@@ -154,20 +154,21 @@ We could also use unit-length quaternions to track orientation. They are often p
 Upon closer inspection
 ----------------------
 
-*Satisfied with your solution you decide to call it a day; shouldn't get ahead of yourself and try for too much progress in one day! You get ready to head home in eager anticipation of finally having some of that fancy tea you bought last week that has repeatedly avoided your consumption. After turning off your monitor&mdash;because you care about the environment and stuff like that&mdash;and collect the last of your belongings, your mind begins to wander...*
+*Satisfied with your solution you decide to call it a day. You get ready to head home in eager anticipation of finally having some of that fancy tea you bought last week that has repeatedly avoided your consumption. After turning off your monitor&mdash;because you care about the environment and stuff like that&mdash;and collect the last of your belongings, your mind begins to wander...*
 
-Why did we choose that particular Euler angle ordering? Are there better orderings? I've heard that quaternions are super popular and useful, maybe they could help? And what about that weird thing on wikipedia... the *exponential map*? That was just confusing...
+Why did we choose that particular Euler angle ordering?
 
-It turns out that there's a nice answer connecting all these questions and ideas together. To show you what I mean, let's look at a different Euler angle order.
+Is there a better one?
 
-There are many possible Euler angle variants, XYX, XZX, YXY. Some of them are popular, others will make people look at you like you're an excentric mad person (YXY... seriously?). Nevertheless, the number of choices might make you worry that the one we chose is not as good as another one.
+There are many possible Euler angle variants, XYX, XZX, YXY. Some of them are popular, others will attract odd looks from your colleagues. Here are two variants, XYZ and ZYX:
 
-Here are two different variants, XYZ and ZYX. As you drag the sliders and rotate the two, you realize that they look vastly different, for the same values.
-
+![](../euler/plates2x3.png)
 <!-- todo: gizmo one, big angles -->
 <!-- todo: not just adjusting any single angle in isolation -->
 
-But looking more closely around the area that we're interested in, that of 'small angles'.
+As you drag the sliders and rotate the two, you realize that they look vastly different, for the same values. But looking more closely around the area that we're interested in, that of 'small angles'.
+
+![](../euler/plates2x3.png)
 
 <!-- todo: gizmo two, small angles -->
 
