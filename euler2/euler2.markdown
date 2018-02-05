@@ -100,9 +100,10 @@ input { vertical-align: middle; }
     <label>Click and drag</label>
 </div>
 
-In other words, the coordinate frame you rotate around follows the object while you're rotating it, but as soon as you release, the frame resets. No matter where you start rotating, you can theoretically generate all three distinct rotations:
+In other words, the coordinate frame you rotate around follows the object while you're rotating it, but as soon as you release, the frame resets. No matter how much you have rotated the object in the past, when you click and drag your mouse up and down, or left and right, it behaves the same as the first time.
 
-<div class="slider-wrap">
+<!-- three distinct ways... -->
+<!-- <div class="slider-wrap">
     <div class="slider" id="slider1" style="max-width:160px;max-height:180px;">
         <div style="width:700px;"><img src="x1.png"/><img src="x2.png"/><img src="x3.png"/></div>
     </div>
@@ -121,9 +122,9 @@ In other words, the coordinate frame you rotate around follows the object while 
     <br>
     <input type="range" min=0 max=2 step=1 value=0 oninput="document.getElementById('slider3').scrollLeft = this.value*160;"></input>
     <label>rotate z</label>
-</div>
+</div> -->
 
-It turns out that this is a **terrible** user interface, because, even though the object can theoretically be rotated in three distinct ways, the mouse's lack of a third dimension prevents the user from accessing more than two of those.
+It turns out that this is a **terrible** user interface, because, even though the object can theoretically be rotated in three distinct ways anywhere you start rotating, the mouse's lack of a third dimension prevents the user from accessing more than two of those.
 
 <p style="color:#999;">In particular, the user controls x-rotation by moving the mouse vertically and y-rotation by moving the mouse horizontally. When the user tries to rotate about z, they end up spinning their mouse like a methodic lunatic&mdash;a motion that gave the widget its name.</p>
 
@@ -153,7 +154,7 @@ We could also use unit-length quaternions to track orientation. They are often p
 Upon closer inspection
 ----------------------
 
-<!-- *Satisfied with your progress you decide to call it a day. You get ready to head home in eager anticipation of sipping some of that fancy tea you bought yesterday but didn't have the chance to try. After turning off your monitor&mdash;because you care about saving power and nothing irks you more than seeing your coworker leaving theirs on (again!)&mdash;as you finish tossing the last of your belongings into your bag, your mind starts to wander...* -->
+*Satisfied with your solution you decide to call it a day; shouldn't get ahead of yourself and try for too much progress in one day! You get ready to head home in eager anticipation of finally having some of that fancy tea you bought last week that has repeatedly avoided your consumption. After turning off your monitor&mdash;because you care about the environment and stuff like that&mdash;and collect the last of your belongings, your mind begins to wander...*
 
 Why did we choose that particular Euler angle ordering? Are there better orderings? I've heard that quaternions are super popular and useful, maybe they could help? And what about that weird thing on wikipedia... the *exponential map*? That was just confusing...
 
