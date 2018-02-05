@@ -57,7 +57,7 @@ The take-home message from last time was that Euler angles can *gimbal lock*, wh
 
 ...
 
-Another way of saying it is: Euler angles suck at keeping track of absolute orientation. See, when I made this textured 3D box, I inadvertently chose its "default" orientation (all angles zero) to be with its cover facing the camera, like so:
+Another way of saying it is that Euler angles suck at keeping track of absolute orientation. See, when I made this textured 3D box, I inadvertently chose its "default" orientation (all angles zero) to be with its cover facing the camera, like so:
 
 ![](model3.png)
 
@@ -66,6 +66,14 @@ This happens to have an impact on gimbal lock: for this choice, we have all thre
 ![](model4.png)
 
 we would have three degrees of freedom at the sideways orientation, but *not* when the cover is facing the camera.
+
+No matter which default orientation we base our Euler angles around, we will run into gimbal lock sufficiently far away. But they are pretty good as long as we stay close to the origin...
+
+## The Tumbler
+
+3D modelling software have tackled similar problems for a long time: how can the user, with their 2D mouse interface, rotate an object in 3D? One solution is called the *Tumbler*. It is notoriously unintuitive and the only excuse you get for using it is [not knowing any better](todo: matt keeter). It works like this:
+
+When you click and start dragging, the Euler angles start from zero and you can rotate the thing around its current orientation. When you release, the orientation is saved but the Euler angles are reset to zero.
 
 <style>
 .slider img {
@@ -83,15 +91,6 @@ we would have three degrees of freedom at the sideways orientation, but *not* wh
 .slider-wrap { width:fit-content; margin:0 auto; }
 input { vertical-align: middle; }
 </style>
-
-In other words, Euler angles suck at keeping track of absolute orientation, but they are pretty good when kept close to zero...
-
-## The Tumbler
-
-3D modelling software have tackled similar problems for a long time: how can the user, with their 2D mouse interface, rotate an object in 3D? One solution is called the *Tumbler*. It is notoriously unintuitive and the only excuse you get for using it is [not knowing any better](todo: matt keeter). It works like this:
-
-When you click and start dragging, the Euler angles start from zero and you can rotate the thing around its current orientation. When you release, the orientation is saved but the Euler angles are reset to zero.
-
 <div class="slider-wrap">
     <div class="slider" id="slider4" style="max-width:240px;max-height:260px;">
         <div style="width:1700px;"><img src="gimbals1.png"/><img src="gimbals1-2.png"/><img src="gimbals2.png"/><img src="gimbals3.png"/><img src="gimbals3-4.png"/><img src="gimbals4.png"/><img src="gimbals5.png"/></div>
