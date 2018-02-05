@@ -189,45 +189,60 @@ For small angles, `cos(x) = 1` and `sin(x) = x`. So within reasonable approximat
     |  z    x*y*z + 1    y*z - x |
     | -y            x          1 |
 
-Moreover, the product of two small numbers of them becomes really small compared to any one of them alone, so we can simplify again:
+Moreover, the product of two small numbers becomes "small" compared to any one of them alone, so if we allow ourselves to ignore those products we get this fellow:
 
     |  1   -z    y |
     |  z    1   -x |
     | -y    x    1 |
 
-I'll leave it to your curiosity to check that no matter what Euler angle order you consider, they are all (approximately) equal to this when you plug in small angles. So when we write
+This is **a pretty good matrix**, as far as matrices go, anyway. Not only does it have anti-symmetry around the diagonal but it also turns out that, no matter what Euler angle order you consider, they all tend toward it, for smaller and smaller angles.
 
-    // update current rotation with offset from gradient descent
+So when we update the current rotation with the offset from gradient descent:
+
     R = euler(rx,ry,rz)*R
 
-it doesn't really matter what ordering we choose&mdash;they all pretty much have the same effect, as long as `rx,ry,rz` are small.
+it does not matter what convention we use&mdash;they all pretty much have the same effect if `rx,ry,rz` are small.
 
 Axis-angle
 ----------
 
 Euler angles are not the only minimal representation. Axis-angle is another popular one. For fun, let's take a look at what happens to it when the angle is small.
 
-Euler angles concatenate three rotations about three axes, but we can also parametrize our rotation in terms of an axis `r` and an angle `a` around it. There's a formula to convert this to a rotation matrix (copied from Wikipedia):
+Euler angles concatenate three rotations about three axes, but we can also parametrize our rotation in terms of one axis `r` and an angle `a` around it. There's even a formula to convert those to a rotation matrix:
 
     R = I + sin(a) skew(r) + (1-cos(a)) skew(r)^2
 
 <p style="color:#999;">We'll see what this `skew` function is in a bit...</p>
 
-This is not a minimal parametrization because it has four numbers, the constraint being that the axis must be unit-length. But if we multiply the angle into the axis we do get a minimal parametrization: a vector whose length is the original angle and direction is the original axis.
+This is not a minimal parametrization because it has four numbers (the constraint being that the axis must be unit-length). But if we multiply the angle into the axis we do get a minimal parametrization: a vector whose length is the original angle and, when normalized, is the original axis.
 
     R = I + sin(|w|) skew(w/|w|) + (1-cos(|w|)) skew(w/|w|)^2
 
-So what happens when the angle is small? Well, stuff becomes zero and we're left with the identity plus this `skew` thing.
+So what happens when the angle is small? Well, some things becomes zero, and other things cancel, and we're left with the identity plus this `skew` thing.
 
     R = I + skew(w)
 
-`skew(w)` is the skew-symmetric form of `w`. What's that? Well if `w = (x,y,z)`, wikipedia tells us that `S(w)` is
+<p style="color:#999;">
+`skew(w)` is called the skew-symmetric form of `w`, and is a matrix that, when multiplied with a vector, gives you the cross product of `w` and that other vector. That is, `skew(a)b` is the same as `a x b`.
+</p>
 
-    |  0   -z    y |
-    |  z    0   -x |
-    | -y    x    0 |
+It's easy to forget what this matrix looks like, but luckily I had it written down:
 
-And what do you know, if we add the identity to that, we get the exact same matrix as before. Weird!
+                    |  0   -z    y |
+    skew([x,y,z]) = |  z    0   -x |
+                    | -y    x    0 |
+
+And adding the identity to that gives us the final rotation matrix...
+
+        |  1   -z    y |
+    R = |  z    1   -x |
+        | -y    x    1 |
+
+Why, this is the same matrix as before, what gives?
+
+Physics!
+--------
+It seems like there is a **canonical small rotation**, that **all forms of rotations tend towards**. How can we intuitively appreciate this?
 
 <!-- this ties into physics. skew(w)*R is like taking the cross product between w and each axis of R. Remember from physics that the cross product of angular velocity with a vector points in the direction that vector moves. So this w is like an angular velocity, and skew(w)*R is how each axis changes. -->
 
