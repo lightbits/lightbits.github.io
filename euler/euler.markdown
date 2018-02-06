@@ -136,11 +136,13 @@ What people usually do at this point is to parametrize the rotation matrix in te
 Using Euler angles
 ------------------
 
-Euler angles is a so-called *minimal* parametrization, in that they use the minimal amount of numbers (three) to define a rotation. By virtue of being minimal, those numbers can each be chosen freely, without concern or being constrained by the others.
+Euler angles is a so-called *minimal* parametrization, in that they use the minimal amount of numbers (three) to define a rotation. By virtue of being minimal, those numbers can each be chosen freely, without concern of being constrained by the others.
 
-That sounds a bit like what we're after, so we'll add a function that takes three angles and returns a rotation matrix following some Euler angle convention, like x,y,z or z,y,x. In total we then have three variables for rotation (rx,ry,rz) and three variables for translation (tx,ty,tz).
+That sounds a bit like what we're after, so we'll add a function that takes three angles and returns a rotation matrix following some Euler angle convention. In total we then have three variables for rotation (rx,ry,rz) and three variables for translation (tx,ty,tz).
 
-We can now update those six variables with gradient descent like so (I abbreviated the quality measure function to E):
+Because these six variables are all independent, we can update them with gradient descent, like so:
+
+<p style="color:#999;">I abbreviated the quality measure function to E, for easier reading.</p>
 
     update_parameters(rx,ry,rz, tx,ty,tz):
         dedrx = (E(euler(rx+drx, ry, rz), [tx, ty, tz]) -
@@ -156,11 +158,11 @@ We can now update those six variables with gradient descent like so (I abbreviat
         ty -= gain*dedty
         tz -= gain*dedtz
 
-This will **sort of** work!
+If you run this, it even looks like it's working:
 
 ![](gradientdescent.gif)
 
-It's a bit slow and unstable... but there's ways to fix that (like using someone else's library)&sup1;.
+It's a bit slow and unstable... but there are common ways to fix that (like using someone else's library)&sup1;. There's another problem I'd like to point out.
 
 <span style="color:#999;">
 &sup1;When I made this gif my parameters did blow up on the first try. I hacked in a fix by adding a line search: instead of choosing an arbitrary gain thing, you instead check the error at several points along the gradient direction and go to the point that had the lowest error. I also normalized the differences in the error function by dividing by the image width: squaring pixel coordinates gave really big values. It's still super slow, as you can see. That can be improved by using cooler methods like Gauss-Newton or Levenberg-Marquardt.
