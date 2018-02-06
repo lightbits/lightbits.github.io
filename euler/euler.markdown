@@ -106,9 +106,9 @@ This will make f(x) smaller and smaller until it stops, hopefully at zero. With 
 The derivative of a rotation matrix
 -----------------------------------
 
-The derivative of `x^2` is simple, but it might take you longer than you'd like to differentiate more complex expressions, possibly involving matrix multiplications and stuff. Luckily we have some pretty neat tools to do that for us&mdash;gone are the days when it was a symbol of hard work and dedication if your paper had pages upon pages of calculus, rigorously deriving each expression by hand (I still see papers like that for some reason).
+The derivative of `x^2` is simple, but it might take you longer than you'd like to differentiate more complex expressions, maybe involving matrices and stuff. Luckily we have some neat tools that do that for us&mdash;gone are the days when it was a symbol of hard work and dedication when your paper had pages upon pages of calculus, rigorously deriving each expression by hand.
 
-Look for libraries with *automatic differentiation*. Or, use a *symbolic processor* (found in MATLAB and Octave) to derive analytic expressions and translate them into your code. There's also an online [matrix calculus tool](http://www.matrixcalculus.org/). But the simplest solution might just be botch it with finite differences:
+Look for libraries with *automatic differentiation*. Or, use a *symbolic processor* (found in MATLAB and Octave) to derive analytic expressions and translate them into your code. There's also an online [matrix calculus tool](http://www.matrixcalculus.org/). But the simplest solution might just be to botch it with *finite differences*:
 
     dfdx = (f(x+dx) - f(x-dx)) / 2dx
 
@@ -120,12 +120,12 @@ carefully selecting dx to be small enough, but not so small as to cause a floati
 
 This works for any ugly function you can reasonably code up. In fact, our error function is pretty ugly: it has matrix multiplications and a weird 3D-2D projection with lens distortion. It would surely be more efficient (runtime-wise) to derive an analytic expression, but the generality of finite differences makes it nice when you're pressed on time.
 
-... wait ...
-
-You know that feeling when you realize something is harder than you first thought?
+... but wait ...
 
 <!-- A function of a matrix is no harder than the function of a vector: it's just a bunch of numbers, and we can take the derivative with respect to each one. But... -->
-How do we take the derivative with respect to a rotation matrix? It's not a bunch of numbers we can choose freely because not all 3x3 matrices are valid rotation matrices; there are constraints between the elements&sup1;. So we can't just do finite differences on 9 numbers `r11, r12, r13 ...` for each element in the matrix, and use that for our gradient.
+How do we take the derivative with respect to a rotation matrix?
+
+Ordinarily, a function of a matrix is not harder to differentiate than a function of a vector: it's just a bunch of numbers, and we can take the derivative with respect to each one. But a rotation matrix is *not* a bunch of numbers we can choose freely because not all 3x3 matrices are valid rotation matrices; there are constraints between the elements&sup1;.
 
 What people usually do at this point is to parametrize the rotation matrix in terms of some other numbers that *can* be chosen freely, like Euler angles.
 
