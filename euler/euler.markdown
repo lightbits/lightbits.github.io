@@ -171,17 +171,11 @@ It's a bit slow and unstable... but there are common ways to fix that (like usin
 What is gimbal lock?
 --------------------
 
-Consider a plate that you can rotate by three angles rx, ry and rz around the x-, y- and z-axes respectively with the matrix `Rz(rz)*Ry(ry)*Rx(rx)`. Adjusting one of the angles in isolation produces these three motions:
+Consider a plate that you can rotate with three angles rx, ry and rz around the x-, y- and z-axes respectively with the matrix `Rz(rz)*Ry(ry)*Rx(rx)`. Adjusting the angles in isolation produces these three motions (x on the left, z on the right):
 
 ![](plates1xyz.png)
 
-They all look clearly different, but a funny thing happens as the angle about the y-axis approaches 90 degrees. Here's an illustration:
-
-<!-- ![](gimballock.gif) -->
-
-<!-- * For the red plate I keep rz fixed and adjust rx back and forth.
-* For the blue plate I keep rx fixed and adjust rz back and forth (in the opposite direction).
-* I repeat this while slowly adjusting ry from zero to 90 degrees -->
+They all look clearly different, but a funny thing happens as the angle about the y-axis approaches 90 degrees. Here's an illustration: both plates are rotating about either x or z, while you can control the rotation about y for both.
 
 <style>
 .slider img {
@@ -219,9 +213,9 @@ input { vertical-align: middle; }
     <label>rotate y [0 to 90 degrees]</label>
 </div>
 
-The two plates start out rotating about different axes, as you'd expect, but along the way, the right one mysteriously starts looking more and more like the left one, until they finally look identical (although in opposite directions). So what? Well here's an interactive puzzle for you.
+The two plates start out rotating about different axes, as you'd expect, but along the way, the right one mysteriously starts looking more and more like the left one, until they finally look identical (although in opposite directions).
 
-Try to rotate the book to match the photo:
+What does this mean? Well here's a puzzle for you: try to rotate the book to match the photo.
 
 <div class="slider-wrap">
     <img src="book/book1.jpg" style="max-width:240px;">
@@ -256,7 +250,7 @@ However, it's not like we literally cannot find three Euler angles to match the 
 
 ![](sideways45.png)
 
-Indeed, if we rotate -90 degrees about the z-axis and -90 degrees about the x-axis, the middle rotation about the y-axis can now be used to control the pitch up or down. Try it:
+Indeed, if we rotate -90 degrees about both the x- and the z-axis, the middle rotation about the y-axis can now be used to control the pitch up or down. Try it:
 
 <div class="slider-wrap">
     <div class="slider" id="slider5" style="max-width:240px;max-height:240px;">
@@ -277,14 +271,14 @@ Indeed, if we rotate -90 degrees about the z-axis and -90 degrees about the x-ax
     <input type="range" min=0 max=2 step=1 value=0 onload="console.log(this)" oninput="document.getElementById('slider5').scrollTop = this.value*document.getElementById('slider5').clientWidth;"/>
     <label>rotate x (left book) [-120,-90,-60]</label>
     <br>
-    <input type="range" min=0 max=2 step=1 value=0 oninput="document.getElementById('slider6').scrollTop = this.value*document.getElementById('slider5').clientWidth;"/>
-    <label>rotate z (right book) [-120,-90,-60]</label>
-    <br>
     <input type="range" min=0 max=2 step=1 value=0 oninput="document.getElementById('slider6').scrollLeft = this.value*document.getElementById('slider5').clientWidth;document.getElementById('slider5').scrollLeft = this.value*document.getElementById('slider5').clientWidth;"/>
     <label>rotate y (both books) [0,45,90]</label>
+    <br>
+    <input type="range" min=0 max=2 step=1 value=0 oninput="document.getElementById('slider6').scrollTop = this.value*document.getElementById('slider5').clientWidth;"/>
+    <label>rotate z (right book) [-120,-90,-60]</label>
 </div>
 
-But alas, we find ourselves in the same rut at (-90,90,-90), where the book is seen head-on from the side. Again we can only rotate about two different axes, but now we have lost the ability to rotate the book left or right!
+But alas, we find ourselves in the same rut at (-90,90,-90), where the book is seen head-on from the side. Again we can only rotate about two different axes!
 
 ## How gimbal lock affects gradient descent
 
