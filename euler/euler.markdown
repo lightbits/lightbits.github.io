@@ -1,19 +1,14 @@
 # Stepping through rotations: Part I
 
-<!-- “If the only tool you have is a hammer, you tend
-to see every problem as a nail.” Abraham Maslow -->
-<!-- requirements for this to be a good idea. a way of transforming problems into nails (MLCPs). a hammer (Lemke’s algorithm) -->
-<!-- hammers, by definition not the most optimal way. but compuers are very fast. we often don't care about optimality (prepro, prototypes, tools, not a profile hotspot). can always move to optimal solution after you verify it's a problem you actually want to solve. -->
-
 **"If all you have is a hammer, everything looks like a nail."**
 
 A familiar proverb that, as noted by Chris Hecker in his [GDC talk](http://chrishecker.com/The_Mixed_Linear_Complementarity_Problem), has an unappreciated cousin:
 
 **"If you can turn anything into a nail, all you need is a hammer."**
 
-Chris Hecker's message was that *numerical optimization* can solve *a lot* of different problems in the same way, making it a sort of hammer in your maths toolbox. Consequently, if you have a library or program (like MATLAB) that can do optimization, you can solve any problem that you can wrangle into the right form, all using the same tool.
+Chris Hecker's message was that *numerical optimization* can solve *a lot* of problems in the same way, making it a sort of hammer in your maths toolbox. Consequently, if you have a library or tool that does optimization, you can use it to solve any problem that can be wrangled into the right form.
 
-With increasing computer power and a desire for rapid iteration, having a hammer readily available can be of great value, even if it doesn't solve the problem as cleanly or as run-time-efficiently as it could, because it can save you a lot of programmer time.
+With increasing computer speed and a desire for rapid iteration, having a hammer readily available can be of great value, even if it doesn't solve the problem as cleanly or as run-time-efficiently as a purpose-designed solution, because it can save you a lot of programmer time. And, you can always move to a better solution after verifying it's a problem you want to solve.
 
 I have since come to appreciate optimization as a powerful technique that can solve problems whose closed-form solution (if it even exists) is so far beyond my mathematics / algorithms knowledge that I couldn't even begin to approach it in any other way.
 
@@ -30,26 +25,26 @@ If you want to make a quadcopter [land on a robotic vacuum cleaner](todo: iarc) 
 
 If you want reconstruct a 3D model of a scene from photographs, part of the problem is calculating how the camera was rotated and translated between each photo. Using that you can triangulate the 3D coordinate of corresponding pixels by casting rays in the direction they came from and computing where they intersect in 3D.
 
-Calculating how your vacuum cleaner robot is positioned relative to your quadcopter, or how a camera moves through a scene as it takes photos of it, can both be turned into a type of optimization problem&mdash;a nail for our hammer.
+Either way, calculating how your vacuum cleaner robot is positioned relative to your quadcopter, or how a camera moves through a scene as it takes photos of it, can both be turned into a type of optimization problem&mdash;a nail for our hammer.
 
 However, it'll involve **3D rotations**, and that is where things can get nasty.
 
 Example problem
 ---------------
 
-Books and CD covers are often used in example problems (and in youtube videos of object tracking algorithms) because they have a lot of **texture**, making them an easy case for computer vision algorithms.
+Books and CD covers are often used in example problems (and in youtube videos of object tracking algorithms) because they have a lot of **unique texture**, making them an easy test case.
 
 Here's a book I picked from my shelf.
 
 <img src="book/book2.jpg" style="max-width:320px;width:100%;">
 
-It's a **pretty good book**.
+It's a **pretty good book**, but to simplify our mathematical discussion we'll assume this book is nothing more than a 3D box filled with void.
 
-But to simplify our mathematical discussion we'll assume this book is nothing more than a 3D box filled with void. Thus, one way to find out how the book is positioned relative to the camera (or vice versa) starts by finding matching patches of pixels between the photo and the 3D model.
+One way to find out how the book is positioned relative to the camera (or vice versa) starts by finding matching patches of pixels between the photo and the 3D model.
 
 ![](matches.png)
 
-At this point, your typical computer vision text book will start to tell you about the Perspective-N-Point problem and show you how easily you can recover the rotation and translation matrices using linear algebra and Singular Value Decomposition...
+At this point, your typical computer vision textbook will start to tell you about the Perspective-N-Point problem and show you how easily you can recover the rotation and translation matrices using linear algebra and Singular Value Decomposition...
 
 ...but that's an **elegant solution**.
 
