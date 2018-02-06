@@ -318,12 +318,9 @@ I used gradient descent for this article because I didn't want too much mathemat
 
 Like gradient descent, these also calculate the gradient of the error, but the way they use it to step toward the solution is more involved, and assumes that the error function is a sum of squared errors (the type we looked at). Because of this they typically converge in fewer steps, although each step now requires more computation.
 
-<!-- http://ceres-solver.org/nnls_solving.html -->
-You can read more about these methods (and some computer vision problems they're used for) at this documentation page for Ceres, an optimization library. todo. All I'll say is that these are also affected by the gimbal lock problem, but the way it manifests itself is actually more evident than in gradient descent; in fact, the math tells you very clearly when it happens.
+These methods are also affected by the gimbal lock problem, but the way it manifests itself is actually more evident than in gradient descent; in fact, the math tells you very clearly when it happens:
 
-<span style="color:#999;">
-Skipping some details&mdash;because either you already know about these methods and you'll find it boring, or you don't know and a paragraph in a blog post won't be much help&mdash;both methods are based on solving a linear system of equations, like `Ax = b`. The effect of gimbal lock is that the Hessian `A` becomes ill-conditioned, in that two of its columns are close to, or exactly, identical but with opposite sign. Those two columns correspond to the two angles that are gimbal-locking.
-</span>
+Skipping some details&mdash;because either you already know about these methods and you'll find it boring, or you don't know and a paragraph in a blog post won't be much help&mdash;both methods are based on solving a linear system of equations, like `Ax = b`. The effect of gimbal lock is that `A` becomes "badly conditioned", in that two of its columns are close to, or exactly, identical but with opposite sign, so that the matrix cannot be inverted. Those two columns correspond to the two angles that are gimbal-locking.
 
 There's also a class of *derivative-free optimization* methods. Particle Swarm Optimization, for one, works by evaluating the error at random locations in the parameter space, and sharing information between samples to pinpoint the precise solution. It's similar to genetic algorithms or Simulated Annealing. Another, the Nelder-Mead method, is similar in that it evaluates the error at corners of a space-filling shape, but it differs in that it moves the shape deterministically based on a set of rules.
 
