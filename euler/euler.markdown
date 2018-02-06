@@ -86,10 +86,12 @@ In pseudo-code we could write this as
 
 Our quality measure is a function of the rotation and translation. Plug in R and T, get a value. The value is zero when the predicted 2D coordinates match the observed ones, and positive otherwise (in that sense we should call it a measure of error rather than quality). So if we want to find the true pose of the book, we just need to find values for R and T that make the error as small as possible.
 
-How? Well I wrote gradient descent in the title of this article, and somewhere along the line I was going to use it to make a point about Euler angles...
+How? Well with our hammer, of course!
 
 Gradient descent
 ----------------
+
+There are many hammers to choose from, but gradient descent is simple to explain, and I mainly just want to make a point about rotations, not the hammers themselves. So bear with me for now.
 
 We want to adjust R and T to make the error smaller. One way to do so is to look at how the error changes for a change in R and T. For example, if we had the function `f(x) = x^2`, the derivative with respect to x (the gradient) says how the value of f changes for an increase in x. In this case, the derivative is `dfdx(x) = 2x`, so f will decrease as x goes from negative infinity to zero, and increase as x goes from zero to positive infinity..
 
