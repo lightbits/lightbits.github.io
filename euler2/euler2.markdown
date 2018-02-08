@@ -196,11 +196,11 @@ Moreover, the product of two small numbers becomes "small" compared to any one o
 
 This is **a pretty good matrix**, as far as matrices go, anyway. Not only does it have anti-symmetry around the diagonal but it also turns out that, no matter what Euler angle order you consider, they all tend toward it, for smaller and smaller angles.
 
-So when we update the current rotation with the offset from gradient descent:
+<!-- So when we update the current rotation with the offset from gradient descent:
 
     R = euler(rx,ry,rz)*R
 
-it does not matter what convention we use&mdash;they all pretty much have the same effect if `rx,ry,rz` are small.
+it does not matter what convention we use&mdash;they all pretty much have the same effect if `rx,ry,rz` are small. -->
 
 Axis-angle
 ----------
@@ -245,8 +245,31 @@ It seems like there is a **canonical small rotation**, that **all forms of rotat
 
 <!-- this ties into physics. skew(w)*R is like taking the cross product between w and each axis of R. Remember from physics that the cross product of angular velocity with a vector points in the direction that vector moves. So this w is like an angular velocity, and skew(w)*R is how each axis changes. -->
 
+<!-- In fact there is, and mathematicians gave a name to this discovery
+The so3 lie algebra
+We describe the "small step" in terms of three numbers. We've called them Euler angles and axis-angle. But they're exactly the same. -->
+
 So many choices.... but does it matter?
 ---------------------------------------
+
+Back to our optimization problem then.
+
+What we have learned is that when we update the current rotation with the offset from gradient descent:
+
+    R = euler(rx,ry,rz)*R
+
+it does not matter what Euler angle convention we use or if we use axis-angle&mdash;they all pretty much have the same effect if `rx,ry,rz` are small.
+
+But that leads to another question: which one is the "correct" one to use, when we update the rotation matrix? If we interpret `rx,ry,rz` as not being Euler angles anymore (because they could be any ordering, or they could even be axis-angle), but being this canonical small rotation direction, what is the "canonical" rotation it represents along its line?
+
+What we get from gradient descent is just a (weighted) direction. Line search etc. But what does it mean to continue a rotation?
+
+Exponential map
+---------------
+
+Misc
+----
+
 Now you might ask, when can I use this approximation? How small is 'small'? And how do I know if the incremental update I get from my optimization is compliant with that?
 
 Here's a comparison for you where ex, ey and ez are each varied between -25 and +25 degrees. The red cube uses the Euler rotation R = Rz(rz)Ry(ry)Rx(rx). The green and the blue cubes are using the exact axis-angle rotation formula, (I + sin(|w|) K + (1-cos(|w|)) K^2 ), and its approximation, (I + w^x), respectively. The blue cube orthogonalizes the result to ensure that it remains a proper rotation matrix.
