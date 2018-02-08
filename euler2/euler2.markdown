@@ -128,12 +128,9 @@ It turns out that this is a **terrible** user interface, because, even though th
 
 <p style="color:#999;">In particular, the user controls x-rotation by moving the mouse vertically and y-rotation by moving the mouse horizontally. When the user tries to rotate about z, they end up spinning their mouse like a methodic lunatic&mdash;a motion that gave the widget its name.</p>
 
-For us, however, it is an ideal solution, if we think of one step of gradient descent like one click-drag-release movement with the Tumbler. Here's how:
+For us, however, it is an ideal solution to our gimbal lock problem, if we think of one step of gradient descent to be like a small click-drag-release rotation with the Tumbler. Notice how dragging the Tumbler, without releasing, is like our first strategy, where we accumulate small Euler angle increments, that we get from gradient descent. (Of course, gradient descent is not limited by a two-dimensional mouse peripheral; it can adjust all three angles.)
 
-1. We start out with the book cover facing us: `R = identity`.
-2. We solve for the gradient descent direction, which gives us three delta Euler angles and a delta translation.
-3. Instead of adding the deltas to three absolute angles, we apply the rotation they represent to the current rotation matrix: `R = euler(rx,ry,rz)*R`.
-4. We then repeat and use the updated `R` as the origin for the next step, "resetting" the Euler angles to zero.
+As we have seen, this runs into gimbal lock if we drag it too far. But when you release, the orientation is "saved" and the Euler angles are reset to zero. As long as you release after short increments, the Euler angles will always be close to zero, and you will never reach gimbal lock.
 
 This prevents gimbal lock because the Euler angles are always based around zero inside gradient descent. See, when we computed the gradient last time, we added or subtracted a delta around our absolute Euler angles, like so:
 
@@ -145,7 +142,7 @@ If the absolute angles were at a particular point (the `euler` matrix was close 
     dedrx = (E(euler(+drx,0,0) * R, T) -
              E(euler(-drx,0,0) * R, T)) / 2drx ...
 
-Whether we use finite differences, automatic differentiation or analytic derivatives, the Euler matrix on the left always has three degrees of freedom, because it's based around the origin.
+Whether we use finite differences, automatic differentiation or analytic derivatives, the Euler matrix on the left always has three degrees of freedom, because its parameters are kept near zero.
 
 <p style="color:#999;">
 We could also use unit-length quaternions to track orientation. They are often preferred because they use fewer bytes than rotation matrices and, like rotation matrices, they do not gimbal lock. But they also have constraints to keep them valid (must be unit-length), so we can't freely adjust its parameters to find a direction for gradient descent.
