@@ -157,6 +157,8 @@ Why did we choose that particular Euler angle ordering?
 
 Is there a better one?
 
+<!-- todo: also, what if we want to use analytic derivatives? or automatic differentiation? -->
+
 There are many possible Euler angle variants, XYX, XZX, YXY. Some of them are popular, others will attract odd looks from your colleagues. Here are two variants, XYZ and ZYX:
 
 ![](../euler/plates2x3.png)
