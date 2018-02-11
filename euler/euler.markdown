@@ -4,9 +4,11 @@
 
 A familiar proverb that, as noted by Chris Hecker in his [GDC talk](http://chrishecker.com/The_Mixed_Linear_Complementarity_Problem), has an unappreciated cousin:
 
-**"If you can turn anything into a nail, all you need is a hammer."**
+**"If everything looks like a nail, all you need is a hammer."**
+<!-- **"If you can turn anything into a nail, all you need is a hammer."** -->
 
 Chris Hecker's message was that *numerical optimization* can solve *a lot* of problems in the same way, making it a sort of hammer in your maths toolbox. Consequently, if you have a library or tool that does optimization, you can use it to solve any problem that can be wrangled into the right form.
+<!-- To be successful, this requires two things: a tool or library that solves optimization problems, and a way to turn things into nails. -->
 
 With increasing computer speed and a desire for rapid iteration, having a hammer readily available can be of great value, even if it doesn't solve the problem as cleanly or as run-time-efficiently as a purpose-designed solution, because it can save you a lot of programmer time. And, you can always move to a better solution after verifying it's a problem you want to solve.
 
