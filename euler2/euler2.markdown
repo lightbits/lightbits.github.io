@@ -128,20 +128,52 @@ It turns out that this is a **terrible** user interface, because, even though th
 
 <p style="color:#999;">In particular, the user controls x-rotation by moving the mouse vertically and y-rotation by moving the mouse horizontally. When the user tries to rotate about z, they end up spinning their mouse like a methodic lunatic&mdash;a motion that gave the widget its name.</p>
 
-For us, however, it is an ideal solution to our gimbal lock problem, if we think of one step of gradient descent to be like a small click-drag-release rotation with the Tumbler. Notice how dragging the Tumbler, without releasing, is like our first strategy, where we accumulate small Euler angle increments, that we get from gradient descent. (Of course, gradient descent is not limited by a two-dimensional mouse peripheral; it can adjust all three angles.)
+<!-- For us, however, it is an ideal solution to our gimbal lock problem, if we think of one step of gradient descent to be like a small click-drag-release rotation with the Tumbler. -->
+For us, however, it is an ideal solution to our gimbal lock problem.
 
-As we have seen, this runs into gimbal lock if we drag it too far. But when you release, the orientation is "saved" and the Euler angles are reset to zero. As long as you release after short increments, the Euler angles will always be close to zero, and you will never reach gimbal lock.
+<!-- todo: figure? -->
 
-This prevents gimbal lock because the Euler angles are always based around zero inside gradient descent. See, when we computed the gradient last time, we added or subtracted a delta around our absolute Euler angles, like so:
+Notice how dragging the Tumbler, without releasing, is like our first strategy, where we accumulate small Euler angle increments obtained from gradient descent. (The difference being that gradient descent is not limited by a two-dimensional mouse peripheral; it can adjust all three angles.)
 
+As we have seen, this runs into gimbal lock if we drag it too far. But when you release, the orientation is "saved" and the Euler angles are reset to zero. Therefore, as long as you release before the Euler angles get too big, you can safely avoid gimbal locking.
+
+We can apply this idea to gradient descent: instead of accumulating the resulting increments into a set of global angles, we apply the rotation they represent to a rotation matrix that we keep track of. See, when we computed the gradient last time, we added or subtracted a delta around our absolute Euler angles, like so:
+
+<pre><code>dedrx = <span style="color:#999;">(E(euler(</span><span id="efg">rx+drx</span><span style="color:#999;">,ry,rz), T) -
+         E(euler(</span><span id="efg">rx-drx</span><span style="color:#999;">,ry,rz), T)) / 2drx</span>
+dedry = <span style="color:#999;">(E(euler(rx,</span><span id="efg">ry+dry</span><span style="color:#999;">,rz), T) -
+         E(euler(rx,</span><span id="efg">ry-dry</span><span style="color:#999;">,rz), T)) / 2dry</span>
+dedrz = <span style="color:#999;">(E(euler(rx,ry,</span><span id="efg">rz+drz</span><span style="color:#999;">), T) -
+         E(euler(rx,ry,</span><span id="efg">rz-drz</span><span style="color:#999;">), T)) / 2drz</span></code></pre>
+
+<!--
     dedrx = (E(euler(rx+drx,ry,rz), T) -
-             E(euler(rx-drx,ry,rz), T)) / 2drx ...
-
+             E(euler(rx-drx,ry,rz), T)) / 2drx
+    dedry = (E(euler(rx,ry+dry,rz), T) -
+             E(euler(rx,ry-dry,rz), T)) / 2dry
+    dedrz = (E(euler(rx,ry,rz+drz), T) -
+             E(euler(rx,ry,rz-drz), T)) / 2drz
+ -->
 If the absolute angles were at a particular point (the `euler` matrix was close to gimbal lock) adding or subtracting a delta would not have the effect we wanted. But now we can compute the gradient by adding or subtracting a delta around zero, and applying that to the current rotation matrix:
 
+<pre><code><span style="color:#999;"><span style="color:#000;">dedrx = </span>(E(euler(<span style="color:#000;">0+drx</span>,0,0)<span style="color:#000;">*R</span>, T) -
+         E(euler(<span style="color:#000;">0-drx</span>,0,0)<span style="color:#000;">*R</span>, T)) / 2drx
+<span style="color:#000;">dedry = </span>(E(euler(0,<span style="color:#000;">0+dry</span>,0)<span style="color:#000;">*R</span>, T) -
+         E(euler(0,<span style="color:#000;">0-dry</span>,0)<span style="color:#000;">*R</span>, T)) / 2dry
+<span style="color:#000;">dedrz = </span>(E(euler(0,0,<span style="color:#000;">0+drz</span>)<span style="color:#000;">*R</span>, T) -
+         E(euler(0,0,<span style="color:#000;">0-drz</span>)<span style="color:#000;">*R</span>, T)) / 2drz</span></code></pre>
+
+<!-- <pre><code>dedrx = <span style="color:#999;">(E(euler(</span><span id="efg">0+drx</span><span style="color:#999;">,0,0) * R, T) -
+         E(euler(</span><span id="efg">0-drx</span><span style="color:#999;">,0,0) * R, T)) / 2drx</span>
+dedry = <span style="color:#999;">(E(euler(0,</span><span id="efg">0+dry</span><span style="color:#999;">,0) * R, T) -
+         E(euler(0,</span><span id="efg">0-dry</span><span style="color:#999;">,0) * R, T)) / 2dry</span>
+dedrz = <span style="color:#999;">(E(euler(0,0,</span><span id="efg">0+drz</span><span style="color:#999;">) * R, T) -
+         E(euler(0,0,</span><span id="efg">0-drz</span><span style="color:#999;">) * R, T)) / 2drz</span></code></pre> -->
+
+<!--
     dedrx = (E(euler(+drx,0,0) * R, T) -
              E(euler(-drx,0,0) * R, T)) / 2drx ...
-
+ -->
 Whether we use finite differences, automatic differentiation or analytic derivatives, the Euler matrix on the left always has three degrees of freedom, because its parameters are kept near zero.
 
 <p style="color:#999;">
