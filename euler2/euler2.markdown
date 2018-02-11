@@ -71,9 +71,9 @@ No matter which default orientation we base our Euler angles around, we will run
 
 ## The Tumbler
 
-3D modelling software have tackled similar problems for a long time: how can the user, with their 2D mouse interface, rotate an object in 3D? One solution is called the *Tumbler*. It is notoriously unintuitive and the only excuse you get for using it is [not knowing any better](todo: matt keeter). It works like this:
+3D modelling software have tackled similar problems for a long time: how can the user, with their 2D mouse interface, rotate an object in 3D? One solution is called the *Tumbler*. It is notoriously unintuitive and the only excuse you get for using it is [not knowing any better](todo: matt keeter). Here's how it works...
 
-When you click and start dragging, the Euler angles start from zero and you can rotate the thing around its current orientation. When you release, the orientation is saved but the Euler angles are reset to zero.
+When you click and start dragging, moving your mouse horizontally or vertically will adjust either of two Euler angles, and rotate the thing around its current orientation. When you release, the new orientation is saved and the Euler angles are reset to zero.
 
 <style>
 .slider img {
