@@ -183,15 +183,18 @@ We could also use unit-length quaternions to track orientation. They are often p
 Upon closer inspection
 ----------------------
 
+<!-- alternatively, I could go into reducing computational cost. First, look at what computing the gradient would involve. Exploit fact that two/three parameters are zero. Close to zero. Trig approximations...
+
+But that doesn't lead nicely into axis-angle or other euler angle orders...
+ -->
+
 *Satisfied with your solution you decide to call it a day. You get ready to head home in eager anticipation of finally having some of that fancy tea you bought last week that has repeatedly avoided your consumption. After turning off your monitor&mdash;because you care about the environment and stuff like that&mdash;and collect the last of your belongings, your mind begins to wander...*
 
 Why did we choose that particular Euler angle ordering?
 
 Is there a better one?
 
-<!-- todo: also, what if we want to use analytic derivatives? or automatic differentiation? -->
-
-There are many possible Euler angle variants, XYX, XZX, YXY. Some of them are popular, others will attract odd looks from your colleagues. Here are two variants, XYZ and ZYX:
+In fact, there are many Euler angle variants, XYX, XZX, YXY. Some of them are well-recognized and the accepted convention in their technological discipline... others will simply attract odd looks from your peers. Here are two variants, XYZ and ZYX:
 
 ![](../euler/plates2x3.png)
 <!-- todo: gizmo one, big angles -->
@@ -228,7 +231,7 @@ Moreover, the product of two small numbers becomes "small" compared to any one o
     |  z    1   -x |
     | -y    x    1 |
 
-This is **a pretty good matrix**, as far as matrices go, anyway. Not only does it have anti-symmetry around the diagonal but it also turns out that, no matter what Euler angle order you consider, they all tend toward it, for smaller and smaller angles.
+This is **a pretty cool matrix**, as far as matrices go, anyway. Not only does it have a neat anti-symmetric pattern around the diagonal but, more importantly, it so happens to be that no matter what Euler angle order you consider, they are all approximately equal to this matrix, for small angles.
 
 <!-- So when we update the current rotation with the offset from gradient descent:
 
@@ -239,7 +242,9 @@ it does not matter what convention we use&mdash;they all pretty much have the sa
 Axis-angle
 ----------
 
-Euler angles are not the only minimal representation. Axis-angle is another popular one. For fun, let's take a look at what happens to it when the angle is small.
+That seems like a peculiarity too important to let go, so let's continue this investigation and look at a **completely different** parametrization...
+
+<!-- Euler angles are not the only minimal representation. Axis-angle is another popular one. For fun, let's take a look at what happens to it when the angle is small. -->
 
 Euler angles concatenate three rotations about three axes, but we can also parametrize our rotation in terms of one axis `r` and an angle `a` around it. There's even a formula to convert those to a rotation matrix:
 
@@ -247,25 +252,27 @@ Euler angles concatenate three rotations about three axes, but we can also param
 
 <p style="color:#999;">We'll see what this `skew` function is in a bit...</p>
 
-This is not a minimal parametrization because it has four numbers (the constraint being that the axis must be unit-length). But if we multiply the angle into the axis we do get a minimal parametrization: a vector whose length is the original angle and, when normalized, is the original axis.
+This is not a minimal parametrization because it has four numbers (the constraint is on the axis to be unit-length). But if we multiply the angle into the axis we do get a minimal parametrization: a vector whose length is the original angle and, when normalized, is the original axis. Let's rewrite our formula in terms of this vector... let's call it `w`.
 
     R = I + sin(|w|) skew(w/|w|) + (1-cos(|w|)) skew(w/|w|)^2
 
-So what happens when the angle is small? Well, some things becomes zero, and other things cancel, and we're left with the identity plus this `skew` thing.
+Its length is `|w|`, and its normalized direction is `w/|w|`. So what happens when the angle (the length of `w`) is small? Well... some things cancel and we can pull some stuff out, and we're left with the identity plus this `skew` thing:
+
+<!-- * `1-cos(|w|)` becomes zero, so we can skip the entire second term there
+* `sin(|w|)` is just `|w|`
+* and we can take the divide by `|w|` out of the `skew` function, so that it cancels the one outside () -->
+
+<!-- some things becomes zero, and other things cancel, and we're left with the identity plus this `skew` thing. -->
 
     R = I + skew(w)
 
-<p style="color:#999;">
-`skew(w)` is called the skew-symmetric form of `w`, and is a matrix that, when multiplied with a vector, gives you the cross product of `w` and that other vector. That is, `skew(a)b` is the same as `a x b`.
-</p>
-
-It's easy to forget what this matrix looks like, but luckily I had it written down:
+Consulting wikipedia again, it appears that `skew(w)` is the "skew-symmetric" form of `w`, and is a matrix that, when multiplied with a vector, gives you the cross product of `w` and that other vector. That is, `skew(a)b` is the same as `a x b`. It's easy to forget what this matrix looks like, but luckily I had it written down:
 
                     |  0   -z    y |
     skew([x,y,z]) = |  z    0   -x |
                     | -y    x    0 |
 
-And adding the identity to that gives us the final rotation matrix...
+Well that looks awfully familiar... but let's plug it back into the above formula and see what we get:
 
         |  1   -z    y |
     R = |  z    1   -x |
