@@ -133,9 +133,9 @@ For us, however, it is an ideal solution to our gimbal lock problem.
 
 <!-- todo: figure? -->
 
-Notice how dragging the Tumbler, without releasing, is like our first strategy, where we accumulate small Euler angle increments obtained from gradient descent. (The difference being that gradient descent is not limited by a two-dimensional mouse peripheral; it can adjust all three angles.)
+Notice how dragging the Tumbler, without releasing, is like our first strategy, where we accumulate small angle increments obtained from gradient descent. (The difference being that gradient descent is not limited by a two-dimensional mouse peripheral; it can adjust all three angles.)
 
-As we have seen, this runs into gimbal lock if we drag it too far. But when you release, the orientation is "saved" and the Euler angles are reset to zero. Therefore, as long as you release before the Euler angles get too big, you can safely avoid gimbal locking.
+As we have seen, this runs into gimbal lock if we drag it too far, however, when you release, the orientation is "saved" and the Euler angles are reset to zero. Therefore, as long as you release before the Euler angles get too big, you can safely avoid gimbal locking.
 
 We can apply this idea to gradient descent: instead of accumulating increments into global angles, we apply the rotation they represent to a rotation matrix that we keep track of. See, when we computed the gradient last time, we added or subtracted a delta around global Euler angles, like so:
 
@@ -163,18 +163,7 @@ If the global angles were at a particular point (the `euler` matrix was close to
 <span style="color:#000;">dedrz = </span>(E(euler(0,0,<span style="color:#000;">0+drz</span>)<span style="color:#000;">*R</span>, T) -
          E(euler(0,0,<span style="color:#000;">0-drz</span>)<span style="color:#000;">*R</span>, T)) / 2drz</span></code></pre>
 
-<!-- <pre><code>dedrx = <span style="color:#999;">(E(euler(</span><span id="efg">0+drx</span><span style="color:#999;">,0,0) * R, T) -
-         E(euler(</span><span id="efg">0-drx</span><span style="color:#999;">,0,0) * R, T)) / 2drx</span>
-dedry = <span style="color:#999;">(E(euler(0,</span><span id="efg">0+dry</span><span style="color:#999;">,0) * R, T) -
-         E(euler(0,</span><span id="efg">0-dry</span><span style="color:#999;">,0) * R, T)) / 2dry</span>
-dedrz = <span style="color:#999;">(E(euler(0,0,</span><span id="efg">0+drz</span><span style="color:#999;">) * R, T) -
-         E(euler(0,0,</span><span id="efg">0-drz</span><span style="color:#999;">) * R, T)) / 2drz</span></code></pre> -->
-
-<!--
-    dedrx = (E(euler(+drx,0,0) * R, T) -
-             E(euler(-drx,0,0) * R, T)) / 2drx ...
--->
-Whether we use finite differences, automatic differentiation or analytic derivatives, the Euler matrix on the left always has three degrees of freedom, because its parameters are kept near zero.
+The `euler` matrix is basically just an offset around our current orientation estimate.
 
 <p style="color:#999;">
 We could also use unit-length quaternions to track orientation. They are often preferred because they use fewer bytes than rotation matrices and, like rotation matrices, they do not gimbal lock. But they also have constraints to keep them valid (must be unit-length), so we can't freely adjust its parameters to find a direction for gradient descent.
@@ -424,6 +413,9 @@ $$
 
 Why do they accumulate instead of updating $\zeta_0$ in each iteration?
 -->
+
+Aside: Analytic derivatives
+---------------------------
 
 Aside: Normalization
 --------------------
