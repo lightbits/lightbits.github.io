@@ -1,15 +1,6 @@
 # Stepping through rotations: Part II
 
 <!--
-1. Fixing gimbal lock with switching models
-2. Fixing gimbal lock with absolute matrix and relative euler angles
-3. Reducing computational cost
-4. But which order should you use? I arbitrarily chose xyz!
-5. Well it doesn't matter
-    Local euler angle is identical to any other local euler angle ordering. Looking at it a different way, rotations commute (it doesn't matter which order you rotate in).
-
-    In fact, let's look at another parametrization: axis-angle.
-    Huh, it's the same!!
 6. Isn't that neat?
     It's like there's a sort of "canonical" small step
     In fact there is, and mathematicians gave a name to this discovery
