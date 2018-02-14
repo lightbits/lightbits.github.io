@@ -60,7 +60,10 @@ we would have three degrees of freedom at the sideways orientation, but *not* wh
 
 No matter which default orientation we base our Euler angles around, we will run into gimbal lock sufficiently far away. But they are pretty good as long as we stay close to the origin...
 
-## The Tumbler
+<br>
+<br>
+<br>
+# The Tumbler
 
 3D modelling software have tackled similar problems for a long time: how can the user, with their 2D mouse interface, rotate an object in 3D? One solution is called the *Tumbler*. It is notoriously unintuitive and the only excuse you get for using it is [not knowing any better](todo: matt keeter). Here's how it works...
 
@@ -160,33 +163,28 @@ The `euler` matrix is basically just an offset around our current orientation es
 We could also use unit-length quaternions to track orientation. They are often preferred because they use fewer bytes than rotation matrices and, like rotation matrices, they do not gimbal lock. But they also have constraints to keep them valid (must be unit-length), so we can't freely adjust its parameters to find a direction for gradient descent.
 </p>
 
-Upon closer inspection
-----------------------
+<br>
+<br>
+<br>
+# Looking closely
 
 <!-- alternatively, I could go into reducing computational cost. First, look at what computing the gradient would involve. Exploit fact that two/three parameters are zero. Close to zero. Trig approximations...
 
 But that doesn't lead nicely into axis-angle or other euler angle orders...
  -->
 
-*Satisfied with your solution you decide to call it a day. You get ready to head home in eager anticipation of finally having some of that fancy tea you bought last week that has repeatedly avoided your consumption. After turning off your monitor&mdash;because you care about the environment and stuff like that&mdash;and collect the last of your belongings, your mind begins to wander...*
+![](euler-random-big.png)
+ <br>
 
-Why did we choose that particular Euler angle ordering?
+There are in fact many possible Euler angle orderings, some of them are well-recognized and the accepted convention in their scientific discipline, others simply attract odd looks from your peers.
 
-Is there a better one?
+Here's a comparison of two that are probably most often used, XYZ and ZYX, by randomly sampling angles between +-60 degrees, rotating a cube based on both orderings using the exact same angles, and overlaying the two over each other.
 
-In fact, there are many Euler angle variants, XYX, XZX, YXY. Some of them are well-recognized and the accepted convention in their technological discipline... others will simply attract odd looks from your peers. Here are two variants, XYZ and ZYX:
+As you can tell, it's a huge mess, none of the cubes look alike! But let's look more closely around the area that we're interested in, that of *small angles*.
 
-![](../euler/plates2x3.png)
-<!-- todo: gizmo one, big angles -->
-<!-- todo: not just adjusting any single angle in isolation -->
+![](euler-random-small.png)
 
-As you drag the sliders and rotate the two, you realize that they look vastly different, for the same values. But looking more closely around the area that we're interested in, that of 'small angles'.
-
-![](../euler/plates2x3.png)
-
-<!-- todo: gizmo two, small angles -->
-
-Huh, within this 5-10 degree range, you almost can't tell them apart!
+Within this +-20 degree range, you almost can't tell them apart!
 
 Small rotations
 ---------------
