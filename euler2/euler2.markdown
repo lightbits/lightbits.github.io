@@ -180,37 +180,51 @@ You may (or may not) be asking why we used that particular Euler ordering: first
 
 There are in fact many possible Euler angle orderings. The above image compares the most popular two (xyz and zyx) by randomly sampling angles between &plusmn;60 degrees, rotating a cube based on both orderings using the exact same angles, and overlaying the two over each other.
 
-As you can tell, it's a huge mess, none of the cubes look alike! But let's look more closely around the area that we're interested in, small angles around zero.
+It clearly looks like a mess, none of the cubes are alike... But let's look more closely around the area that we're interested in, small angles around zero, say, at most &plusmn;20 degrees each.
 
 ![](euler-random-small.png)
 
-Within a &plusmn;20 degree range, we almost can't tell them apart... We can see this from the math as well. If we write out the matrix product `Rz(z)Ry(y)Rx(x)`, we get this:
+Now we almost can't tell them apart! But why?
 
+<br>
+<br>
+<br>
+
+Let's look at the actual maths behind these rotations. If we multiply together the rotation matrices for a ZYX rotation we get this:
+
+![](eq1.png)
+
+<!--
     | cy*cz   cz*sx*sy - cx*sz   sx*sz + cx*cz*sy |
     | cy*sz   cx*cz + sx*sy*sz   cx*sy*sz - cz*sx |
     |   -sy              cy*sx              cx*cy |
+ -->
 
-<p style="color:#999;">(I wrote `cx` and `sx` instead of `cos(x)` and `sin(x)` and so on, for easier reading)</p>
+It's horrible. But a trig fact says that for small angles `cos(x) = 1` and `sin(x) = x`,  so we could say that it's kinda equal to this:
 
-This looks like a mess, but a trig fact says that for small angles `cos(x) = 1` and `sin(x) = x`,  so we could say that the above is kinda equal to this:
+![](eq2.png)
 
+<!--
     |  1      x*y - z    x*z + y |
     |  z    x*y*z + 1    y*z - x |
     | -y            x          1 |
+ -->
 
-And if we multiply two small numbers together, the product becomes *really* small compared to any one of them alone, so if we allow ourselves to ignore products of two (or three) numbers, we get this:
+And if we multiply two small numbers together, the product becomes *really* small compared to any one of them alone, so if we allow ourselves to ignore products of two (or three) angles, we get this:
 
+![](eq3.png)
+
+<!--
     |  1   -z    y |
     |  z    1   -x |
     | -y    x    1 |
+ -->
 
-This is **a pretty cool matrix**, as far as matrices go, anyway. Not only does it have a neat anti-symmetric pattern around the diagonal but, more importantly, it so happens to be that no matter what Euler angle order you consider, they are all approximately equal to this matrix, for small angles.
+This is a special matrix we'll see again soon.
 
-<!-- So when we update the current rotation with the offset from gradient descent:
+It turns out that if we do these simplification steps for any other Euler order, we get the same thing.
 
-    R = euler(rx,ry,rz)*R
-
-it does not matter what convention we use&mdash;they all pretty much have the same effect if `rx,ry,rz` are small. -->
+Strange...
 
 Axis-angle
 ----------
