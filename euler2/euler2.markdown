@@ -174,22 +174,17 @@ But that doesn't lead nicely into axis-angle or other euler angle orders...
  -->
 
 ![](euler-random-big.png)
- <br>
+<br>
 
-There are in fact many possible Euler angle orderings, some of them are well-recognized and the accepted convention in their scientific discipline, others simply attract odd looks from your peers.
+You may (or may not) be asking why we used that particular Euler ordering: first z, then y, then x. The answer is that it doesn't matter, as will become clear shortly.
 
-Here's a comparison of two that are probably most often used, XYZ and ZYX, by randomly sampling angles between +-60 degrees, rotating a cube based on both orderings using the exact same angles, and overlaying the two over each other.
+There are in fact many possible Euler angle orderings. The above image compares the most popular two (xyz and zyx) by randomly sampling angles between &plusmn;60 degrees, rotating a cube based on both orderings using the exact same angles, and overlaying the two over each other.
 
-As you can tell, it's a huge mess, none of the cubes look alike! But let's look more closely around the area that we're interested in, that of *small angles*.
+As you can tell, it's a huge mess, none of the cubes look alike! But let's look more closely around the area that we're interested in, small angles around zero.
 
 ![](euler-random-small.png)
 
-Within this +-20 degree range, you almost can't tell them apart!
-
-Small rotations
----------------
-
-It turns out that for small angles, the order you apply rotations doesn't matter. We can see this mathematically. If we write out the matrix product `Rz(z)Ry(y)Rx(x)`, we get this nasty fellow:
+Within a &plusmn;20 degree range, we almost can't tell them apart... We can see this from the math as well. If we write out the matrix product `Rz(z)Ry(y)Rx(x)`, we get this:
 
     | cy*cz   cz*sx*sy - cx*sz   sx*sz + cx*cz*sy |
     | cy*sz   cx*cz + sx*sy*sz   cx*sy*sz - cz*sx |
@@ -197,13 +192,13 @@ It turns out that for small angles, the order you apply rotations doesn't matter
 
 <p style="color:#999;">(I wrote `cx` and `sx` instead of `cos(x)` and `sin(x)` and so on, for easier reading)</p>
 
-For small angles, `cos(x) = 1` and `sin(x) = x`. So within reasonable approximation, the above is equal to this:
+This looks like a mess, but a trig fact says that for small angles `cos(x) = 1` and `sin(x) = x`,  so we could say that the above is kinda equal to this:
 
     |  1      x*y - z    x*z + y |
     |  z    x*y*z + 1    y*z - x |
     | -y            x          1 |
 
-Moreover, the product of two small numbers becomes "small" compared to any one of them alone, so if we allow ourselves to ignore those products we get this fellow:
+And if we multiply two small numbers together, the product becomes *really* small compared to any one of them alone, so if we allow ourselves to ignore products of two (or three) numbers, we get this:
 
     |  1   -z    y |
     |  z    1   -x |
