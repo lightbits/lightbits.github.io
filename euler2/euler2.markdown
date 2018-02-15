@@ -65,9 +65,9 @@ No matter which default orientation we base our Euler angles around, we will run
 <br>
 # The Tumbler
 
-3D modelling software have tackled similar problems for a long time: how can the user, with their 2D mouse interface, rotate an object in 3D? One solution is called the *Tumbler*. It is notoriously unintuitive and the only excuse you get for using it is [not knowing any better](todo: matt keeter). Here's how it works...
+3D modelling software have tackled similar problems for a long time: how can the user, with their 2D mouse interface, rotate an object in 3D?
 
-When you click and start dragging, moving your mouse horizontally or vertically will adjust either of two Euler angles, and rotate the thing around its current orientation. When you release, the new orientation is saved and the Euler angles are reset to zero.
+One solution is called the *Tumbler*. It is notoriously unintuitive and the only excuse you get for using it is [not knowing any better](todo: matt keeter). It works like this: when you click and start dragging, moving your mouse horizontally or vertically will adjust either of two Euler angles, and rotate the thing around its current orientation. When you release, the new orientation is saved and the Euler angles are reset to zero.
 
 <style>
 .slider img {
@@ -220,55 +220,59 @@ And if we multiply two small numbers together, the product becomes *really* smal
     | -y    x    1 |
  -->
 
-This is a special matrix we'll see again soon.
-
-It turns out that if we do these simplification steps for any other Euler order, we get the same thing.
+It turns out that, no matter which Euler order we look at (the order we multiply the rotation matrices), if we do these simplification steps we get the same thing.
 
 Strange...
 
 Axis-angle
 ----------
 
-That seems like a peculiarity too important to let go, so let's continue this investigation and look at a **completely different** parametrization...
-
-<!-- Euler angles are not the only minimal representation. Axis-angle is another popular one. For fun, let's take a look at what happens to it when the angle is small. -->
+For fun, let's look at a different parametrization.
 
 Euler angles concatenate three rotations about three axes, but we can also parametrize our rotation in terms of one axis `r` and an angle `a` around it. There's even a formula to convert those to a rotation matrix:
 
-    R = I + sin(a) skew(r) + (1-cos(a)) skew(r)^2
+![](eq4.png)
+<!-- R = I + sin(a) skew(r) + (1-cos(a)) skew(r)^2 -->
 
 <p style="color:#999;">We'll see what this `skew` function is in a bit...</p>
 
-This is not a minimal parametrization because it has four numbers (the constraint is on the axis to be unit-length). But if we multiply the angle into the axis we do get a minimal parametrization: a vector whose length is the original angle and, when normalized, is the original axis. Let's rewrite our formula in terms of this vector... let's call it `w`.
+This is not a minimal parametrization because it has four numbers, but if we multiply the angle into the axis we do get a minimal parametrization: a vector whose length is the original angle and, when normalized, is the original axis. Let's rewrite our formula in terms of this vector...
 
-    R = I + sin(|w|) skew(w/|w|) + (1-cos(|w|)) skew(w/|w|)^2
+![](eq5.png)
+<!-- R = I + sin(|w|) skew(w/|w|) + (1-cos(|w|)) skew(w/|w|)^2 -->
 
-Its length is `|w|`, and its normalized direction is `w/|w|`. So what happens when the angle (the length of `w`) is small? Well... some things cancel and we can pull some stuff out, and we're left with the identity plus this `skew` thing:
+So what happens when the angle (the length of `w`) is small? Well, some things cancel and we can pull some stuff out, and we're left with this:
 
-<!-- * `1-cos(|w|)` becomes zero, so we can skip the entire second term there
-* `sin(|w|)` is just `|w|`
-* and we can take the divide by `|w|` out of the `skew` function, so that it cancels the one outside () -->
+![](eq6.png)
+<!-- R = I + skew(w) -->
 
-<!-- some things becomes zero, and other things cancel, and we're left with the identity plus this `skew` thing. -->
+Consulting wikipedia again, it appears that `skew(w)` is the "skew-symmetric" form of `w`: the matrix that, when multiplied with a vector, gives you the cross product of `w` and that other vector. That is, `skew(a)b` is the same as `a x b`. It's easy to forget what this matrix looks like, but luckily I had it written down:
 
-    R = I + skew(w)
-
-Consulting wikipedia again, it appears that `skew(w)` is the "skew-symmetric" form of `w`, and is a matrix that, when multiplied with a vector, gives you the cross product of `w` and that other vector. That is, `skew(a)b` is the same as `a x b`. It's easy to forget what this matrix looks like, but luckily I had it written down:
-
+![](eq7.png)
+<!--
                     |  0   -z    y |
     skew([x,y,z]) = |  z    0   -x |
                     | -y    x    0 |
+-->
 
-Well that looks awfully familiar... but let's plug it back into the above formula and see what we get:
+... plugging that into the above formula we get ...
 
+![](eq8.png)
+<!--
         |  1   -z    y |
     R = |  z    1   -x |
         | -y    x    1 |
+-->
 
 Why, this is the same matrix as before, what gives?
 
-Physics!
---------
+<br>
+<br>
+<br>
+# Physics
+
+![](eq3.png)
+
 It seems like there is a **canonical small rotation**, that **all forms of rotations tend towards**. How can we intuitively appreciate this?
 
 <!-- this ties into physics. skew(w)*R is like taking the cross product between w and each axis of R. Remember from physics that the cross product of angular velocity with a vector points in the direction that vector moves. So this w is like an angular velocity, and skew(w)*R is how each axis changes. -->
