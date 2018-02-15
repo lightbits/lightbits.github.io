@@ -118,18 +118,17 @@ In other words, the coordinate frame you rotate around follows the object while 
     <label>rotate z</label>
 </div> -->
 
-It turns out that this is a **terrible** user interface, because, even though the object can theoretically be rotated in three distinct ways anywhere you start rotating, the mouse's lack of a third dimension prevents the user from accessing more than two of those.
+It turns out that this is a **terrible** user interface, because, even though the object can theoretically be rotated in three distinct ways anywhere you start rotating, the mouse's lack of a third dimension keeps you from accessing more than two.
 
-<p style="color:#999;">In particular, the user controls x-rotation by moving the mouse vertically and y-rotation by moving the mouse horizontally. When the user tries to rotate about z, they end up spinning their mouse like a methodic lunatic&mdash;a motion that gave the widget its name.</p>
+<!-- <p style="color:#999;">The user controls x-rotation by moving the mouse vertically and y-rotation by moving the mouse horizontally. When the user tries to rotate about z, they end up spinning their mouse like a methodic lunatic&mdash;a motion that gave the widget its name.</p> -->
 
-<!-- For us, however, it is an ideal solution to our gimbal lock problem, if we think of one step of gradient descent to be like a small click-drag-release rotation with the Tumbler. -->
-For us, however, it is an ideal solution to our gimbal lock problem.
+For us though it is a great solution to our gimbal lock problem.
 
 <!-- todo: figure? -->
 
-Notice how dragging the Tumbler, without releasing, is like our first strategy, where we accumulate small angle increments obtained from gradient descent. (The difference being that gradient descent is not limited by a two-dimensional mouse peripheral; it can adjust all three angles.)
+Notice how dragging the Tumbler, without releasing, is like our first strategy of accumulating small angle increments from gradient descent (the difference being that gradient descent is not limited by a two-dimensional mouse; it can adjust all three angles).
 
-As we have seen, this runs into gimbal lock if we drag it too far, however, when you release, the orientation is "saved" and the Euler angles are reset to zero. Therefore, as long as you release before the Euler angles get too big, you can safely avoid gimbal locking.
+As we saw, this runs into gimbal lock if we drag it too far; however, when you release, the orientation is "saved" and the Euler angles are reset to zero. Therefore, as long as you release before the Euler angles get too big, you can avoid gimbal lock.
 
 We can apply this idea to gradient descent: instead of accumulating increments into global angles, we apply the rotation they represent to a rotation matrix that we keep track of. See, when we computed the gradient last time, we added or subtracted a delta around global Euler angles, like so:
 
@@ -188,7 +187,7 @@ Now we almost can't tell them apart! But why?
 
 <br>
 <br>
-# The maths
+<!-- # The maths -->
 <!-- <br> -->
 
 Let's look at the actual maths behind these rotations:
@@ -230,28 +229,28 @@ Excited yet?
 
 <br>
 <br>
-# Axis-angle
+<!-- # Axis-angle -->
 
 Hm, not much of a reaction out of you. How about this...
 
-Euler angles concatenate three rotations about three axes, but we can also parametrize our rotation in terms of one axis `r` and an angle `a` around it. There's even a formula to convert those to a rotation matrix:
+Euler angles are three angles about three axes, but we can also parametrize our rotation in terms of one axis and one angle around it. There's even a formula to convert that to a rotation matrix:
 
 ![](eq4.png)
 <!-- R = I + sin(a) skew(r) + (1-cos(a)) skew(r)^2 -->
 
-<p style="color:#999;">We'll see what this `skew` function is in a bit...</p>
+<p style="color:#999;">`a` is the angle and `r` is the axis. We'll see what this `skew` function is in a bit...</p>
 
-This is not a minimal parametrization because it has four numbers, but if we multiply the angle into the axis we do get a minimal parametrization: a vector whose length is the original angle and, when normalized, is the original axis. Let's rewrite our formula in terms of this vector...
+This is not minimal because it uses four numbers, but if we multiply the angle into the axis we do get a minimal parametrization: a vector whose length is the original angle and, when normalized, is the original axis. Let's rewrite our formula in terms of this vector:
 
 ![](eq5.png)
 <!-- R = I + sin(|w|) skew(w/|w|) + (1-cos(|w|)) skew(w/|w|)^2 -->
 
-So what happens when the angle (the length of `w`) is small? Well, some things cancel and we can pull some stuff out, and we're left with this:
+So what happens when the angle is small? Well, some things cancel and we're left with:
 
 ![](eq6.png)
 <!-- R = I + skew(w) -->
 
-Consulting wikipedia again, it appears that `skew(w)` is the "skew-symmetric" form of `w`: the matrix that, when multiplied with a vector, gives you the cross product of `w` and that other vector. That is, `skew(a)b` is the same as `a x b`. It's easy to forget what this matrix looks like, but luckily I had it written down:
+That `skew(w)` thing is called the *skew-symmetric* form of `w`, and is the matrix that, when multiplied with a vector, gives you the cross product. That is, `skew(a)b` is the same as `a x b`. It looks like this:
 
 ![](eq7.png)
 <!--
@@ -260,7 +259,7 @@ Consulting wikipedia again, it appears that `skew(w)` is the "skew-symmetric" fo
                     | -y    x    0 |
 -->
 
-... plugging that into the above formula we get ...
+Plugging that into the above formula we get:
 
 ![](eq8.png)
 <!--
@@ -269,14 +268,18 @@ Consulting wikipedia again, it appears that `skew(w)` is the "skew-symmetric" fo
         | -y    x    1 |
 -->
 
-Why, this is the same matrix as before, what gives?
+Well how about that, it's the same matrix as before!
+
+Still no reaction?
+
+Ok, maybe *understanding* is a prerequisite for *appreciation*.
 
 <br>
 <br>
 <br>
 # Physics
 
-It seems like there is a **canonical small rotation**, that **all forms of rotations tend towards**. How can we intuitively appreciate this?
+Let' take a moment to contemplate. It seems like there is a **canonical small rotation**, that **all forms of rotations tend towards**. How can we intuitively appreciate this?
 
 Let's look at a simple case first: 2D rotations.
 
