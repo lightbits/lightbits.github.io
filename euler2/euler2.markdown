@@ -188,7 +188,8 @@ Now we almost can't tell them apart! But why?
 
 <br>
 <br>
-<br>
+# The maths
+<!-- <br> -->
 
 Let's look at the actual maths behind these rotations. If we multiply together the rotation matrices for a ZYX rotation we get this:
 
@@ -220,14 +221,11 @@ And if we multiply two small numbers together, the product becomes *really* smal
     | -y    x    1 |
  -->
 
-It turns out that, no matter which Euler order we look at (the order we multiply the rotation matrices), if we do these simplification steps we get the same thing.
+It turns out that, *no matter which Euler angle convention* we look at (the order we multiply the rotation matrices), if we do these simplification steps *we get the same matrix*.
 
-Strange...
-
-Axis-angle
-----------
-
-For fun, let's look at a different parametrization.
+<br>
+<br>
+# Axis-angle
 
 Euler angles concatenate three rotations about three axes, but we can also parametrize our rotation in terms of one axis `r` and an angle `a` around it. There's even a formula to convert those to a rotation matrix:
 
@@ -271,9 +269,9 @@ Why, this is the same matrix as before, what gives?
 <br>
 # Physics
 
-![](eq3.png)
-
 It seems like there is a **canonical small rotation**, that **all forms of rotations tend towards**. How can we intuitively appreciate this?
+
+Let's look at a simple case first: 2D rotations.
 
 <!-- this ties into physics. skew(w)*R is like taking the cross product between w and each axis of R. Remember from physics that the cross product of angular velocity with a vector points in the direction that vector moves. So this w is like an angular velocity, and skew(w)*R is how each axis changes. -->
 
@@ -281,8 +279,7 @@ It seems like there is a **canonical small rotation**, that **all forms of rotat
 The so3 lie algebra
 We describe the "small step" in terms of three numbers. We've called them Euler angles and axis-angle. But they're exactly the same. -->
 
-So many choices.... but does it matter?
----------------------------------------
+<!--
 
 Back to our optimization problem then.
 
@@ -294,4 +291,4 @@ it does not matter what Euler angle convention we use or if we use axis-angle&md
 
 But that leads to another question: which one is the "correct" one to use, when we update the rotation matrix? If we interpret `rx,ry,rz` as not being Euler angles anymore (because they could be any ordering, or they could even be axis-angle), but being this canonical small rotation direction, what is the "canonical" rotation it represents along its line?
 
-What we get from gradient descent is just a (weighted) direction. Line search etc. But what does it mean to continue a rotation?
+What we get from gradient descent is just a (weighted) direction. Line search etc. But what does it mean to continue a rotation? -->
