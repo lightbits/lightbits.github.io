@@ -176,11 +176,11 @@ But that doesn't lead nicely into axis-angle or other euler angle orders...
 ![](euler-random-big.png)
 <br>
 
-You may (or may not) be asking why we used that particular Euler ordering: first z, then y, then x. The answer is that it doesn't matter, as will become clear shortly.
+You may be asking why we used that particular Euler angle convention; maybe a different one would be better?
 
-There are in fact many possible Euler angle orderings. The above image compares the most popular two (xyz and zyx) by randomly sampling angles between &plusmn;60 degrees, rotating a cube based on both orderings using the exact same angles, and overlaying the two over each other.
+The above image compares the two most popular conventions. Each cube is rotated by three random angles. The gray cubes are rotated by the same angles, but with the other Euler order.
 
-It clearly looks like a mess, none of the cubes are alike... But let's look more closely around the area that we're interested in, small angles around zero, say, at most &plusmn;20 degrees each.
+It clearly looks like a mess, none of the cubes are alike... But let's look more closely around the area that we're interested in, small angles, say, within plus or minus 20 degrees around zero.
 
 ![](euler-random-small.png)
 
@@ -191,7 +191,8 @@ Now we almost can't tell them apart! But why?
 # The maths
 <!-- <br> -->
 
-Let's look at the actual maths behind these rotations. If we multiply together the rotation matrices for a ZYX rotation we get this:
+Let's look at the actual maths behind these rotations:
+ <!-- If we multiply together the rotation matrices for a ZYX rotation we get this: -->
 
 ![](eq1.png)
 
@@ -201,7 +202,9 @@ Let's look at the actual maths behind these rotations. If we multiply together t
     |   -sy              cy*sx              cx*cy |
  -->
 
-It's horrible. But a trig fact says that for small angles `cos(x) = 1` and `sin(x) = x`,  so we could say that it's kinda equal to this:
+Ok it's horrible.
+
+But a trig fact tells us that for small angles `cos(x) = 1` and `sin(x) = x`,  so we can say that the above monstrosity is almost equal to this:
 
 ![](eq2.png)
 
@@ -211,7 +214,7 @@ It's horrible. But a trig fact says that for small angles `cos(x) = 1` and `sin(
     | -y            x          1 |
  -->
 
-And if we multiply two small numbers together, the product becomes *really* small compared to any one of them alone, so if we allow ourselves to ignore products of two (or three) angles, we get this:
+And if we multiply two small numbers together, the product becomes *really* small compared to any one of them alone, so we get:
 
 ![](eq3.png)
 
@@ -221,11 +224,15 @@ And if we multiply two small numbers together, the product becomes *really* smal
     | -y    x    1 |
  -->
 
-It turns out that, *no matter which Euler angle convention* we look at (the order we multiply the rotation matrices), if we do these simplification steps *we get the same matrix*.
+Ok, here is the exciting part: if you go ahead and try, you will find that *any Euler angle order is equal to this matrix (for small angles)*.
+
+Excited yet?
 
 <br>
 <br>
 # Axis-angle
+
+Hm, not much of a reaction out of you. How about this...
 
 Euler angles concatenate three rotations about three axes, but we can also parametrize our rotation in terms of one axis `r` and an angle `a` around it. There's even a formula to convert those to a rotation matrix:
 
