@@ -1,49 +1,5 @@
 # Stepping through rotations: Part II
 
-<!--
-6. Isn't that neat?
-    It's like there's a sort of "canonical" small step
-    In fact there is, and mathematicians gave a name to this discovery
-    The so3 lie algebra
-    We describe the "small step" in terms of three numbers. We've called them Euler angles and axis-angle. But they're exactly the same.
-    ...?
-    What are these three numbers?
-    And what is this weird looking matrix they're placed inside?
-    Exponential map
-7. I'm going to leave you with some questions
-
-    What makes a small step in 'translation space' so much easier than a small step in 'rotation space'?
-    Why do translation vectors commute, but rotations do not?
-
-    "Rotations do not live in a vector space" [barfoot 6.2.5]
-
-    "There are many ways of representing rotations mathematically, including matrices, axis-angle, Euler, unit-length quaternions. The most important fact to remember is that all these representations have the samy underlying rotation, which only has three degrees of freedom. A 3x3 rotation matrix has nine elements, but only three are independent. Unit-length quaternions have four parameters, but only three are independent (normalization)."
-
-    What we are really after here is to linearize rotation: translation is already linear, so we can add a small translation and get a new translation. We can also find the midpoint between two translations by subtracting one from the other and dividing by two. We can't do that with rotation matrices.
-
-    "The fact that rotations do not live in a vector space is fundamental when it comes to linearizing motion"
-
-    Can we generalize these statements somehow to other mathematical things? Yes: Lie groups and Lie algebras. While SO3 is not a vector space, it is a matrix Lie group. And there are other matrix Lie groups. And they all share some properties, and can be treated in similar ways.
-
-    Based on our discussion so far, one way you can begin to intuit Lie algebras, is that they encode what it means to take a small step. Knowing this encoding lets you do the tricks you're familiar with from vector spaces: you can interpolate between rotations, you can add or subtract rotations, you can take small steps.
-
-    RVC Chapter 2.3
-    Barfoot Chapter 6.2.5
-    Barfoot Chapter 7
-    Barfoot Chapter 7.1.9: specific to optimization
-        (page 241 "A cleaner ways to carry out optimization is to find an update for C in the form of a small rotation on the left, rather than directly on the Lie algebra rotation vector representing C")
-        (I just decided to write 3000 words about one sentence: "... which has singularities associated with it")
-
-Q) Existence of local minima. Global uniqueness. (page 307). Dips within humps.
-Q) What about global optimization? Point cloud alignment. Closed-form solution for rotation matrix. But our problem involves perspective projection with lens distortion, which requires iterative?
-Q) Interpolation can be important, because you might want to do a line search? (page 248). Or do you? What does it mean to 'continue' in a rotation?
-Q) Treating translation seperately from rotation (still as a vector space) is more beneficial I think. The se3 looks unnatural and makes it harder for optimization to achieve certain motions
-    Instead of having x y z correspond to translation and rx ry rz correspond to rotation, each along an intuitive axis, you need to do a weird mixture of perturbations, sometimes large, just to achieve motion along one axis.
-
-    Unwanted coupling: you don't want to have to rotate in order to translate.
-
--->
-
 The take-home message from last time was that Euler angles can *gimbal lock*, whereby you lose the ability to rotate around all three axes: adjusting any angle in isolation can only generate two distinct motions, instead of the three you started with. This could cause gradient descent, or similar optimization strategies, to slow to a stop, or adjust the wrong parameters.
 
 ...
@@ -320,9 +276,55 @@ Remember that `skew(w)` was a matrix that, when multiplied by a vector, becomes 
 
 In other words, this canonical small rotation that all rotations appear to become equal to, for small angles, is actually a lot like an angular velocity vector.
 
-<!-- In fact there is, and mathematicians gave a name to this discovery
-The so3 lie algebra
-We describe the "small step" in terms of three numbers. We've called them Euler angles and axis-angle. But they're exactly the same. -->
+<br>
+<br>
+# SO3 and so3
+
+What are these three numbers?
+
+In fact there is, and mathematicians gave a name to this discovery.
+The so3 lie algebra. We describe the "small step" in terms of three numbers. We've called them Euler angles and axis-angle. But they're exactly the same.
+
+<!-- 6. Isn't that neat?
+    It's like there's a sort of "canonical" small step
+    In fact there is, and mathematicians gave a name to this discovery
+    The so3 lie algebra
+    We describe the "small step" in terms of three numbers. We've called them Euler angles and axis-angle. But they're exactly the same.
+    ...?
+    What are these three numbers?
+    And what is this weird looking matrix they're placed inside?
+    Exponential map
+7. I'm going to leave you with some questions
+
+    What makes a small step in 'translation space' so much easier than a small step in 'rotation space'?
+    Why do translation vectors commute, but rotations do not?
+
+    "Rotations do not live in a vector space" [barfoot 6.2.5]
+
+    "There are many ways of representing rotations mathematically, including matrices, axis-angle, Euler, unit-length quaternions. The most important fact to remember is that all these representations have the samy underlying rotation, which only has three degrees of freedom. A 3x3 rotation matrix has nine elements, but only three are independent. Unit-length quaternions have four parameters, but only three are independent (normalization)."
+
+    What we are really after here is to linearize rotation: translation is already linear, so we can add a small translation and get a new translation. We can also find the midpoint between two translations by subtracting one from the other and dividing by two. We can't do that with rotation matrices.
+
+    "The fact that rotations do not live in a vector space is fundamental when it comes to linearizing motion"
+
+    Can we generalize these statements somehow to other mathematical things? Yes: Lie groups and Lie algebras. While SO3 is not a vector space, it is a matrix Lie group. And there are other matrix Lie groups. And they all share some properties, and can be treated in similar ways.
+
+    Based on our discussion so far, one way you can begin to intuit Lie algebras, is that they encode what it means to take a small step. Knowing this encoding lets you do the tricks you're familiar with from vector spaces: you can interpolate between rotations, you can add or subtract rotations, you can take small steps.
+
+    RVC Chapter 2.3
+    Barfoot Chapter 6.2.5
+    Barfoot Chapter 7
+    Barfoot Chapter 7.1.9: specific to optimization
+        (page 241 "A cleaner ways to carry out optimization is to find an update for C in the form of a small rotation on the left, rather than directly on the Lie algebra rotation vector representing C")
+        (I just decided to write 3000 words about one sentence: "... which has singularities associated with it")
+
+Q) Existence of local minima. Global uniqueness. (page 307). Dips within humps.
+Q) What about global optimization? Point cloud alignment. Closed-form solution for rotation matrix. But our problem involves perspective projection with lens distortion, which requires iterative?
+Q) Interpolation can be important, because you might want to do a line search? (page 248). Or do you? What does it mean to 'continue' in a rotation?
+Q) Treating translation seperately from rotation (still as a vector space) is more beneficial I think. The se3 looks unnatural and makes it harder for optimization to achieve certain motions
+    Instead of having x y z correspond to translation and rx ry rz correspond to rotation, each along an intuitive axis, you need to do a weird mixture of perturbations, sometimes large, just to achieve motion along one axis.
+
+    Unwanted coupling: you don't want to have to rotate in order to translate. -->
 
 <!--
 
