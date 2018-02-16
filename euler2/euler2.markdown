@@ -281,7 +281,22 @@ Ok, maybe *understanding* is a prerequisite for *appreciation*.
 
 Let' take a moment to contemplate. It seems like there is a **canonical small rotation**, that **all forms of rotations tend towards**. How can we intuitively appreciate this?
 
-Let's look at a simple case first: 2D rotations.
+Let's look at stuff in two dimensions first.
+
+![](physics2.png)
+
+
+From physics you may have learned that a point rotating on a circle has a velocity tangent to the circle, and that the speed is proportional to the angular speed and the radius: v = wr.
+
+![](physics1.png)
+
+More generally we can say that the velocity is the cross product between an *angular velocity vector*, pointing in or out of the page, and the position: v = w x r.
+
+<!-- The right-hand rule lets you figure out the direction of the angular velocity vector by wrapping your right hand along the rotation. Your thumb will then either point away from or into the page. -->
+
+![](physics3.png)
+
+The latter also holds in 3D: the point rotates in the plane perpendicular to the angular velocity vector, which can now be an arbitrary direction; not just in or out of the page.
 
 <!-- this ties into physics. skew(w)*R is like taking the cross product between w and each axis of R. Remember from physics that the cross product of angular velocity with a vector points in the direction that vector moves. So this w is like an angular velocity, and skew(w)*R is how each axis changes. -->
 
