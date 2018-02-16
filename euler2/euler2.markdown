@@ -298,7 +298,27 @@ More generally we can say that the velocity is the cross product between an *ang
 
 The latter also holds in 3D: the point rotates in the plane perpendicular to the angular velocity vector, which can now be an arbitrary direction; not just in or out of the page.
 
-<!-- this ties into physics. skew(w)*R is like taking the cross product between w and each axis of R. Remember from physics that the cross product of angular velocity with a vector points in the direction that vector moves. So this w is like an angular velocity, and skew(w)*R is how each axis changes. -->
+I bring this up because rotation matrices can be seen as a set of three vectors. What we were doing earlier was that we rotated this rotation matrix either by a small Euler angle offset, or by a small axis-angle offset, which we wrote as a matrix-matrix product:
+
+    R' = euler(...) R
+
+But we can expand this and see it as three matrix-vector products:
+
+    R' = [euler(...) x | euler(...) y | euler(...) z]
+
+We also saw that the offset matrix, for small enough angles, was equal to:
+
+    I + skew(w)
+
+So if we substitute that back into the above we get:
+
+    R' = [x + skew(w) x | y + skew(w) y | z + skew(w) z]
+
+Remember that `skew(w)` was a matrix that, when multiplied by a vector, becomes the cross product vector between `w` and that vector, so this is actually saying:
+
+    R' = [x + w x x | y + w x y | z + w x z]
+
+In other words, this canonical small rotation that all rotations appear to become equal to, for small angles, is actually a lot like an angular velocity vector.
 
 <!-- In fact there is, and mathematicians gave a name to this discovery
 The so3 lie algebra
