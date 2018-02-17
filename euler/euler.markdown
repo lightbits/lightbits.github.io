@@ -32,38 +32,39 @@ However, it'll involve **3D rotations**, and that is where things can get nasty.
 <br>
 # Books
 
-Books and CD covers are often used in example problems (and in youtube videos of object tracking algorithms) because they have a lot of **unique texture**, making them an easy test case.
+Books and CD covers are often used in impressive youtube videos of object tracking algorithms because they have unique textures that are easy to detect.
 
 Here's a book I picked from my shelf.
 
 <img src="book/book2.jpg" style="max-width:320px;width:100%;">
 
-It's a **pretty good book**, but to simplify our mathematical discussion we'll assume this book is nothing more than a 3D box filled with void.
+It's a pretty good book.
 
-One way to find out how the book is positioned relative to the camera (or vice versa) starts by finding matching patches of pixels between the photo and the 3D model.
+One way to find out how the book is positioned relative to the camera (or vice versa) starts by finding matching patches of pixels between the photo and a 3D model.
 
 ![](matches.png)
 
-At this point, your typical computer vision textbook will start to tell you about the Perspective-N-Point problem and show you how easily you can recover the rotation and translation matrices using linear algebra and Singular Value Decomposition...
+At this point, your computer vision textbook will start to tell you about the Perspective-N-Point problem and show you how easily you can recover the rotation and translation matrices using linear algebra and Singular Value Decomposition...
 
-...but that's an **elegant solution**.
+...but that's an *elegant solution*.
 
-We don't have time to learn this PnP stuff, but we do know how to use a hammer and we don't care about being efficient (maybe later we'll have to dig into it, but not right now). So let's turn this problem into a nail.
+We don't have time to learn about PnP, but we do know how to use a hammer and we don't care about being efficient (maybe later we'll have to dig into it, but not right now). So let's turn this problem into a nail.
 
-## Pose estimation as an optimization problem
+<br>
+<br>
 
 A nail version of this problem is similar to most nail versions of problems, and consists of
 1. guessing the answer,
 2. measuring how wrong it was, and
 3. guessing the answer again (but now you are educated).
 
-In the context of book-pose-estimation, it means we guess the pose of the book. To measure how bad our guess was, we can render the book as seen by my camera (a handheld Canon with heavy lens distortion).
+In our case, it means we guess the pose of the book to be some rotation and translation. To measure how bad our guess was, we can render the book as seen by my camera (a Canon S90 with heavy lens distortion).
 
 ![](reproject1.jpg)
 
-We can look at this as a person and say "yup that's pretty close". But it's too slow to ask a person after each guess. If we want to automate this with a computer we need to be *quantitative*. We have lots of options to measure the quantitative quality of our guess.
+We can look at this as a person and say that looks pretty close, or not. But it's too slow to ask a person after each guess. If we want to automate this with a computer we need to be quantitative.
 
-Here's one that's pretty popular...
+There are lots of ways to measure the quantitative quality of our guess, here's one that's pretty popular...
 
 ![](reproject2.jpg)
 
