@@ -112,9 +112,9 @@ The gradient gives us a "direction" to rotate in, and, like before, we can turn 
 
 As long as the amount we rotate by is small, these angles will be close to zero, and the euler matrix behaves nicely.
 
-<p style="color:#999;">
+<!-- <p style="color:#999;">
 We could also use unit-length quaternions to track orientation. They are often preferred because they use fewer bytes than rotation matrices and, like rotation matrices, they do not gimbal lock. But they also have constraints to keep them valid (must be unit-length), so we can't freely adjust its parameters to find a direction for gradient descent.
-</p>
+</p> -->
 
 <br>
 <br>
@@ -211,7 +211,7 @@ So what happens when the angle is small? Well, some things cancel and we're left
 ![](eq6.png)
 <!-- R = I + skew(w) -->
 
-That `skew(w)` thing is called the *skew-symmetric* form of `w`, and is the matrix that, when multiplied with a vector, gives you the cross product. That is, `skew(a)b` is the same as `a x b`. It looks like this:
+That `skew(w)` thing is called the *skew-symmetric* form of `w`, and is the matrix that, when multiplied with a vector, gives you the cross product between `w` and that vector.
 
 ![](eq7.png)
 <!--
@@ -219,9 +219,7 @@ That `skew(w)` thing is called the *skew-symmetric* form of `w`, and is the matr
     skew([x,y,z]) = |  z    0   -x |
                     | -y    x    0 |
 -->
-
-Plugging that into the above formula we get:
-
+which means that
 ![](eq8.png)
 <!--
         |  1   -z    y |
@@ -277,25 +275,27 @@ Remember that skew(w), when multiplied by a vector, gives the cross product betw
 ![](eq12.png)
 
 <!-- R = R + [w cross X | w cross Y | w cross Z] -->
-Which looks a lot like taking the current rotation matrix and adding, to each axis, the linear velocity of each axis rotating in the plane perpendicular to w.
+Which looks a lot like adding the linear velocity of each axis rotating around an angular velocity vector.
 
 <br>
 <br>
 # What the fuck is SO3?
 
-Why is rotation so difficult, but translation is easy as pie: just add the numbers together and off you go.
+What is this w thing, these three numbers? We've called them Euler angles and axis-angle, but they're all kind of the same, and they behave like an angular velocity. Also, why does rotation have to be so annoying when translation is so easy?&mdash;just add the numbers together and you're fine.
 
-What is this w thing? What are these three numbers? We've called them Euler angles and axis-angle. But they are all kind of the same, in some weird sense.
+Mathematicians argued about these questions, but they figured it out. They decided to invent a category of mathematics called Lie groups&mdash;which is a part of *group theory*, which is about defining very precisely how stuff that look similar are, in fact, similar, for some definition of similar.
 
-Does it have a name?
+As mathematicians like to do, they promptly went ahead and put names on everything. w, for example, is called the "Lie algebra element of SO3" or just "so3" (yes, lower case is important and yes, I agree).
 
-In fact it does, mathematicians gave a name to this discovery. The so3 lie algebra. We describe the "small step" in terms of three numbers.
+But those are just names. Unfortunately, people like to toss these names around everywhere, in papers or in code, perhaps to cause confusion and stop anyone from understanding them.
 
-But that's just a name that doesn't tell you anything meaningful.
+But we know what intuitively what it means: *it's just a small rotation*.
 
-Unfortunately, people like to toss the name around everywhere, in papers or in code. Maybe it is to confuse you, or to demonstrate their intellectual superiority.
+<br>
+<br>
+# What the fuck is the exponential map?
 
-Either way, you are now protected, because you know what it really means: it's just a small rotation.
+There's a thing called the exponential map.
 
 <br>
 <br>
