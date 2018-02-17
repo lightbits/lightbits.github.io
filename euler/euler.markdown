@@ -89,8 +89,9 @@ Our quality measure is a function of the rotation and translation. Plug in R and
 
 How? Well with our hammer, of course!
 
-Gradient descent
-----------------
+<br>
+<br>
+# The derivative of a rotation matrix
 
 There are many hammers to choose from, but gradient descent is simple to explain, and I mainly just want to make a point about rotations, not the hammers themselves. So bear with me for now.
 
@@ -104,8 +105,9 @@ One way to adjust x, starting from an initial guess, could therefore be `x += -g
 
 This will make f(x) smaller and smaller until it stops, hopefully at zero. With some luck, the value of x at that point is even what you wanted. (Also likely is that it blows up to infinity, if you're not careful, but decent software packages do additional checks and number-massaging to prevent that)
 
-The derivative of a rotation matrix
------------------------------------
+<br>
+<br>
+<!-- ## The derivative of a rotation matrix -->
 
 The derivative of `x^2` is simple, but it might take you longer than you'd like to differentiate more complex expressions, maybe involving matrices and stuff. Luckily we have some neat tools that do that for us&mdash;gone are the days when it was a symbol of hard work and dedication when your paper had pages upon pages of calculus, rigorously deriving each expression by hand.
 
@@ -134,8 +136,9 @@ What people usually do at this point is to parametrize the rotation matrix in te
 &sup1; Particularly, that the columns (or axes) of the matrix are perpendicular to each other and unit length.
 </span>
 
-Using Euler angles
-------------------
+<br>
+<br>
+# Euler angles
 
 Euler angles is a so-called *minimal* parametrization, in that they use the minimal amount of numbers (three) to define a rotation. By virtue of being minimal, those numbers can each be chosen freely, without concern of being constrained by the others.
 
@@ -169,8 +172,9 @@ It's a bit slow and unstable... but there are common ways to fix that (like usin
 &sup1;When I made this gif my parameters did blow up on the first try. I hacked in a fix by adding a line search: instead of choosing an arbitrary gain thing, you instead check the error at several points along the gradient direction and go to the point that had the lowest error. I also normalized the differences in the error function by dividing by the image width: squaring pixel coordinates gave really big values. It's still super slow, as you can see. That can be improved by using cooler methods like Gauss-Newton or Levenberg-Marquardt.
 </span>
 
-What is gimbal lock?
---------------------
+<br>
+<br>
+# What is gimbal lock?
 
 Consider a plate that you can rotate with three angles rx, ry and rz around the x-, y- and z-axes respectively with the matrix `Rz(rz)*Ry(ry)*Rx(rx)`. Adjusting the angles in isolation produces these three motions (x on the left, z on the right):
 
@@ -281,7 +285,9 @@ Indeed, if we rotate -90 degrees about both the x- and the z-axis, the middle ro
 
 But alas, we find ourselves in the same rut at (-90,90,-90), where the book is seen head-on from the side. Again we can only rotate about two different axes!
 
-## How gimbal lock affects gradient descent
+<br>
+<br>
+# Gimbal lock and gradient descent
 
 While we can always *find* a set of angles that exactly reproduce the photo (as there is no rotation Euler angles cannot describe), the problem, in the context of gradient descent, is that those angles can be unintuitively far away from our current guess.
 
