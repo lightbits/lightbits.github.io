@@ -287,11 +287,15 @@ The surprising thing, though, is that *any* rotation made small enough, is essen
 
 <br>
 <br>
-# What the fuck is SO3?
+# The mathematics of things that look similar
 
 What is this w thing, these three numbers? We've called them Euler angles and axis-angle, but they're all kind of the same, and they behave like an angular velocity. Also, why does rotation have to be so annoying when translation is so easy?&mdash;just add the numbers together and you're fine.
 
-Mathematicians argued about these questions, but they figured it out. They decided to invent a category of mathematics called Lie groups&mdash;which is a part of *group theory*, which is about defining very precisely how stuff that look similar are, in fact, similar, for some definition of similar.
+Mathematicians argued about these questions, but they figured it out. They decided to invent a category of mathematics called Lie groups&mdash;which is a part of *group theory*, which is about defining very precisely how stuff that look similar are, in fact, similar (for some definition of similar).
+
+<!-- What they discovered is that rotations live in a weird space that translations do not. Translation live in a vector space, which means that you can take two translations, add them together, and get a new translation. -->
+
+<!-- You cannot take two rotations (e.g. matrices), add the numbers together, and get a valid rotation back. Except I can take two sets of Euler angles and add them together. I can also take two axis-angles... What gives?-->
 
 As mathematicians like to do, they promptly went ahead and put names on everything. w, for example, is called the "Lie algebra element of SO3" or just "so3" (yes, lower case is important and yes, I agree).
 
@@ -301,13 +305,13 @@ But we know what intuitively what it means: *it's just a small rotation*.
 
 <br>
 <br>
-# What the fuck is the exponential map?
+# What is the exponential map?
 
 There's a thing called the exponential map. But you already know what it is.
 
 <br>
 <br>
-# What the fuck is SE3?
+# What is SE3?
 
 SE3 is just saying that you are allowed to translate as well.
 
