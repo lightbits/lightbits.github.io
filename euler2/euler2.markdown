@@ -199,7 +199,7 @@ Euler angles are three angles about three axes, but we can also parametrize our 
 ![](eq4.png)
 <!-- R = I + sin(a) skew(r) + (1-cos(a)) skew(r)^2 -->
 
-<p style="color:#999;">`a` is the angle and `r` is the axis. We'll see what this `skew` function is in a bit...</p>
+<p style="color:#999;">`a` is the angle and `r` is the axis. We'll see what this `skew` function is soon</p>
 
 This is not minimal because it uses four numbers, but if we multiply the angle into the axis we do get a minimal parametrization: a vector whose length is the original angle and, when normalized, is the original axis. Let's rewrite our formula in terms of this vector:
 
@@ -239,20 +239,18 @@ Well how about that, it's the same matrix as before!
 Let' take a moment to contemplate. It seems like there is a **canonical small rotation**, that **all forms of rotations tend towards**. How can we intuitively appreciate this?
 
 Let's look at stuff in two dimensions first.
-
 ![](physics2.png)
-
-From physics you may have learned that a point rotating on a circle has a velocity tangent to the circle, and that the speed is proportional to the angular speed and the radius: v = wr.
+You may have learned that a point rotating on a circle has a velocity tangent to the circle, and that the speed is proportional to the angular speed and the radius: v = wr.
 
 ![](physics1.png)
 
-More generally we can say that the velocity is the cross product between an *angular velocity vector*, pointing in or out of the page, and the position: v = w x r.
+We could also say the velocity is the cross product between an *angular velocity vector*, pointing in or out of the page, and the position: v = w x r.
 
 <!-- The right-hand rule lets you figure out the direction of the angular velocity vector by wrapping your right hand along the rotation. Your thumb will then either point away from or into the page. -->
 
 ![](physics3.png)
 
-The latter also holds in 3D: the point rotates in the plane perpendicular to the angular velocity vector, which can now be an arbitrary direction; not just in or out of the page.
+The latter also holds in 3D with the point rotating in a plane perpendicular to the angular velocity vector, which can be an arbitrary direction; not just in or out of the page.
 
 I bring this up because rotation matrices can be seen as a set of three vectors, defining the three axes of a coordinate system.
 ![](eq9.png)
@@ -265,12 +263,12 @@ We also saw that the euler (and axis-angle) matrix, for small angles, was equal 
 ![](eq11.png)
 
 <!-- I + skew(w) -->
-Remember that `skew(w)` was a matrix that, when multiplied by a vector, becomes the cross product vector between `w` and that vector. So if we substitute that back into the above we get:
-![](eq12.png)
-<!-- R = R + [w cross X | w cross Y | w cross Z] -->
-It looks like each of the cross products is the velocity of the axis rotating around an angular velocity vector.
+Remember that skew(w), when multiplied by a vector, gives the cross product between w and that vector. So if we put that back into the above we get:
 
-In other words, this canonical small rotation that all rotations appear to become equal to, for small angles, is actually a lot like an angular velocity.
+![](eq12.png)
+
+<!-- R = R + [w cross X | w cross Y | w cross Z] -->
+Which looks a lot like taking the current rotation matrix and adding, to each axis, the linear velocity of each axis rotating in the plane perpendicular to w.
 
 <br>
 <br>
