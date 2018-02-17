@@ -295,7 +295,7 @@ But we know what intuitively what it means: *it's just a small rotation*.
 <br>
 # What the fuck is the exponential map?
 
-There's a thing called the exponential map.
+There's a thing called the exponential map. But you already know what it is.
 
 <br>
 <br>
