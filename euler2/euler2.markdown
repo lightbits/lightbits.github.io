@@ -106,8 +106,6 @@ If the global angles were at a particular point (the `euler` matrix was close to
 <span style="color:#000;">dedrz = </span>(E(euler(0,0,<span style="color:#000;">0+drz</span>)<span style="color:#000;">*R</span>, T) -
          E(euler(0,0,<span style="color:#000;">0-drz</span>)<span style="color:#000;">*R</span>, T)) / 2drz</span></code></pre>
 
-The `euler` matrix is like an offset around our current orientation estimate, and it has all three degrees of freedom.
-
 The gradient gives us a "direction" to rotate in, and, like before, we can turn that into three angles `rx,ry,rz`. But instead of accumulating those into three global angles, we update the orientation like this:
 
     R = euler(rx,ry,rz) * R
