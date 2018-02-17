@@ -1,20 +1,20 @@
 # Stepping through rotations: Part II
 
-The take-home message from last time was that Euler angles can *gimbal lock*, whereby you lose the ability to rotate around all three axes: adjusting any angle in isolation can only generate two distinct motions, instead of the three you started with. This could cause gradient descent, or similar optimization strategies, to slow to a stop, or adjust the wrong parameters.
+The take-away from last time was that Euler angles can *gimbal lock*, where you lose the ability to rotate around all three axes: adjusting any angle in isolation only gives you two distinct motions. This causes gradient descent, and similar optimization strategies, to slow to a stop, or adjust the wrong parameters.
 
-...
+Another way of seeing it is that Euler angles suck at tracking *absolute* orientation.
 
-Another way of saying it is that Euler angles suck at keeping track of absolute orientation. See, when I made this textured 3D box, I inadvertently chose its "default" orientation (all angles zero) to be with its cover facing the camera, like so:
+See, when I coded this 3D book model, I inadvertently chose its default orientation (all angles zero) to be with its cover facing the camera:
 
 ![](model3.png)
 
-This happens to have an impact on gimbal lock: for this choice, we have all three degrees of freedom when the cover is facing the camera, but not when we turn the book sideways. On the other hand, if the default orientation had been sideways....
+This happens to have an impact on gimbal lock: for this choice, we have all three degrees of freedom when the cover is facing the camera, but not when the book is sideways. On the other hand, if the default orientation had been sideways....
 
 ![](model4.png)
 
 we would have three degrees of freedom at the sideways orientation, but *not* when the cover is facing the camera.
 
-No matter which default orientation we base our Euler angles around, we will run into gimbal lock sufficiently far away. But they are pretty good as long as we stay close to the origin...
+No matter which default orientation we base our Euler angles around, we will run into gimbal lock sufficiently far away. But they are OK as long as we stay close to the zero.
 
 <br>
 <br>
