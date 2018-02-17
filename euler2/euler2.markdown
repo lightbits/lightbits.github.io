@@ -246,21 +246,21 @@ Although we assigned entirely different meanings to these three numbers (an axis
 <br>
 # Physics
 
-Let' take a moment to contemplate. It seems like there is a **canonical small rotation**, that **all forms of rotations tend towards**. How can we intuitively appreciate this?
+It seems like there is a "canonical" small rotation, that all forms of rotations tend towards.
 
-Let's look at stuff in two dimensions first.
+To try and intuitively appreciate this, let's first look at stuff in two dimensions.
 ![](physics2.png)
-You may have learned that a point rotating on a circle has a velocity tangent to the circle, and that the speed is proportional to the angular speed and the radius: v = wr.
+In physics, you may have learned that a point rotating on a circle has a velocity tangent to the circle, and that the speed is proportional to the angular speed and the radius: v = wr.
 
 ![](physics1.png)
 
-We could also say the velocity is the cross product between an *angular velocity vector*, pointing in or out of the page, and the position: v = w x r.
+We could also, more generally, say that the velocity is the cross product between an *angular velocity vector*, pointing in or out of the page, and the position: v = w x r.
 
 <!-- The right-hand rule lets you figure out the direction of the angular velocity vector by wrapping your right hand along the rotation. Your thumb will then either point away from or into the page. -->
 
 ![](physics3.png)
 
-The latter also holds in 3D with the point rotating in a plane perpendicular to the angular velocity vector, which can be an arbitrary direction; not just in or out of the page.
+The latter also holds in 3D, now with the point rotating in a plane perpendicular to the angular velocity vector, which can be an arbitrary direction; not just in or out of the page.
 
 I bring this up because rotation matrices can be seen as a set of three vectors, defining the three axes of a coordinate system.
 ![](eq9.png)
@@ -278,7 +278,12 @@ Remember that skew(w), when multiplied by a vector, gives the cross product betw
 ![](eq12.png)
 
 <!-- R = R + [w cross X | w cross Y | w cross Z] -->
-Which looks a lot like adding the linear velocity of each axis rotating around an angular velocity vector.
+Which looks a lot like adding the tangential velocity of each axis rotating on a circle, with a speed and direction defined by w.
+
+From a physics point of view, this is kinda intuitive. In the same way that a rotating point has a velocity defined by this cross product, each axis in the coordinate frame does too.
+
+The surprising thing, though, is that *any* rotation made small enough, is essentially no different from an angular velocity vector.
+<!-- It's the analog of linearizing a translation; but in rotation space -->
 
 <br>
 <br>
