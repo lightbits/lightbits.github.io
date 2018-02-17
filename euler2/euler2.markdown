@@ -284,6 +284,12 @@ Does it have a name?
 
 In fact it does, mathematicians gave a name to this discovery. The so3 lie algebra. We describe the "small step" in terms of three numbers.
 
+But that's just a name that doesn't tell you anything meaningful.
+
+Unfortunately, people like to toss the name around everywhere, in papers or in code. Maybe it is to confuse you, or to demonstrate their intellectual superiority.
+
+Either way, you are now protected, because you know what it really means: it's just a small rotation.
+
 <br>
 <br>
 # What the fuck is SE3?
