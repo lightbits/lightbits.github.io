@@ -23,7 +23,7 @@ No matter which default orientation we base our Euler angles around, we will run
 
 3D modelling software have tackled similar problems for a long time: how can the user, with their 2D mouse interface, rotate an object in 3D?
 
-One solution is called the *Tumbler*. It is notoriously unintuitive and the only excuse you get for using it is [not knowing any better](todo: matt keeter). It works like this: when you click and start dragging, moving your mouse horizontally or vertically will adjust either of two Euler angles, and rotate the thing around its current orientation. When you release, the new orientation is saved and the Euler angles are reset to zero.
+One solution is called the *Tumbler*. It is notoriously unintuitive and the only excuse you get for using it is [not knowing any better](todo: matt keeter). It works like this: when you click and drag your mouse horizontally or vertically, it adjusts either of two Euler angles and rotates the thing, but when you let go, this orientation is saved and the Euler angles are reset to zero.
 
 <style>
 .slider img {
@@ -50,7 +50,7 @@ input { vertical-align: middle; }
     <label>Click and drag</label>
 </div>
 
-In other words, the coordinate frame you rotate around follows the object while you're rotating it, but as soon as you release, the frame resets. No matter how much you have rotated the object in the past, when you click and drag your mouse up and down, or left and right, it behaves the same as the first time.
+The coordinate frame you rotate around follows the object while you're rotating it, but it resets when you release the mouse button. So no matter how much you have rotated the object in the past, when you click and drag your mouse up and down, or left and right, it behaves the same as the first time.
 
 <!-- three distinct ways... -->
 <!-- <div class="slider-wrap">
@@ -74,19 +74,13 @@ In other words, the coordinate frame you rotate around follows the object while 
     <label>rotate z</label>
 </div> -->
 
-It turns out that this is a **terrible** user interface, because, even though the object can theoretically be rotated in three distinct ways anywhere you start rotating, the mouse's lack of a third dimension keeps you from accessing more than two.
+It turns out that this is a **terrible** user interface, because, even though the object can theoretically be rotated in three distinct ways anywhere you start rotating, the mouse's lack of a third dimension keeps you from accessing more than two. For us though it is a great solution to our gimbal lock problem.
 
-<!-- <p style="color:#999;">The user controls x-rotation by moving the mouse vertically and y-rotation by moving the mouse horizontally. When the user tries to rotate about z, they end up spinning their mouse like a methodic lunatic&mdash;a motion that gave the widget its name.</p> -->
+Notice how dragging the Tumbler, without letting go, is like our first strategy of accumulating small angle increments from gradient descent (the difference being that gradient descent is not limited by a two-dimensional mouse). This runs into gimbal lock if we drag it too far, but not if we let go before the Euler angles get too big.
 
-For us though it is a great solution to our gimbal lock problem.
+We can extend this idea to gradient descent: instead of accumulating increments into a set of global angles, we apply the rotation they represent to the object's currently saved orientation which we store, for example, as a rotation matrix.
 
-<!-- todo: figure? -->
-
-Notice how dragging the Tumbler, without releasing, is like our first strategy of accumulating small angle increments from gradient descent (the difference being that gradient descent is not limited by a two-dimensional mouse; it can adjust all three angles).
-
-As we saw, this runs into gimbal lock if we drag it too far; however, when you release, the orientation is "saved" and the Euler angles are reset to zero. Therefore, as long as you release before the Euler angles get too big, you can avoid gimbal lock.
-
-We can apply this idea to gradient descent: instead of accumulating increments into global angles, we apply the rotation they represent to a rotation matrix that we keep track of. See, when we computed the gradient last time, we added or subtracted a delta around global Euler angles, like so:
+This little change makes all the difference. See, when we computed the gradient last time, we added or subtracted a delta around global Euler angles, like so:
 
 <pre><code>dedrx = <span style="color:#999;">(E(euler(</span><span id="efg">rx+drx</span><span style="color:#999;">,ry,rz), T) -
          E(euler(</span><span id="efg">rx-drx</span><span style="color:#999;">,ry,rz), T)) / 2drx</span>
@@ -112,7 +106,13 @@ If the global angles were at a particular point (the `euler` matrix was close to
 <span style="color:#000;">dedrz = </span>(E(euler(0,0,<span style="color:#000;">0+drz</span>)<span style="color:#000;">*R</span>, T) -
          E(euler(0,0,<span style="color:#000;">0-drz</span>)<span style="color:#000;">*R</span>, T)) / 2drz</span></code></pre>
 
-The `euler` matrix is basically just an offset around our current orientation estimate.
+The `euler` matrix is like an offset around our current orientation estimate, and it has all three degrees of freedom.
+
+The gradient gives us a "direction" to rotate in, and, like before, we can turn that into three angles `rx,ry,rz`. But instead of accumulating those into three global angles, we update the orientation like this:
+
+    R = euler(rx,ry,rz) * R
+
+As long as the amount we rotate by is small, these angles will be close to zero, and the euler matrix behaves nicely.
 
 <p style="color:#999;">
 We could also use unit-length quaternions to track orientation. They are often preferred because they use fewer bytes than rotation matrices and, like rotation matrices, they do not gimbal lock. But they also have constraints to keep them valid (must be unit-length), so we can't freely adjust its parameters to find a direction for gradient descent.
