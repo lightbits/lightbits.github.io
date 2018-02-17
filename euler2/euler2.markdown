@@ -242,7 +242,6 @@ Let's look at stuff in two dimensions first.
 
 ![](physics2.png)
 
-
 From physics you may have learned that a point rotating on a circle has a velocity tangent to the circle, and that the speed is proportional to the angular speed and the radius: v = wr.
 
 ![](physics1.png)
@@ -255,27 +254,23 @@ More generally we can say that the velocity is the cross product between an *ang
 
 The latter also holds in 3D: the point rotates in the plane perpendicular to the angular velocity vector, which can now be an arbitrary direction; not just in or out of the page.
 
-I bring this up because rotation matrices can be seen as a set of three vectors. What we were doing earlier was that we rotated this rotation matrix either by a small Euler angle offset, or by a small axis-angle offset, which we wrote as a matrix-matrix product:
+I bring this up because rotation matrices can be seen as a set of three vectors, defining the three axes of a coordinate system.
+![](eq9.png)
+<!-- R = [X | Y | Z] -->
+What we did earlier was to rotate this matrix by a small Euler angle offset, which we wrote as a matrix-matrix product. But we can expand that and multiply each vector inside:
+![](eq10.png)
+<!-- R = euler*R = [euler*X | euler*Y | euler*Z] -->
+We also saw that the euler (and axis-angle) matrix, for small angles, was equal to:
 
-    R' = euler(...) R
+![](eq11.png)
 
-But we can expand this and see it as three matrix-vector products:
+<!-- I + skew(w) -->
+Remember that `skew(w)` was a matrix that, when multiplied by a vector, becomes the cross product vector between `w` and that vector. So if we substitute that back into the above we get:
+![](eq12.png)
+<!-- R = R + [w cross X | w cross Y | w cross Z] -->
+It looks like each of the cross products is the velocity of the axis rotating around an angular velocity vector.
 
-    R' = [euler(...) x | euler(...) y | euler(...) z]
-
-We also saw that the offset matrix, for small enough angles, was equal to:
-
-    I + skew(w)
-
-So if we substitute that back into the above we get:
-
-    R' = [x + skew(w) x | y + skew(w) y | z + skew(w) z]
-
-Remember that `skew(w)` was a matrix that, when multiplied by a vector, becomes the cross product vector between `w` and that vector, so this is actually saying:
-
-    R' = [x + w x x | y + w x y | z + w x z]
-
-In other words, this canonical small rotation that all rotations appear to become equal to, for small angles, is actually a lot like an angular velocity vector.
+In other words, this canonical small rotation that all rotations appear to become equal to, for small angles, is actually a lot like an angular velocity.
 
 <br>
 <br>
