@@ -184,13 +184,15 @@ And if we multiply two small numbers together, the product becomes *really* smal
 
 Ok, here is the exciting part: if you go ahead and try, you will find that *any Euler angle order is equal to this matrix (for small angles)*.
 
-Excited yet?
+This hints at the idea that it wouldn't matter which Euler convention we chose to update our orientation, they would have pretty much the same effect.
+
+But wait, isn't that *super suspicious*? Doesn't it make you wonder, *why*?
 
 <br>
 <br>
 <!-- # Axis-angle -->
 
-Hm, not much of a reaction out of you. How about this...
+No? How about this...
 
 Euler angles are three angles about three axes, but we can also parametrize our rotation in terms of one axis and one angle around it. There's even a formula to convert that to a rotation matrix:
 
@@ -228,10 +230,6 @@ Plugging that into the above formula we get:
 -->
 
 Well how about that, it's the same matrix as before!
-
-Still no reaction?
-
-Ok, maybe *understanding* is a prerequisite for *appreciation*.
 
 <br>
 <br>
