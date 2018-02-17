@@ -1,4 +1,4 @@
-# Stepping through rotations: Part I
+# Rotations and mathematical hammers
 
 **"If all you have is a hammer, everything looks like a nail."**
 
@@ -12,14 +12,11 @@ Chris Hecker's message was that *numerical optimization* can solve *a lot* of pr
 
 With increasing computer speed and a desire for rapid iteration, having a hammer readily available can be of great value, even if it doesn't solve the problem as cleanly or as run-time-efficiently as a purpose-designed solution, because it can save you a lot of programmer time. And, you can always move to a better solution after verifying it's a problem you want to solve.
 
-I have since come to appreciate optimization as a powerful technique that can solve problems whose closed-form solution (if it even exists) is so far beyond my mathematics / algorithms knowledge that I couldn't even begin to approach it in any other way.
+<!-- todo: hammer tossers in mario -->
 
-I have also learned that 3D rotations are weird. But to explain this, I have to dive into a specific problem.
-
-Estimating rotations
---------------------
-
-A common problem in computer vision is finding out how a thing is rotated and translated.
+<br>
+<br>
+For example, a common computer vision problem is figuring out how a thing is rotated and translated.
 
 If you want to make a quadcopter [land on a robotic vacuum cleaner](todo: iarc) using a camera, part of the problem is calculating where you are relative to the robot&mdash;or where the robot is relative to you&mdash;so you know where you need to go.
 
@@ -31,8 +28,9 @@ Either way, calculating how your vacuum cleaner robot is positioned relative to 
 
 However, it'll involve **3D rotations**, and that is where things can get nasty.
 
-Example problem
----------------
+<br>
+<br>
+# Books
 
 Books and CD covers are often used in example problems (and in youtube videos of object tracking algorithms) because they have a lot of **unique texture**, making them an easy test case.
 
