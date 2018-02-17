@@ -232,11 +232,14 @@ Well how about that, it's the same matrix as before!
 <br>
 <br>
 
-On one hand, we had three Euler angles x, y, and z. No matter what convention we use, xyz or zyx or something else, if the angles were small, we got the above matrix.
+To recap what's going on, we first represented the rotation as three numbers describing Euler angles, and irrespective of what convention we interpreted them to be, if the angles were small, we got the above matrix.
 
-On the other hand, we used three numbers to describe an angle and an axis, but if the angle was small, we got the same thing.
+<!-- On one hand, we had three Euler angles x, y, and z. No matter what convention we use, xyz or zyx or something else, if the angles were small, we got the above matrix. -->
+We then looked at using three numbers describing an angle and an axis, but if the angle was small, we got the same thing.
 
-Although we assign entirely different meanings to x, y and z (an axis-angle, three Euler angles, any convention)&mdash;and for big angles they look entirely different too!&mdash;they are all somehow the same...
+<!-- On the other hand, we used three numbers to describe an angle and an axis, but if the angle was small, we got the same thing. -->
+
+Although we assigned entirely different meanings to these three numbers (an axis-angle or any order of Euler rotations)&mdash;and for big angles they look entirely different too!&mdash;they are all the same in some sense.
 
 <br>
 <br>
