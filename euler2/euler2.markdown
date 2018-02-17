@@ -274,12 +274,21 @@ In other words, this canonical small rotation that all rotations appear to becom
 
 <br>
 <br>
-# SO3 and so3
+# What the fuck is SO3?
 
-What are these three numbers?
+Why is rotation so difficult, but translation is easy as pie: just add the numbers together and off you go.
 
-In fact there is, and mathematicians gave a name to this discovery.
-The so3 lie algebra. We describe the "small step" in terms of three numbers. We've called them Euler angles and axis-angle. But they're exactly the same.
+What is this w thing? What are these three numbers? We've called them Euler angles and axis-angle. But they are all kind of the same, in some weird sense.
+
+Does it have a name?
+
+In fact it does, mathematicians gave a name to this discovery. The so3 lie algebra. We describe the "small step" in terms of three numbers.
+
+<br>
+<br>
+# What the fuck is SE3?
+
+SE3 is just saying that you are allowed to translate as well.
 
 <!-- 6. Isn't that neat?
     It's like there's a sort of "canonical" small step
