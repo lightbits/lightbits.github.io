@@ -133,7 +133,12 @@ You may be asking why we used that particular Euler angle convention; maybe a di
 
 The above image compares the two most popular conventions. Each cube is rotated by three random angles. The gray cubes are rotated by the same angles, but with the other Euler order.
 
-It clearly looks like a mess, none of the cubes are alike... But let's look more closely around the area that we're interested in, small angles, say, within plus or minus 20 degrees around zero.
+It clearly looks like a mess, none of the cubes are alike. So if we were to update our orientation using one or the other, we could get completely different results!
+
+    R = euler1(rx,ry,rz)*R // this would be completely different from
+    R = euler2(rx,ry,rz)*R // this
+
+But let's look more closely around the area that we're interested in, small angles, say, within plus or minus 20 degrees around zero.
 
 ![](euler-random-small.png)
 
