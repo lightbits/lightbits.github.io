@@ -52,28 +52,6 @@ input { vertical-align: middle; }
 
 The coordinate frame you rotate around follows the object while you're rotating it, but it resets when you release the mouse button. So no matter how much you have rotated the object in the past, when you click and drag your mouse up and down, or left and right, it behaves the same as the first time.
 
-<!-- three distinct ways... -->
-<!-- <div class="slider-wrap">
-    <div class="slider" id="slider1" style="max-width:160px;max-height:180px;">
-        <div style="width:700px;"><img src="x1.png"/><img src="x2.png"/><img src="x3.png"/></div>
-    </div>
-    <div class="slider" id="slider2" style="max-width:160px;max-height:180px;">
-        <div style="width:700px;"><img src="y1.png"/><img src="x2.png"/><img src="y3.png"/></div>
-    </div>
-    <div class="slider" id="slider3" style="max-width:160px;max-height:180px;">
-        <div style="width:700px;"><img src="z1.png"/><img src="x2.png"/><img src="z3.png"/></div>
-    </div>
-    <br>
-    <input type="range" min=0 max=2 step=1 value=0 oninput="document.getElementById('slider1').scrollLeft = this.value*160;"></input>
-    <label>rotate x</label>
-    <br>
-    <input type="range" min=0 max=2 step=1 value=0 oninput="document.getElementById('slider2').scrollLeft = this.value*160;"></input>
-    <label>rotate y</label>
-    <br>
-    <input type="range" min=0 max=2 step=1 value=0 oninput="document.getElementById('slider3').scrollLeft = this.value*160;"></input>
-    <label>rotate z</label>
-</div> -->
-
 It turns out that this is a **terrible** user interface, because, even though the object can theoretically be rotated in three distinct ways anywhere you start rotating, the mouse's lack of a third dimension keeps you from accessing more than two. For us though it is a great solution to our gimbal lock problem.
 
 Notice how dragging the Tumbler, without letting go, is like our first strategy of accumulating small angle increments from gradient descent (the difference being that gradient descent is not limited by a two-dimensional mouse). This runs into gimbal lock if we drag it too far, but not if we let go before the Euler angles get too big.
@@ -120,11 +98,6 @@ We could also use unit-length quaternions to track orientation. They are often p
 <br>
 <br>
 # Looking closely
-
-<!-- alternatively, I could go into reducing computational cost. First, look at what computing the gradient would involve. Exploit fact that two/three parameters are zero. Close to zero. Trig approximations...
-
-But that doesn't lead nicely into axis-angle or other euler angle orders...
- -->
 
 ![](euler-random-big.png)
 <br>
@@ -234,10 +207,7 @@ Well how about that, it's the same matrix as before!
 
 To recap what's going on, we first represented the rotation as three numbers describing Euler angles, and irrespective of what convention we interpreted them to be, if the angles were small, we got the above matrix.
 
-<!-- On one hand, we had three Euler angles x, y, and z. No matter what convention we use, xyz or zyx or something else, if the angles were small, we got the above matrix. -->
 We then looked at using three numbers describing an angle and an axis, but if the angle was small, we got the same thing.
-
-<!-- On the other hand, we used three numbers to describe an angle and an axis, but if the angle was small, we got the same thing. -->
 
 Although we assigned entirely different meanings to these three numbers (an axis-angle or any order of Euler rotations)&mdash;and for big angles they look entirely different too!&mdash;they are all the same in some sense.
 
@@ -296,58 +266,3 @@ Mathematicians thought about these questions, and decided to invent a thing in m
 They promptly went ahead and gave weird names to everything. w, for example, is called the *Lie Algebra Element of SO3* or just *so3*. Yes, lower case matters and yes, it's confusing. The way I remember which is which is that SO3 is a big rotation and so3 is a small rotation.
 
 There's even a book about this. Its cover says *STATE ESTIMATION FOR ROBOTICS* in large, bold letters, with *A Matrix Lie Group Approach* underneath. Unfortunately, after reading it, I can't tell you why rotations are strange; it supposedly has to do with translations living in a vector space, and that rotations do not, but if you ask me why rotations don't live in a vector space I can't give you an answer.
-
-<!-- 6. Isn't that neat?
-    It's like there's a sort of "canonical" small step
-    In fact there is, and mathematicians gave a name to this discovery
-    The so3 lie algebra
-    We describe the "small step" in terms of three numbers. We've called them Euler angles and axis-angle. But they're exactly the same.
-    ...?
-    What are these three numbers?
-    And what is this weird looking matrix they're placed inside?
-    Exponential map
-7. I'm going to leave you with some questions
-
-    What makes a small step in 'translation space' so much easier than a small step in 'rotation space'?
-    Why do translation vectors commute, but rotations do not?
-
-    "Rotations do not live in a vector space" [barfoot 6.2.5]
-
-    "There are many ways of representing rotations mathematically, including matrices, axis-angle, Euler, unit-length quaternions. The most important fact to remember is that all these representations have the samy underlying rotation, which only has three degrees of freedom. A 3x3 rotation matrix has nine elements, but only three are independent. Unit-length quaternions have four parameters, but only three are independent (normalization)."
-
-    What we are really after here is to linearize rotation: translation is already linear, so we can add a small translation and get a new translation. We can also find the midpoint between two translations by subtracting one from the other and dividing by two. We can't do that with rotation matrices.
-
-    "The fact that rotations do not live in a vector space is fundamental when it comes to linearizing motion"
-
-    Can we generalize these statements somehow to other mathematical things? Yes: Lie groups and Lie algebras. While SO3 is not a vector space, it is a matrix Lie group. And there are other matrix Lie groups. And they all share some properties, and can be treated in similar ways.
-
-    Based on our discussion so far, one way you can begin to intuit Lie algebras, is that they encode what it means to take a small step. Knowing this encoding lets you do the tricks you're familiar with from vector spaces: you can interpolate between rotations, you can add or subtract rotations, you can take small steps.
-
-    RVC Chapter 2.3
-    Barfoot Chapter 6.2.5
-    Barfoot Chapter 7
-    Barfoot Chapter 7.1.9: specific to optimization
-        (page 241 "A cleaner ways to carry out optimization is to find an update for C in the form of a small rotation on the left, rather than directly on the Lie algebra rotation vector representing C")
-        (I just decided to write 3000 words about one sentence: "... which has singularities associated with it")
-
-Q) Existence of local minima. Global uniqueness. (page 307). Dips within humps.
-Q) What about global optimization? Point cloud alignment. Closed-form solution for rotation matrix. But our problem involves perspective projection with lens distortion, which requires iterative?
-Q) Interpolation can be important, because you might want to do a line search? (page 248). Or do you? What does it mean to 'continue' in a rotation?
-Q) Treating translation seperately from rotation (still as a vector space) is more beneficial I think. The se3 looks unnatural and makes it harder for optimization to achieve certain motions
-    Instead of having x y z correspond to translation and rx ry rz correspond to rotation, each along an intuitive axis, you need to do a weird mixture of perturbations, sometimes large, just to achieve motion along one axis.
-
-    Unwanted coupling: you don't want to have to rotate in order to translate. -->
-
-<!--
-
-Back to our optimization problem then.
-
-What we have learned is that when we update the current rotation with the offset from gradient descent:
-
-    R = euler(rx,ry,rz)*R
-
-it does not matter what Euler angle convention we use or if we use axis-angle&mdash;they all pretty much have the same effect if `rx,ry,rz` are small.
-
-But that leads to another question: which one is the "correct" one to use, when we update the rotation matrix? If we interpret `rx,ry,rz` as not being Euler angles anymore (because they could be any ordering, or they could even be axis-angle), but being this canonical small rotation direction, what is the "canonical" rotation it represents along its line?
-
-What we get from gradient descent is just a (weighted) direction. Line search etc. But what does it mean to continue a rotation? -->
