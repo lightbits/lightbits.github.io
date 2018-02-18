@@ -20,8 +20,6 @@ For example, a common computer vision problem is figuring out how a thing is rot
 
 If you want to make a quadcopter [land on a robotic vacuum cleaner](todo: iarc) using a camera, part of the problem is calculating where you are relative to the robot&mdash;or where the robot is relative to you&mdash;so you know where you need to go.
 
-![](lander.gif)
-
 If you want reconstruct a 3D model of a scene from photographs, part of the problem is calculating how the camera was rotated and translated between each photo. Using that you can triangulate the 3D coordinate of corresponding pixels by casting rays in the direction they came from and computing where they intersect in 3D.
 
 Either way, calculating how your vacuum cleaner robot is positioned relative to your quadcopter, or how a camera moves through a scene as it takes photos of it, can both be turned into a type of optimization problem&mdash;a nail for our hammer.
