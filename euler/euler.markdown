@@ -36,7 +36,7 @@ Books and CD covers are often used in impressive youtube videos of object tracki
 
 Here's a book I picked from my shelf.
 
-<img src="book/book2.jpg" style="max-width:320px;width:100%;">
+<img src="book2.jpg" style="max-width:320px;width:100%;">
 
 It's a pretty good book.
 
@@ -223,7 +223,7 @@ The two plates start out rotating about different axes, as you'd expect, but alo
 What does this mean? Well here's a puzzle for you: try to rotate the book to match the photo.
 
 <div class="slider-wrap">
-    <img src="book/book1.jpg" style="max-width:240px;">
+    <img src="book1.jpg" style="max-width:240px;">
     <div class="slider" id="slider3" style="max-width:240px;max-height:240px;">
         <div style="width:800px;">
             <img src="ex0-11.png"/><img src="ex0-12.png"/><img src="ex0-13.png"/><br>
@@ -295,7 +295,7 @@ Remember, gradient descent only looks at small changes of the parameters&mdash;h
 
 If you're at (0, 90, 0)&mdash;head-on sideways
 
-![](gimballock-book.png)
+![](sideways.png)
 
 but the true rotation is at (-90, 45, -90)&mdash;sideways and tilted slightly backward
 
@@ -305,11 +305,11 @@ then gradient descent will have trouble getting there, because neither of the mo
 
 If those motions both increase the error, it means the optimization gets stuck, unable to progress. In fact, unless you can jump directly to the solution, getting there might involve things getting worse before getting better: an intermediate rotation, say at (-45,45,-45), will look like this
 
-![](gimballock3.png)
+![](sidewaysmid.png)
 
 which is worse than the initial guess, so gradient descent will prefer to stay put. Alternatively, it'll start adjusting the wrong parameters, say, the translation, because they are the only ones that decrease the error.
 
-![](translation.png)
+![](sidewaystranslate.png)
 
 For example, maybe there were relatively fewer point correspondences on the blank underside of the book than on the side, so that, in terms of the error, it is more beneficial to move the book up and back so as to align the ones on the side with each other.
 
