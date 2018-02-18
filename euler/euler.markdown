@@ -12,8 +12,6 @@ Chris Hecker's message was that *numerical optimization* can solve *a lot* of pr
 
 With increasing computer speed and a desire for rapid iteration, having a hammer readily available can be of great value, even if it doesn't solve the problem as cleanly or as run-time-efficiently as a purpose-designed solution, because it can save you a lot of programmer time. And, you can always move to a better solution after verifying it's a problem you want to solve.
 
-<!-- todo: hammer tossers in mario -->
-
 <br>
 <br>
 For example, a common computer vision problem is figuring out how a thing is rotated and translated.
@@ -105,7 +103,6 @@ This will make f(x) smaller and smaller until it stops, hopefully at zero. With 
 
 <br>
 <br>
-<!-- ## The derivative of a rotation matrix -->
 
 The derivative of `x^2` is simple, but it might take you longer than you'd like to differentiate more complex expressions, maybe involving matrices and stuff. Luckily we have some neat tools that do that for us&mdash;gone are the days when it was a symbol of hard work and dedication when your paper had pages upon pages of calculus, rigorously deriving each expression by hand.
 
@@ -123,7 +120,6 @@ This works for any ugly function you can reasonably code up. In fact, our error 
 
 ... but wait ...
 
-<!-- A function of a matrix is no harder than the function of a vector: it's just a bunch of numbers, and we can take the derivative with respect to each one. But... -->
 How do we take the derivative with respect to a rotation matrix?
 
 Ordinarily, a function of a matrix is not harder to differentiate than a function of a vector: it's just a bunch of numbers, and we can take the derivative with respect to each one. But a rotation matrix is *not* a bunch of numbers we can choose freely because not all 3x3 matrices are valid rotation matrices; there are constraints between the elements&sup1;.
@@ -310,8 +306,6 @@ which is worse than the initial guess, so gradient descent will prefer to stay p
 ![](sidewaystranslate.png)
 
 For example, maybe there were relatively fewer point correspondences on the blank underside of the book than on the side, so that, in terms of the error, it is more beneficial to move the book up and back so as to align the ones on the side with each other.
-
-<!-- So if you happen to find yourself at that 90 degrees sideways angle, perhaps because you've been tracking the book for a while, then you're stuck! -->
 
 ## Next time
 
