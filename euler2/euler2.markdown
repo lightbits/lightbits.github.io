@@ -291,25 +291,11 @@ The weird thing, though, is that *any* rotation made small enough, is essentiall
 
 What is this w thing, these three numbers? We've called them Euler angles and axis-angle, but if you make them small enough it doesn't matter. Why is rotation so annoying when translation is so easy? What's special about it?
 
-Mathematicians argued about these questions, and decided to invent a category of mathematics called Lie groups&mdash;which is a part of *group theory*, which is about defining very precisely how stuff that look similar are, in fact, similar (for some definition of similar).
+Mathematicians thought about these questions, and decided to invent a thing in mathematics called Lie groups&mdash;which is a part of group theory, which is about defining very precisely how stuff that look similar are, in fact, similar (for some definition of similar).
 
-<!-- What they discovered is that rotations live in a weird space that translations do not. Translation live in a vector space, which means that you can take two translations, add them together, and get a new translation. -->
+They promptly went ahead and gave weird names to everything. w, for example, is called the *Lie Algebra Element of SO3* or just *so3*. Yes, lower case matters and yes, it's confusing. The way I remember which is which is that SO3 is a big rotation and so3 is a small rotation.
 
-<!-- You cannot take two rotations (e.g. matrices), add the numbers together, and get a valid rotation back. Except I can take two sets of Euler angles and add them together. I can also take two axis-angles... What gives?-->
-
-They promptly went ahead and put names on everything. w, for example, is called the "Lie algebra element of SO3" or just "so3" (yes, lower case is important and yes, it's annoying). The axis-angle formula they decided to rename "the exponential map". And if you're allowed to translate, things are called "SE3" or "se3".
-
-The way I like to remember them is that SO3 is a big rotation and so3 is a small rotation. SO3 describes where you are, and so3 describes where you can go.
-
-If you'd like to read more this, there's a book whose cover has
-
-<p style="text-align:center;">**"STATE ESTIMATION FOR ROBOTICS"**</p>
-
-written in huge bold letters, with "A Matrix Lie Group Approach" beneath it, in a smaller font, followed by "Timothy D. Barfoot [newline] Copyright &copy; 2016" in an even smaller font.
-
-Unfortunately, after reading it, I can't tell you why rotations are so strange; it supposedly has to do with translations living in a vector space, and that rotations do not. But I don't know, philosophically, why that's the case.
-
-Maybe you can work it out.
+There's even a book about this. Its cover says *STATE ESTIMATION FOR ROBOTICS* in large, bold letters, with *A Matrix Lie Group Approach* underneath. Unfortunately, after reading it, I can't tell you why rotations are strange; it supposedly has to do with translations living in a vector space, and that rotations do not, but if you ask me why rotations don't live in a vector space I can't give you an answer.
 
 <!-- 6. Isn't that neat?
     It's like there's a sort of "canonical" small step
