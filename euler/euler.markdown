@@ -247,11 +247,11 @@ What does this mean? Well here's a puzzle for you: try to rotate the book to mat
 
 Although you start out able to produce three distinctly different motions, you can only produce two around that magical 90 degree sideways angle, and you are unable to get that backward pitch you are after. This drop in degrees of freedom from three to two is called gimbal lock and happens no matter what Euler angle order you choose (although the point at which it happens will vary).
 
-However, it's not like we literally cannot find three Euler angles to match the photo; I was just artifically limiting your input range. For example, (-90,45,-90) looks like this:
+It's not as if we can't find three Euler angles to match the photo; I was just artifically limiting your input range. For example, (-90,45,-90) looks like this:
 
 ![](sideways45.png)
 
-Indeed, if we rotate -90 degrees about both the x- and the z-axis, the middle rotation about the y-axis can now be used to control the pitch up or down. Try it:
+<!-- In fact, if we rotate -90 degrees about the x- and z-axis, the y-rotation can be used to control the pitch up or down. Try it:
 
 <div class="slider-wrap">
     <div class="slider" id="slider5" style="max-width:240px;max-height:240px;">
@@ -279,11 +279,11 @@ Indeed, if we rotate -90 degrees about both the x- and the z-axis, the middle ro
     <label>rotate z (right book) [-120,-90,-60]</label>
 </div>
 
-But alas, we find ourselves in the same rut at (-90,90,-90), where the book is seen head-on from the side. Again we can only rotate about two different axes!
+But alas, we find ourselves in the same rut at (-90,90,-90), where the book is seen head-on from the side. Again we can only rotate about two different axes! -->
 
-<br>
-<br>
-# Gimbal lock and gradient descent
+<!-- <br> -->
+<!-- <br> -->
+<!-- # Gimbal lock and gradient descent -->
 
 While we can always *find* a set of angles that exactly reproduce the photo (as there is no rotation Euler angles cannot describe), the problem, in the context of gradient descent, is that those angles can be unintuitively far away from our current guess.
 
