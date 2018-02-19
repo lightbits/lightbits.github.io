@@ -103,9 +103,9 @@ This will make f(x) smaller and smaller until it stops, hopefully at zero. With 
 <br>
 <br>
 
-The derivative of `x^2` is simple, but it might take you longer than you'd like to differentiate more complex expressions, maybe involving matrices and stuff. Luckily we have some neat tools that do that for us&mdash;gone are the days when it was a symbol of hard work and dedication when your paper had pages upon pages of calculus, rigorously deriving each expression by hand.
+The derivative of `x^2` is simple, but it might take you longer than you'd like to differentiate more complex expressions, maybe involving matrices and stuff. Luckily we have some neat tools to do that for us, like automatic differentiation, symbolic processors (like MATLAB or Octave) or online [matrix calculus tools](http://www.matrixcalculus.org/).
 
-Look for libraries with *automatic differentiation*. Or, use a *symbolic processor* (found in MATLAB and Octave) to derive analytic expressions and translate them into your code. There's also an online [matrix calculus tool](http://www.matrixcalculus.org/). But the simplest solution might just be to botch it with *finite differences*:
+But for now the simplest solution is to botch it with *finite differences*:
 
     dfdx = (f(x+dx) - f(x-dx)) / 2dx
 
@@ -121,23 +121,22 @@ This works for any ugly function you can reasonably code up. In fact, our error 
 
 How do we take the derivative with respect to a rotation matrix?
 
-Ordinarily, a function of a matrix is not harder to differentiate than a function of a vector: it's just a bunch of numbers, and we can take the derivative with respect to each one. But a rotation matrix is *not* a bunch of numbers we can choose freely because not all 3x3 matrices are valid rotation matrices; there are constraints between the elements&sup1;.
+Ordinarily, a function of a matrix is not harder to differentiate than a function of a vector: it's just a bunch of numbers, and we can take the derivative with respect to each one. But a rotation matrix is *not* a bunch of numbers we can choose freely because not all 3x3 matrices are valid rotation matrices; there are constraints between the elements. <span style="color:#999;">i.e. the columns (or axes) of the matrix are perpendicular to each other and unit length.</span>
 
 What people usually do at this point is to parametrize the rotation matrix in terms of some other numbers that *can* be chosen freely, like Euler angles.
 
-<span style="color:#999;">
-&sup1; Particularly, that the columns (or axes) of the matrix are perpendicular to each other and unit length.
-</span>
 
 <br>
 <br>
 # Euler angles
 
-Euler angles is a so-called *minimal* parametrization, in that they use the minimal amount of numbers (three) to define a rotation. By virtue of being minimal, those numbers can each be chosen freely, without concern of being constrained by the others.
+Euler angles are three numbers that represent three sequential rotations about three axes: x <span style="color:#999;">(1 0 0)</span>, y <span style="color:#999;">(0 1 0)</span> and z <span style="color:#999;">(0 0 1)</span>. One possible such sequence is:
 
-That sounds a bit like what we're after, so we'll add a function that takes three angles and returns a rotation matrix following some Euler angle convention. In total we then have three variables for rotation (rx,ry,rz) and three variables for translation (tx,ty,tz).
+    R = Rz(rz)*Ry(ry)*Rx(rx)
 
-Because these six variables are all independent, we can update them with gradient descent, like so:
+Euler angles is a so-called *minimal* parametrization, in that it uses the minimal amount of numbers (three) to define a rotation. By virtue of being minimal, those numbers can each be chosen freely, without concern of being constrained by the others.
+
+That sounds like what we want, so let's add a function that takes three angles and returns a rotation matrix using some Euler angle sequence. In total we then have three variables for rotation (rx,ry,rz) and three variables for translation (tx,ty,tz). Because these six variables are all independent, we can update them with gradient descent, like so:
 
 <p style="color:#999;">I abbreviated the quality measure function to E, for easier reading.</p>
 
@@ -159,9 +158,7 @@ If you run this, it even looks like it's working:
 
 ![](gradientdescent.gif)
 
-It's a bit slow and unstable, but there are standard ways to speed things up and prevent taking too large steps (and you'll find these implemented in other actual optimization libraries).
-
-Aside from those things, there is another problem here that is not obvious at first glance.
+It's a bit slow and unstable, but there are standard ways to speed things up and prevent taking too large steps (and you'll find these implemented in real optimization libraries). But aside from that, there is another problem here that is not obvious at first glance.
 
 <!-- <span style="color:#999;">
 &sup1;When I made this gif my parameters did blow up on the first try. I hacked in a fix by adding a line search: instead of choosing an arbitrary gain thing, you instead check the error at several points along the gradient direction and go to the point that had the lowest error. I also normalized the differences in the error function by dividing by the image width: squaring pixel coordinates gave really big values. It's still super slow, as you can see. That can be improved by using cooler methods like Gauss-Newton or Levenberg-Marquardt.
