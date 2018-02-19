@@ -7,22 +7,23 @@ A familiar proverb that, as noted by Chris Hecker in his [GDC talk](http://chris
 **"If everything looks like a nail, all you need is a hammer."**
 <!-- **"If you can turn anything into a nail, all you need is a hammer."** -->
 
-Chris Hecker's message was that *numerical optimization* can solve *a lot* of problems in the same way, making it a sort of hammer in your maths toolbox. Consequently, if you have a library or tool that does optimization, you can use it to solve any problem that can be wrangled into the right form.
+Chris Hecker's message was that *numerical optimization* can solve a bunch of problems in the same way, as long as you set them up appropriately, making it a sort of hammer in your maths toolbox.
+<!-- Consequently, if you have a library or tool that does optimization, you can use it to solve any problem that can be wrangled into the right form. -->
 <!-- To be successful, this requires two things: a tool or library that solves optimization problems, and a way to turn things into nails. -->
 
 With increasing computer speed and a desire for rapid iteration, having a hammer readily available can be of great value, even if it doesn't solve the problem as cleanly or as run-time-efficiently as a purpose-designed solution, because it can save you a lot of programmer time. And, you can always move to a better solution after verifying it's a problem you want to solve.
 
 <br>
 <br>
-For example, a common computer vision problem is figuring out how a thing is rotated and translated.
+One such problem, in computer vision, is figuring out how stuff is rotated and translated.
 
-If you want to make a quadcopter [land on a robotic vacuum cleaner](todo: iarc) using a camera, part of the problem is calculating where you are relative to the robot&mdash;or where the robot is relative to you&mdash;so you know where you need to go.
+If you want to make a quadcopter [land on a robotic vacuum cleaner](todo: iarc) using a camera, part of the problem is calculating where you are relative to the robot, or where the robot is relative to you, so you know where you need to go.
 
-If you want reconstruct a 3D model of a scene from photographs, part of the problem is calculating how the camera was rotated and translated between each photo. Using that you can triangulate the 3D coordinate of corresponding pixels by casting rays in the direction they came from and computing where they intersect in 3D.
+If you want reconstruct a 3D model of a scene from photographs, part of the problem is calculating how the camera was rotated and translated between each photo. Using that you can triangulate the 3D coordinate of corresponding pixels by casting rays in the direction they came from and computing where the rays intersect.
 
-Either way, calculating how your vacuum cleaner robot is positioned relative to your quadcopter, or how a camera moves through a scene as it takes photos of it, can both be turned into a type of optimization problem&mdash;a nail for our hammer.
+Either way, calculating how your vacuum cleaner robot is positioned relative to your quadcopter, or how a camera moves through a scene as it takes photos of it, can both be turned into a type of optimization problem, a nail for our hammer.
 
-However, it'll involve **3D rotations**, and that is where things can get nasty.
+However, it'll involve **3D rotations**, which can be strange and annoying to deal with. This article tries to demystify literature on this topic.
 
 <br>
 <br>
