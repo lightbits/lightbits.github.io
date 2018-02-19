@@ -135,7 +135,7 @@ Let's look at the actual maths behind these rotations:
 
 Ok it's horrible.
 
-But a trig fact tells us that for small angles `cos(x) = 1` and `sin(x) = x`,  so we can say that the above monstrosity is almost equal to this:
+But a trig fact tells us that for small angles cos(*x*) = 1 and sin(*x*) = *x*,  so we can say that the above monstrosity is almost equal to this:
 
 ![](eq2.png)
 
@@ -157,32 +157,30 @@ And if we multiply two small numbers together, the product becomes *really* smal
 
 Ok, here is the exciting part: if you repeat the above steps, you will find that *any Euler angle sequence becomes equal to this matrix*. This means that it wouldn't matter which one we choose to update our orientation, they would have pretty much the same effect.
 
-Neat! But isn't that also super suspicious?
+Neat! But isn't that also super suspicious? No? How about this...
 
 <br>
 <br>
 <!-- # Axis-angle -->
-
-No? How about this...
 
 Euler angles are three angles about three axes, but we can also parametrize our rotation in terms of one axis and one angle around it. There's even a formula to convert that to a rotation matrix:
 
 ![](eq4.png)
 <!-- R = I + sin(a) skew(r) + (1-cos(a)) skew(r)^2 -->
 
-<p style="color:#999;">`a` is the angle and `r` is the axis. We'll see what this `skew` function is soon</p>
+<p style="color:#999;">*a* is the angle and *r* is the axis. We'll see what this *skew* function is soon</p>
 
 This is not minimal because it uses four numbers, but if we multiply the angle into the axis we do get a minimal parametrization: a vector whose length is the original angle and, when normalized, is the original axis. Let's rewrite our formula in terms of this vector:
 
 ![](eq5.png)
 <!-- R = I + sin(|w|) skew(w/|w|) + (1-cos(|w|)) skew(w/|w|)^2 -->
 
-So what happens when the angle is small? Well, some things cancel and we're left with:
+If the angle (length of *w*) is small, some things cancel and we're left with:
 
 ![](eq6.png)
 <!-- R = I + skew(w) -->
 
-That `skew(w)` thing is called the *skew-symmetric* form of `w`, and is the matrix that, when multiplied with a vector, gives you the cross product between `w` and that vector.
+skew(*w*) is called the skew-symmetric form of *w*, and is the matrix that, when multiplied with a vector, gives you the cross product between *w* and that vector.
 
 ![](eq7.png)
 <!--
@@ -216,35 +214,37 @@ It seems like there is a "canonical" small rotation, that all forms of rotations
 
 To intuitively appreciate this, let's first look at stuff in two dimensions.
 ![](physics2.png)
-In physics, you may have learned that a point rotating on a circle has a velocity tangent to the circle, and that the speed is proportional to the angular speed and the radius: v = wr.
+In physics, you may have learned that a point rotating on a circle has a velocity tangent to the circle, and that the speed is proportional to the angular speed and the radius: *v = wr*.
 
 ![](physics1.png)
 
-We could also, more generally, say that the velocity is the cross product between an *angular velocity vector*, pointing in or out of the page, and the position: v = w x r.
+We could also, more generally, say that the velocity is the cross product between an *angular velocity vector*, pointing in or out of the page, and the position: *v = w* x *r*.
 
 <!-- The right-hand rule lets you figure out the direction of the angular velocity vector by wrapping your right hand along the rotation. Your thumb will then either point away from or into the page. -->
 
 ![](physics3.png)
 
-The latter also holds in 3D, now with the point rotating in a plane perpendicular to the angular velocity vector, which can be an arbitrary direction; not just in or out of the page.
+The latter also holds in 3D, now with the point rotating in a plane perpendicular to the angular velocity vector, which can be an arbitrary direction; not just in or out of the page. I bring this up because rotation matrices can be seen as a set of three vectors, defining the three axes of a coordinate system:
 
-I bring this up because rotation matrices can be seen as a set of three vectors, defining the three axes of a coordinate system.
 ![](eq9.png)
+
 <!-- R = [X | Y | Z] -->
 What we did earlier was to rotate this matrix by a small Euler angle offset, which we wrote as a matrix-matrix product. But we can expand that and multiply each vector inside:
+
 ![](eq10.png)
+
 <!-- R = euler*R = [euler*X | euler*Y | euler*Z] -->
 We also saw that the euler (and axis-angle) matrix, for small angles, was equal to:
 
 ![](eq11.png)
 
 <!-- I + skew(w) -->
-Remember that skew(w), when multiplied by a vector, gives the cross product between w and that vector. So if we put that back into the above we get:
+Remember that skew(*w*), when multiplied by a vector, gives the cross product between *w* and that vector. So if we put that back into the above we get:
 
 ![](eq12.png)
 
 <!-- R = R + [w cross X | w cross Y | w cross Z] -->
-Which looks a lot like adding, to the current orientation, the tangential velocity of each axis rotating on a circle, with a speed and direction defined by w.
+Which looks a lot like adding, to the current orientation, the tangential velocity of each axis rotating on a circle, with a speed and direction defined by *w*.
 
 From a physics point of view, in the same way that a point rotating on a circle has a velocity tangent to it, each axis in the coordinate frame does too, and we find it by taking the cross product between the angular velocity and the axis.
 
