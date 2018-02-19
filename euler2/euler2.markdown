@@ -6,11 +6,11 @@ Another way of seeing it is that Euler angles suck at tracking *absolute* orient
 
 See, when I coded this 3D book model, I inadvertently chose its default orientation (all angles zero) to be with its cover facing the camera:
 
-![](model3.png)
+![](model1.png)
 
 This happens to have an impact on gimbal lock: for this choice, we have all three degrees of freedom when the cover is facing the camera, but not when the book is sideways. On the other hand, if the default orientation had been sideways....
 
-![](model4.png)
+![](model2.png)
 
 we would have three degrees of freedom at the sideways orientation, but *not* when the cover is facing the camera.
 
