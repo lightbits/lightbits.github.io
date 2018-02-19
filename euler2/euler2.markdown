@@ -102,9 +102,9 @@ We could also use unit-length quaternions to track orientation. They are often p
 ![](euler-random-big.png)
 <br>
 
-You may be asking why we used that particular Euler angle convention; maybe a different one would be better?
+You may be asking why we used that particular Euler angle sequence; maybe a different one would be better?
 
-The above image compares the two most popular conventions. Each cube is rotated by three random angles. The gray cubes are rotated by the same angles, but with the other Euler order.
+The above image compares the two most popular sequences. Each cube is rotated by three random angles. The gray cubes are rotated by the same angles about the same axes, but in a different order.
 
 It clearly looks like a mess, none of the cubes are alike. So if we were to update our orientation using one or the other, we could get completely different results!
 
@@ -155,11 +155,9 @@ And if we multiply two small numbers together, the product becomes *really* smal
     | -y    x    1 |
  -->
 
-Ok, here is the exciting part: if you go ahead and try, you will find that *any Euler angle order is equal to this matrix (for small angles)*.
+Ok, here is the exciting part: if you repeat the above steps, you will find that *any Euler angle sequence becomes equal to this matrix*. This means that it wouldn't matter which one we choose to update our orientation, they would have pretty much the same effect.
 
-This hints at the idea that it wouldn't matter which Euler convention we chose to update our orientation, they would have pretty much the same effect.
-
-But wait, isn't that *super suspicious*? Doesn't it make you wonder, *why*?
+Neat! But isn't that also super suspicious?
 
 <br>
 <br>
@@ -205,11 +203,9 @@ Well how about that, it's the same matrix as before!
 <br>
 <br>
 
-To recap what's going on, we first represented the rotation as three numbers describing Euler angles, and irrespective of what convention we interpreted them to be, if the angles were small, we got the above matrix.
+To recap what's going on, we first represented a rotation as three numbers describing Euler angles, and no matter what sequence we interpreted them to be, if the angles were small, we got the above matrix. We then looked at using three numbers describing an angle and an axis. Again, if the angle was small, we got the same thing.
 
-We then looked at using three numbers describing an angle and an axis, but if the angle was small, we got the same thing.
-
-Although we assigned entirely different meanings to these three numbers (an axis-angle or any order of Euler rotations)&mdash;and for big angles they look entirely different too!&mdash;they are all the same in some sense.
+Although we can assign entirely different meanings to these three numbers (an axis-angle or any Euler sequence)&mdash;and for big angles they look entirely different too!&mdash;they are all equal to each other and this weird rotation matrix.
 
 <br>
 <br>
@@ -218,7 +214,7 @@ Although we assigned entirely different meanings to these three numbers (an axis
 
 It seems like there is a "canonical" small rotation, that all forms of rotations tend towards.
 
-To try and intuitively appreciate this, let's first look at stuff in two dimensions.
+To intuitively appreciate this, let's first look at stuff in two dimensions.
 ![](physics2.png)
 In physics, you may have learned that a point rotating on a circle has a velocity tangent to the circle, and that the speed is proportional to the angular speed and the radius: v = wr.
 
