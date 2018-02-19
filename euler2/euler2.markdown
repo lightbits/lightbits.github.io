@@ -23,7 +23,7 @@ No matter which default orientation we base our Euler angles around, we will run
 
 3D modelling software have tackled similar problems for a long time: how can the user, with their 2D mouse interface, rotate an object in 3D?
 
-One solution is called the *Tumbler*. It is notoriously unintuitive and the only excuse you get for using it is [not knowing any better](todo: matt keeter). It works like this: when you click and drag your mouse horizontally or vertically, it adjusts either of two Euler angles and rotates the thing, but when you let go, this orientation is saved and the Euler angles are reset to zero.
+One solution is called the *Tumbler*. It is notoriously unintuitive and the only excuse you get for using it is [not knowing any better](https://www.mattkeeter.com/projects/rotation/). It works like this: when you click and drag your mouse horizontally or vertically, it adjusts either of two Euler angles and rotates the thing, but when you let go, this orientation is saved and the Euler angles are reset to zero.
 
 <style>
 .slider img {

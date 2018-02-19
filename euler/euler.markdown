@@ -301,7 +301,7 @@ For example, maybe there were relatively fewer point correspondences on the blan
 <br>
 # Next time
 
-In [part two](todo) we'll actually get to the point and look at ways to solve the problem.
+In [part two](https://lightbits.github.io/euler2) we'll actually get to the point and look at ways to solve the problem.
 
 <br>
 <br>
