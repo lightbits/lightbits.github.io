@@ -168,11 +168,11 @@ It's a bit slow and unstable, but there are standard ways to speed things up and
 <br>
 # What is gimbal lock?
 
-Consider a plate that you can rotate with three angles rx, ry and rz around the x-, y- and z-axes respectively with the matrix `Rz(rz)*Ry(ry)*Rx(rx)`. Adjusting the angles in isolation produces these three motions (x on the left, z on the right):
+Consider a plate that you rotate around the x-, y- and z-axis in sequence <span style="color:#999;">(i.e. `R = RzRyRx`)</span>. Adjusting the angles in isolation produces these three motions (x on the left, z on the right):
 
 ![](plates1xyz.png)
 
-They all look clearly different, but a funny thing happens as the angle about the y-axis approaches 90 degrees. Here's an illustration: both plates are rotating about either x or z, while you can control the rotation about y for both.
+They all look clearly different, but a funny thing happens as the angle about the y-axis approaches 90 degrees. Here's an illustration: the left plate is rotating about x, the right plate about z, while you can control the rotation about y for both.
 
 <style>
 .slider img {
@@ -241,9 +241,9 @@ What does this mean? Well here's a puzzle for you: try to rotate the book to mat
     <label>rotate y (both books)</label>
 </div>
 
-Although you start out able to produce three distinctly different motions, you can only produce two around that magical 90 degree sideways angle, and you are unable to get that backward pitch you are after. This drop in degrees of freedom from three to two is called gimbal lock and happens no matter what Euler angle order you choose (although the point at which it happens will vary).
+Although you start out able to produce three distinctly different motions, you can only produce two around that magical 90 degree sideways angle, and you are unable to get that backward pitch you are after. This drop in degrees of freedom from three to two is called gimbal lock and happens for any Euler angle sequence.
 
-It's not as if we can't find three Euler angles to match the photo; I was just artifically limiting your input range. For example, (-90,45,-90) looks like this:
+It's not as if we can't find three Euler angles to match the photo; I was just artifically limiting your input range. For example, (-90 45 -90) looks like this:
 
 ![](sideways45.png)
 
@@ -281,21 +281,17 @@ But alas, we find ourselves in the same rut at (-90,90,-90), where the book is s
 <!-- <br> -->
 <!-- # Gimbal lock and gradient descent -->
 
-While we can always *find* a set of angles that exactly reproduce the photo (as there is no rotation Euler angles cannot describe), the problem, in the context of gradient descent, is that those angles can be unintuitively far away from our current guess.
-
-Remember, gradient descent only looks at small changes of the parameters&mdash;how the error increases or decreases in the small vicinity of our current estimate.
-
-If you're at (0, 90, 0)&mdash;head-on sideways
+While we can always *find* a set of angles that exactly reproduce the photo (as there is no rotation Euler angles cannot describe), the problem, in the context of gradient descent, is that those angles can be unintuitively far away from our current guess. For example, if your current guess is (0 90 0)&mdash;head-on sideways
 
 ![](sideways.png)
 
-but the true rotation is at (-90, 45, -90)&mdash;sideways and tilted slightly backward
+but the true rotation is at (-90 45 -90)&mdash;sideways and tilted slightly backward
 
 ![](sideways45.png)
 
-then gradient descent will have trouble getting there, because neither of the motions you can produce with small changes of your parameters will tilt it backward.
+then gradient descent will have trouble getting there, because neither of the motions you can produce with small changes of your parameters will tilt it backward; gradient descent only looks at how small adjustments increase or decrease the error in the small vicinity of our current estimate.
 
-If those motions both increase the error, it means the optimization gets stuck, unable to progress. In fact, unless you can jump directly to the solution, getting there might involve things getting worse before getting better: an intermediate rotation, say at (-45,45,-45), will look like this
+If those motions both increase the error, it means the optimization gets stuck, unable to progress. In fact, unless you can jump directly to the solution, getting there might involve things getting worse before getting better: an intermediate rotation, say at (-45 45 -45), will look like this
 
 ![](sidewaysmid.png)
 
