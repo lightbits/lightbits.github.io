@@ -29,15 +29,11 @@ However, it'll involve **3D rotations**, which can be strange and annoying to de
 <br>
 # Books
 
-Books and CD covers are often used in impressive youtube videos of object tracking algorithms because they have unique textures that are easy to detect.
-
-Here's a book I picked from my shelf.
+Books and CD covers are often used in impressive youtube videos of object tracking algorithms because they have unique textures that are easy to detect. Here's a book I picked from my shelf.
 
 <img src="book2.jpg" style="max-width:320px;width:100%;">
 
-It's a pretty good book.
-
-One way to find out how the book is positioned relative to the camera (or vice versa) starts by finding matching patches of pixels between the photo and a 3D model.
+It's a pretty good book. One way to figure out how it is positioned relative to the camera (or vice versa) starts by finding matching patches of pixels between the photo and a 3D model.
 
 ![](matches.png)
 
@@ -45,7 +41,7 @@ At this point, your computer vision textbook will start to tell you about the Pe
 
 ...but that's an *elegant solution*.
 
-We don't have time to learn about PnP, but we do know how to use a hammer and we don't care about being efficient (maybe later we'll have to dig into it, but not right now). So let's turn this problem into a nail.
+We don't have time to learn about PnP, but we do know how to use a hammer and we don't care about efficiency right now, so let's turn this problem into a nail.
 
 <br>
 <br>
@@ -59,13 +55,15 @@ In our case, it means we guess the pose of the book to be some rotation and tran
 
 ![](reproject1.jpg)
 
-We can look at this as a person and say that looks pretty close, or not. But it's too slow to ask a person after each guess. If we want to automate this with a computer we need to be quantitative.
+We can look at this as a person and say that looks pretty close, or not, but it's too slow to ask a person after each guess. If we want to automate this with a computer we need to be quantitative.
 
 There are lots of ways to measure the quantitative quality of our guess, here's one that's pretty popular...
 
 ![](reproject2.jpg)
 
-When we found pixel patches in the photograph and searched for matching patches in our 3D book, we got a bunch of 2D-3D correspondences: for each 2D patch coordinate in the photo, we have one 3D coordinate on the 3D box. One measure of the quality of our guess is the average squared distance between those 3D coordinates (projected into the image) and their matching 2D coordinates.
+When we found pixel patches in the photograph and searched for matching patches in our 3D book, we got a bunch of 2D-3D correspondences: for each 2D patch coordinate in the photo, we have one 3D coordinate on the 3D box.
+
+One measure of the quality of our guess is the average squared distance between those 3D coordinates (projected into the image) and their matching 2D coordinates.
 
 ![](reproject3.jpg)
 
@@ -80,7 +78,7 @@ In pseudo-code we could write this as
             e += du*du + dv*dv
         return e / num_patches
 
-`u,v` is the 2D coordinate for each patch in the photo and `p` is the corresponding 3D coordinate. The 3D vector `p` is first transformed (by the rotation matrix R and translation vector T) from box coordinates into camera coordinates, and then transformed to a 2D vector by perspective projection.
+`u,v` is the 2D coordinate for each patch in the photo and `p` is the corresponding 3D coordinate. The 3D vector `p` is first rotated and translated from box coordinates into camera coordinates, and then transformed to a 2D vector by perspective projection.
 
 Our quality measure is a function of the rotation and translation. Plug in R and T, get a value. The value is zero when the predicted 2D coordinates match the observed ones, and positive otherwise (in that sense we should call it a measure of error rather than quality). So if we want to find the true pose of the book, we just need to find values for R and T that make the error as small as possible.
 
