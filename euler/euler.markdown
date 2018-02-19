@@ -17,7 +17,7 @@ With increasing computer speed and a desire for rapid iteration, having a hammer
 <br>
 One such problem, in computer vision, is figuring out how stuff is rotated and translated.
 
-If you want to make a quadcopter [land on a robotic vacuum cleaner](todo: iarc) using a camera, part of the problem is calculating where you are relative to the robot, or where the robot is relative to you, so you know where you need to go.
+If you want to make a quadcopter land on a robot vacuum cleaner using a camera, part of the problem is calculating where you are relative to the robot, or where the robot is relative to you, so you know where you need to go.
 
 If you want reconstruct a 3D model of a scene from photographs, part of the problem is calculating how the camera was rotated and translated between each photo. Using that you can triangulate the 3D coordinate of corresponding pixels by casting rays in the direction they came from and computing where the rays intersect.
 
