@@ -1,4 +1,4 @@
-# Rotations and mathematical hammers
+# Rotations and mathematical hammers: Part 1
 
 **"If all you have is a hammer, everything looks like a nail."**
 

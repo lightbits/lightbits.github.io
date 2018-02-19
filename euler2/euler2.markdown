@@ -1,4 +1,4 @@
-# Stepping through rotations: Part II
+# Rotations and mathematical hammers: Part 2
 
 The take-away from last time was that Euler angles can *gimbal lock*, where you lose the ability to rotate around all three axes: adjusting any angle in isolation only gives you two distinct motions. This causes gradient descent, and similar optimization strategies, to slow to a stop, or adjust the wrong parameters.
 
