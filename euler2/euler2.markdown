@@ -255,12 +255,15 @@ The weird thing, though, is that *any* rotation made small enough, is essentiall
 <br>
 # The mathematics of things that look similar
 
-What is this w thing, these three numbers? We've called them Euler angles and axis-angle, but if you make them small enough it doesn't matter. Why is rotation so annoying when translation is so easy? What's special about it?
+What is this w thing, these three numbers? We've called them Euler angles and axis-angle, but if you make them small they describe the same thing? Why is rotation so annoying when translation is so easy? What's special about it?
 
-Mathematicians thought about these questions, and decided to invent a thing called Lie groups&mdash;which is a part of group theory, which is about defining very precisely how stuff that look similar are, in fact, similar (for some definition of similar).
+Mathematicians thought about these things 150 years ago, and decided to invent what we now call Lie groups&mdash;which is a part of group theory, which is about defining very precisely how stuff that look similar are, in fact, similar (for some definition of similar).
 
-They promptly went ahead and gave weird names to everything. Rotations are now called *SO3* and *w* is called *so3*. Yes, lower case matters and yes, it's confusing. There's even a book about this. Its cover has *STATE ESTIMATION FOR ROBOTICS* written on it in large, bold letters, with *A Matrix Lie Group Approach* underneath.
+They promptly went ahead and gave weird names to everything. Rotations they call *SO3* and *w* they call *so3* <span style="color:#999;">(yes, lower case matters and yes, I agree)</span>. Then other people wrote books explaining what the names mean. One of them has a cover that says *State Estimation for Robotics* in large, bold letters, with *A Matrix Lie Group Approach* underneath. The other is called *Robotics, Vision and Control.* *Fundamental algorithms in MATLAB*.
 
-Unfortunately, after reading it, I can't tell you why rotations are strange; it supposedly has to do with translations living in something called a vector space, and that rotations do not, but if you ask me why rotations don't live in a vector space I can't give you an answer.
+![](blobs-and-arrows.png)
+<p style="text-align:center;color:#999;">Copied from Robotics, Vision and Control: Appendix D - Lie Groups and Algebras.</p>
 
-<!-- I can give you a mnemonic to remember these names though: SO3 are big rotations and so3 are small rotations. -->
+Unfortunately, after reading them, I can't tell you why rotations are strange; it supposedly has to do with translations living in something called a vector space, and that rotations do not, but if you ask me why rotations don't live in a vector space I can't give you an answer; I can only tell you that SO3 are big rotations and so3 are small rotations, whatever that means.
+
+If you'd like to dig into this topic, you can check out those two books, or look for other ones. Either way, I hope this article has revealed a bit of the motivation behind it all and given you some visualizations to relate things back to: how rotations are surprisingly hard to deal with, and the strange connection between seemingly different representations.
