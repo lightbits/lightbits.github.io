@@ -160,10 +160,6 @@ If you run this, it even looks like it's working:
 
 It's a bit slow and unstable, but there are standard ways to speed things up and prevent taking too large steps (and you'll find these implemented in real optimization libraries). But aside from that, there is another problem here that is not obvious at first glance.
 
-<!-- <span style="color:#999;">
-&sup1;When I made this gif my parameters did blow up on the first try. I hacked in a fix by adding a line search: instead of choosing an arbitrary gain thing, you instead check the error at several points along the gradient direction and go to the point that had the lowest error. I also normalized the differences in the error function by dividing by the image width: squaring pixel coordinates gave really big values. It's still super slow, as you can see. That can be improved by using cooler methods like Gauss-Newton or Levenberg-Marquardt.
-</span>
- -->
 <br>
 <br>
 # What is gimbal lock?
@@ -301,11 +297,27 @@ which is worse than the initial guess, so gradient descent will prefer to stay p
 
 For example, maybe there were relatively fewer point correspondences on the blank underside of the book than on the side, so that, in terms of the error, it is more beneficial to move the book up and back so as to align the ones on the side with each other.
 
-## Next time
+<br>
+<br>
+# Next time
 
 In [part two](todo) we'll actually get to the point and look at ways to solve the problem.
 
-## (Aside) How gimbal lock affects other optimization methods
+<br>
+<br>
+## Footnotes
+
+**Improving gradient descent**
+
+When I made the gif of the book getting aligned with the photo, it did blow up on the first try. Popular optimization libraries employ an array of tricks and number massaging to prevent these sort of disasters, but it's still on you to *parametrize* your problem.
+
+The lowest hanging fruit to improve gradient descent is to add a *line search*: instead of choosing an arbitrary step size (gain), you check the error at several points along the (negative) gradient direction and go to the point that had the lowest error. You still have to choose a min and max, but atleast the step size is not fixed arbitrarily.
+
+Another low hanging fruit is to *normalize* your numbers. For example, the error function above expressed pixels in image coordinates (i.e. large numbers between 0 and 1280). When these are squared, you get really big floating point numbers which are then used to calculate the rotation and translation step (by multiplying by a very small number).
+
+Finally, you might want to graduate from gradient descent and use something like Gauss-Newton or Levenberg-Marquardt.
+
+**How gimbal lock affects other optimization methods**
 
 I used gradient descent for this article because I didn't want too much mathematical baggage to get in the way, but I can't think of any paper that uses it on these types of problems (those involving pose estimation). More often I see people prefer Gauss-Newton or Levenberg-Marquardt.
 
