@@ -6,7 +6,7 @@
 .project img { float: right; width: 250px; padding-left: 12px; }
 .project video { float: right; width: 250px; padding-left: 12px; }
 .project { max-width: 640px; min-height: 350px; margin-bottom: 100px; }
-.project h3 { border-top:1px solid #555; border-bottom:1px solid #555;font-weight: normal; text-align: center; padding: 8px 0; }
+.project h3 { border-top:1px solid #000; border-bottom:1px solid #000;font-weight: normal; text-align: center; padding: 8px 0; }
 @media screen and (max-width: 600px){
 .project img { width: 100%; margin-bottom: 12px; }
 .project video { width: 100%; margin-bottom: 12px; }
