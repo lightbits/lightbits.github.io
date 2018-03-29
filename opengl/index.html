@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>A life of OpenGL programming</title>
+<script src="../analytics.js"></script>
+<style type="text/css">
+body { padding: 10px; font-family: times; max-width: 520px; margin: 0 auto;}
+h1 { font-size: 170%; font-weight: normal; text-align: center; }
+h2 { font-size: 160%; font-weight: normal; text-align: center; }
+h3 { font-size: 100%; margin-top: 3em; font-weight: normal; font-style: italic; text-align: center; }
+.frame p { margin: 0 auto; font-style: italic; width: 80%; font-size: 90%; line-height: 145%; }
+p { line-height: 150%; }
+pre { color:#222;padding:1em;overflow-x:auto;background:#f7f7f7;border-radius:8px;}
+code { font-family: "source code pro"; font-size:12px;}
+.footer { display:flex; flex-direction:row; justify-content:space-between; }
+.attrib { text-align: center; font-size: 90%; }
+</style>
+</head>
+<body>
+
+
+<h1 id="a-life-of-opengl-graphics-programming">A life of OpenGL programming</h1>
+<h3 id="the-naive-beginner">the naive beginner</h3>
+<div id="blah"><pre><code>while (rendering) {
+    glUniform1f(glGetUniformLocation(program, &quot;pi&quot;), 3.1415f);
+}
+</code></pre></div><h3 id="the-up-front">the up-front</h3>
+<div id="blah"><pre><code>GLint uniform_pi = glGetUniformLocation(program, &quot;pi&quot;);
+while (rendering) {
+    glUniform1f(uniform_pi, 3.1415f);
+}
+</code></pre></div><h3 id="the-scholar">the scholar</h3>
+<div id="blah"><pre><code>#include &lt;algorithm.h&gt;
+class Program {
+public:
+    void uniform1f(std::string name, float x) {
+        if (!locs[name])
+            locs[name] = glGetUniformLocation(name);
+        glUniform1f(locs[name], x);
+    }
+private:
+    GLuint program;
+    std::map&lt;std::string, GLint&gt; locs;
+};
+
+while (rendering) {
+    program.uniform1f(&quot;pi&quot;, 3.1415f);
+}
+</code></pre></div><h3 id="the-engineer">the engineer</h3>
+<div id="blah"><pre><code>while (rendering) {
+    // todo: uniforms break if prog is reloaded!!!
+    static GLint loc = glGetUniformLocation(program, &quot;pi&quot;);
+    glUniform1f(loc, 3.1415f);
+}
+</code></pre></div><h3 id="the-clever">the clever</h3>
+<div id="blah"><pre><code>#define Uniform(type,prog,name,...) {                       \
+        static GLint loc = glGetUniformLocation(prog,Name); \
+        glUniform##type(loc,__VA_ARGS__);                   \
+    }
+
+while (rendering) {
+    Uniform(1f,program,&quot;pi&quot;, 3.1415f);
+    Uniform(1i,program,&quot;bar&quot;, 1);
+    Uniform(Matrix4fv,program,&quot;pvm&quot;, 1,GL_FALSE,pvm);
+}
+</code></pre></div><h3 id="the-end">the end</h3>
+<div id="blah"><pre><code>while (rendering) {
+    glUniform1f(glGetUniformLocation(program, &quot;pi&quot;), 3.1415f);
+}
+</code></pre></div>
+
+<div class="footer">
+<a href="https://lightbits.github.io/">Archive</a>
+<a href="https://twitter.com/uint9">Twitter</a>
+<a href="https://github.com/lightbits">Github</a>
+</div>
+
+<p class="attrib">
+    Simen Haugo © 2018<br>
+    <a style="text-decoration:none;" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">BY-NC-SA</a> 4.0
+</p>
+
+</body>
+</html>
