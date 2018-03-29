@@ -15,15 +15,15 @@ textarea { font-size: 12px; font-family: "source code pro",monospace; }
 <script>
 function generate()
 {
-    def_renderer = new marked.Renderer();
-    code_renderer = new marked.Renderer();
-    code_renderer.code = function (code, lang) {
-        var def_output = def_renderer.code(code, lang);
-        return '<div id="blah">' + def_output + '</div>';
-    };
+    // def_renderer = new marked.Renderer();
+    // code_renderer = new marked.Renderer();
+    // code_renderer.code = function (code, lang) {
+    //     var def_output = def_renderer.code(code, lang);
+    //     return '<div id="blah">' + def_output + '</div>';
+    // };
 
     marked.setOptions({
-      renderer: code_renderer,
+      renderer: def_renderer,
       gfm: true,
       tables: true,
       breaks: false,
