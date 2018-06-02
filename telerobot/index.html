@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Working From Home: A History of Telerobot Displays</title>
+<style type="text/css">
+body {
+    padding:10px;
+    max-width:520px;
+    margin:0 auto;
+    text-align:justify;
+    font-size:18px;
+    font-family:times,serif;
+}
+img {
+    max-width: 100%;
+    margin: 0 auto;
+    display: block;
+    padding-top:12px;
+    padding-bottom:12px;
+}
+p { line-height:1.35em; }
+h1 { font-size:20px; }
+h2 { font-size:18px;font-weight:normal;text-align:center;margin-top:2em;}
+blockquote { text-align:justify;margin-left:1.7em; }
+.footer { display:flex; flex-direction:row; justify-content:space-between; }
+.attrib { text-align: center; font-size: 90%; }
+
+/*timeline style*/
+.iheader:hover { box-shadow: 0px 0px 8px #5577ff; }
+.iheader {
+    width:96px;
+    height:96px;
+    border-radius:48px;
+    background-size:cover;
+    background-position:center;
+    display:inline-block;
+    margin-bottom:32px;
+    margin-left:4px;
+    margin-right:4px;
+}
+.iheader p {
+    position:absolute;
+    font-size:90%;
+    margin-top:96px;
+    text-align:center;
+    width:96px;
+}
+</style>
+<script src="../analytics.js"></script>
+</head>
+<body>
+
+<h1 style="text-align:left;border:none;font-family:helvetica,helonia,arial,sans-serif;font-weight:bold;font-size:210%;letter-spacing:-2px;margin:0;padding:0px;">Working From Home: A History of Telerobot Displays</h1>
+
+<h2 style="text-align:left;font-family:helvetica,helonia,arial,sans-serif;"><b>Simen Haugo</b><br><span style="font-size:80%;color:#777;">Norwegian University of Science and Technology <br>Department of Engineering Cybernetics <br>May 2018</span></h2>
+
+<br>
+
+<div id="timeline">
+<a href="#1898"><div style="background-image: url('tesla3.jpg');" class="iheader"><p>1898</p></div></a><!--
+--><a href="#1940-1960"><div style="background-image: url('goertz1.jpg');" class="iheader"><p>1945</p></div></a><!--
+--><a href="#1960-1970"><div style="background-image: url('moon.jpg');" class="iheader"><p>1969</p></div></a><!--
+--><a href="#1970-1980"><div style="background-image: url('noyes.jpg');" class="iheader"><p>1982</p></div></a><!--
+--><a href="#1980-1990"><div style="background-image: url('fisher2.jpg');" class="iheader"><p>1986</p></div></a><!--
+--><a href="#1980-1990"><div style="background-image: url('dlr6.jpg');" class="iheader"><p>1993</p></div></a><!--
+--><a href="#2000-2018"><div style="background-image: url('ferland2.jpg');" class="iheader"><p>2009</p></div></a><!--
+--><a href="#2000-2018"><div style="background-image: url('waymo-6.jpg');" class="iheader"><p>2018</p></div></a><!--
+--><a href="#2061"><div style="background-image: url('im2cad-1.jpg');" class="iheader"><p>2061</p></div></a><!--
+--><a href="#3001"><div style="background-image: url('hal.jpg');" class="iheader"><p>3001</p></div></a>
+</div>
+
+<p><span style="font-size:250%;font-weight:bold;float:left;margin-bottom:-6px;padding:0 12px 0 0;line-height:1.1;">O</span>n the third floor of the Fukushima Daiichi Nuclear Power Plant Unit 2 sits a tracked-wheel robot named Quince, permanently disconnected from the world due to an accidental severing of its communication cable upon returning home from its final mission. Even if any battery remains, its electronics have long since exceeded radiation exposure limits and are unlikely to work, atleast not as intended. Over six missions, a team of remote operators controlled Quince and used the robot&#39;s unique capabilities to climb stairs and open doors, to map the internal structure, to measure water spill and radiation levels, and to gain an overall status of the situation after the 2011 disaster. The missions allowed the people involved to understand the aftermath without sending in and risking human lives inside the debris-filled and highly radioactive reactor building. It demonstrated the societal benefits of robotics and that technology is more or less ready for practical deployment. However, that technology did not develop over night; being able to build and control a complex machine like Quince builds on over a century of breakthroughs in science and engineering. In this article I want to take you on a journey through one small part of that history: the history of visual feedback and user interfaces for robots.</p>
+<h2 id="1898">1898</h2>
+<p>So how did we get here? Well, we might say that it all began some two and a half million years ago when humans learned to create tools from nature. For example, the stick can be said to be the first example of a teleoperated system, as it allowed us to manipulate objects from afar, if only a couple of centimeters, and avoid injury when the object is surrounded by fire or a hot soup. But although there are many interesting observations to be made regarding our ability to sense and manipulate objects using sticks and stones, we won&#39;t begin our journey there. Instead, our journey begins in the late 1800s, after another of nature&#39;s forces, electricity, had been tamed. In 1898, Nikola Tesla got a patent for what can be called the first wireless remote-controlled ship. In his design, an operator standing on the shore could control the rudder by pulling a lever left or right. This in turn triggered the transmission of an electric signal that would be received by an antenna on-board the ship and steer a motor connected to the rudder.</p>
+<p><img src="tesla2.jpg" alt=""></p>
+<blockquote>
+<p>Tesla, 1898.
+<!-- tesla1898patent figure 9 --></p>
+</blockquote>
+<p>The problem with this is that the operator has no way of knowing where the ship actually is or what it&#39;s doing, as the fog during day, and the darkness during night, serves to shroud the vessel. Tesla was no stranger to this problem, and proposed to connect bright lights to the top of the ship, controlled by the rudder&#39;s position. He also suggested that the two tall poles at the fore and aft of the boat &quot;should be painted in lively colors, so as to be visible by day at great distances.&quot; One can imagine that at nightfall what the operator would see through the telescope might have resembled a sort of stickfigure drawing, with two brightly colored lines indicating the fore and aft of the boat, and two blinking dots indicating which way it&#39;s turning; a view that would be strikingly similar to the early computerized displays near the end of the century.</p>
+<p><img src="tesla5.jpg" alt=""></p>
+<blockquote>
+<p>Tesla, 1898.
+<!-- tesla1898patent figure 10 --></p>
+</blockquote>
+<p>Tesla was fairly excited about the potential uses of his invention, including the transporation of goods, fishing or establishing communication with inaccessible areas. But its &quot;greatest value&quot;, he wrote, &quot;will result from its effect in warfare and armaments, for by reason of its certain and unlimited destructiveness it will tend to bring about and maintain permanent peace among nations.&quot;</p>
+<p>As with many of his ideas, Tesla&#39;s tele-operated boat was ahead of its time. It had all the components of a modern teleoperated robot; a mechanism for capturing the intent of the operator, in this case the levers to control the rudder, and a method for providing feedback about the results of the operator&#39;s actions, in this case the blinking lights. But contrary to Tesla&#39;s beliefs, the boat would not be used for the subsequent wars of the century, as, even with its &quot;unlimited destructiveness&quot;, it had a number of flaws which made it useless for warfare: one being that the very same mechanism by which the operator sees his boat is also what gives its position away to the enemy. It is also unlikely that the enemy will paint their non-teleoperated boats in similarly lively colors, as that would give away their own position. Thus, not only is the boat a sailing target for the enemy, but the operator has no idea what&#39;s around it and is incapable making a meaningful attack. Tesla&#39;s boat would thereby be largely ignored.</p>
+<h2 id="1940-1960">1940-1960</h2>
+<p>Although Tesla&#39;s boat did not have the effect he anticipated, this did not prevent mankind from obtaining a weapon of unlimited destructiveness, though the scale of which could not be imagined even by Tesla. In the middle of the century, it had taken the world&#39;s scientists six years to go from discovering the process of nuclear fission and hypothesizing the possibility of a sustained chain reaction, to obtaining a full understanding of its behaviour and translating this understanding into a functional weapon. While it was the bombing of 1945 that made it clear that mankind had crossed a threshold in our relationship with nature, the years leading up to it came with its share of warnings, as there were several incidents caused by lack of training on the proper handling of nuclear materials, which were in some cases fatal.</p>
+<!-- bejczy1995teleoperators -->
+<!-- sheridan1987telerobotics -->
+<p>For this reason, in 1945 at the Argonne National Laboratory near Chicago, the american scientist Raymond Goertz decided to make the process safer by developing a machine which became the world&#39;s first master-slave teleoperator. This machine allowed a person to handle radioactive material from an office seperated by a one meter thick concrete wall, with a small radiation-proved window looking in. The arm at the other end, the slave, is mechanically or electrically coupled to an identical master arm handled by the operator. The coupling between the arms is two-way such that forces exerted on the slave arm can be felt at the master arm, enabling the operator to feel the forces that are acting upon it and know when they&#39;ve gripped something.</p>
+<!-- niemeyer2008telerobotics -->
+<p><img src="goertz1.jpg" alt=""></p>
+<blockquote>
+<p>Niemeyer, 2008.</p>
+</blockquote>
+<!-- sheridan1987telerobotics -->
+<p>In the coming years a number of improvements were made: electrical servoes replaced the direct mechanical connection, thus providing the operator some much-wanted rest from the physical exertion of moving the arms. Closed-circuit television and TV cameras also allowed the operator to be an arbitrary distance away, and to see the other side from different viewpoints through monitors.</p>
+<h2 id="1960-1970">1960-1970</h2>
+<!-- sheridan1987telerobotics -->
+<p>After the war, as nuclear research fell into the background, mankind looked to new uses of robotics in unexplored frontiers, among them the moon and the ocean. By the 1960&#39;s, the US, USSR and French navies had taken an interest in telemanipulators and video cameras, and began experimentally to attach them to underwater vehicles. For example, in 1966, the US Navy used a cable-controlled submersible to retrieve a nuclear bomb from the ocean bottom, which had been accidentally dropped from an airplane. Mineral extraction and cable laying firms became interested to replace human divers, especially as oil and gas drilling operations got deeper. And, of course, there was the race to the moon.</p>
+<p><img src="sheridan6.jpg" alt=""></p>
+<blockquote>
+<p>&quot;Handyman, the first (1958) electrohydraulic master-slave teleoperator&quot; and &quot;An early wheelchair arm-aid operated by the handicapped person&#39;s tongue.&quot; Sheridan, 1987.</p>
+</blockquote>
+<!-- Interview with Sheridan -->
+<p>It was at this point that the dynamics between operator and machine were beginning to be formalized and understood more properly. One person at the frontier of this research was Thomas B. Sheridan, who was a professor of applied psychology and mechanical engineering at MIT at the time, and remains a professor there at the time of writing. Sheridan will play an important role in our story going forward, as he has made a number of significant contributions to the field, and, as an eager thesis advisor, trained the up-coming generation of roboticists, and as many as six astronauts (!).</p>
+<p>Sheridan and his lab at MIT discovered that, as television became a common component and the distance between the operator increased, a number of problems emerged. One problem was that the operator could no longer directly see the object he/she was manipulating, and instead had to rely on what could be gleamed of from a small, two-dimensional CRT monitor, which was of rather poor resolution compared with today&#39;s monitors. This led to what was later called the &quot;keyhole&quot; effect, where only a limited portion of the environment is presented to the operator, who has to make an effort to survey it in order to get a situational awareness comparable to being there in person. The loss of a mechanical connection also meant that the operator no longer had a sense of proprioception or of the forces exerted upon the robot. For example, in a search and rescue operation at the site of the WTC in 2001, a robot got stuck on a metal rod, and the operator was unable to diagnose the problem based only on a video feed with a limited view.
+<!-- chen2007human: keyhole effect. WTC incident. --></p>
+<p>Another problem that was particularly troubling was that of time delay. As the distance increased, the operators began to notice a kind of instability, much like what you might notice when turning your shower&#39;s water temperature knob: since there&#39;s a delay of a couple of seconds before the water reaches the set temperature, you have to learn to stop turning the knob before it reaches the temperature you want, otherwise you&#39;ll go too far and have to turn it down. If you happen to overcompensate on the way down, the water becomes even colder than you started with, and so you continue cycling between too cold and too warm.</p>
+<!-- sheridan1987telerobotics -->
+<!-- sheridan1993space -->
+<p>Time delay became a major concern during the space race, as engineers were thinking about how to control robots on the moon from earth, where the radio signal round trip itself takes a good part of a second. The problem gets worse when considering that information coming back from the robot, the pictures from the camera, had to be transmitted serially. A typical bandwidth at the time meant that one could expect up to one very low resolution picture every 8 seconds. Similar problems were also faced in underwater remote control where sound has a round trip time of about one second every kilometer.</p>
+<!-- sheridan1993space -->
+<p>A solution to this problem, that you quickly learn in the shower example, is to adopt what is known as a &quot;move-and-wait&quot; strategy, where you turn the knob by a small amount and wait until it reaches that temperature before making your next move. In 1963, Sheridan and his colleague William Ferrell discovered that teleoperators adopted the same strategy for robotic manipulators; making a small move without looking at the display, then stopping while waiting for the display to catch up and confirming that the action had been followed. This meant that the operator could only commit to a small incremental position change in what&#39;s known as &quot;open loop&quot;, that is, without feedback. The success of this relies on the accuracy of the operator&#39;s mental model of how the robot will behave and how the environment will react from their action. For complicated situations, this process was terribly inefficient and straining for the operators.</p>
+<h2 id="1970-1980">1970-1980</h2>
+<!-- sheridan1978human -->
+<!-- sheridan1987telerobotics -->
+<!-- kassel1971lunokhod -->
+<p>Sheridan and his colleagues didn&#39;t make much progress on the time delay problem during the 1960&#39;s, as he said in a recent interview: &quot;I think, our research kind of scared NASA off, instilling a feeling it was impossible to control anything from the ground, unless it was very very slow. That gave some thrust to the need for sending astronauts. There were lots of reasons, of course; people naturally wanted to be there to explore.&quot; Then again, there were those who tried; alas, the results of these efforts are best summarized by Simon Kassel&#39;s report on the Lunokhod-1 rover&#39;s operations on the moon in the Sea of Rains in 1970: &quot;Its progress has been slow but steady.&quot;</p>
+<!-- sheridan1978human p. 1-7: "At the author's own..." -->
+<!-- sheridan1993space -->
+<p>Fortunately, the turn of the decade brought about some much-needed technology, as Sheridan recalls in 1978: &quot;At the authors&#39; own institution just 25 years ago, the Whirlwind 1 computer filled a 2 1/2 story brick building. Today the equivalent computational capacity is available in a single microelectronic chip.&quot; The progress in &quot;microelectronics&quot; had two major implications: one was that the computer was no longer the bottleneck in cost, power and size, compared with what was demanded by propulsion or communication devices, and it therefore became much more practical to use computers on the other side. It was during this time that the term &quot;telerobot&quot; came into use, as the teleoperators went from being an extension of one&#39;s arms, like the types of machines developed by Goertz in the 40&#39;s, to taking different forms and becoming more of a collaborator at the other side, that could interpret what you wanted to do and decide how to go about doing it. What distinguished a telerobot from a classical teleoperator, was that the robot had a computer capable of receiving, storing and executing commands using sensors and actuators.</p>
+<!-- sheridan1993space -->
+<p>This technological breakthrough allowed Ferrell and Sheridan to develop a strategy called supervisory control, where the operator communicates a high-level goal and some instructions for getting there, which are then sent to the telerobot, to be interpreted and executed. What&#39;s important is that the person doesn&#39;t need to check up on the progress all the time; instead of moving the arms an inch at a time, they would simply tell the arms to go to a specific place and the computer on the other side would find a safe path and automatically follow it. This provided a fundamental way to get around the time delay problem, as it was now possible to adjust how often the operator actually had to receive feedback to make decisions. As the computer on the other side grows more capable, or &quot;autonomous&quot;, the need for human intervention, and thus the need for feedback, decreases.</p>
+<p><img src="sheridan3.jpg" alt=""></p>
+<blockquote>
+<p>&quot;Direct and supervisory control of a teleoperator.&quot; Sheridan, 1978.
+<!-- sheridan1978human figure 1.1 --></p>
+</blockquote>
+<!-- sheridan1987telerobotics -->
+<!-- sheridan1978human p. 94 -->
+<!-- It also became apparent that supervisory control had advantages even when there was no time delay, when quicker reaction time or higher precision was needed than the human operator could provide. It was also thought that, with the progress happening in artificial intelligence, as young as that field was, it might be possible trust the robot to do the entire job by itself. At the time though, this seemed like a very distant future, and the need for an operator's decision making, and thus visual feedback, remained. -->
+<!-- sheridan1978human -->
+<p>The other major impact of the increasing computer power was the development in real-time computer graphics. This led to another solution to the time delay problem called predictive displays. The idea was that when the operator performs an action, the signal is sent not only to the real robot on the other side, but also to a simulated model of the robot inside a computer. Because the model robot could be simulated without delay, and the computer is right next to the operator, the results of the operator&#39;s actions could be drawn in a virtual display instantaneously, before the video from the actual robot returned. Essentially, this offloads the operator&#39;s need to use their mental model of how the robot behaves to implementing that model in a computer and simulating it.</p>
+<p><img src="sheridan2.jpg" alt=""></p>
+<blockquote>
+<p>&quot;Predictor display.&quot; Sheridan, 1978.
+<!-- sheridan1978human figure 5.4 --></p>
+</blockquote>
+<!-- sheridan1993space -->
+<!-- sheridan1978human p. 7-23 (137): Sheridan and Verplank's predictor for lunar rover -->
+<p>An early prototype for a predictor display was developed by Sheridan and William Verplank in 1978 for a lunar rover. Their experiment consisted of a computer generated terrain, displayed from above in perspective, and updated every 8 seconds to simulate a delayed video feed. A small square on the screen, that they called a predictor symbol, would simulate the rover driving on the terrain, and was updated at a much higher rate. The task was to follow a ridge by essentially keeping two lines centered on the screen. Now, doing this only with the picture that updates every 8 seconds was fairly difficult, and it took the participants about six minutes to complete the task, at extremely slow speed to avoid going unstable. When they added the predicted rover position, which was updated continuously, the operator could tell where the camera was pointing and what the next picture would be, and was able to complete the task in almost half the original time.</p>
+<p><img src="verplank.jpg" alt=""></p>
+<blockquote>
+<p>&quot;Simulation experiments with predictor display.&quot; Sheridan, 1978.
+<!-- sheridan1978human figure 7.14  --></p>
+</blockquote>
+<!-- sheridan1993space -->
+<p>Four years later, in 1982, Sheridan became the thesis supervisor of Mark Vincent Noyes. Noyes took the idea of predictive displays and applied it to a robotic gripper arm based on the model developed by Goertz. Using a 32 kilobyte computer, with an unspoken CPU speed, he was able to superimpose a wireframe drawing of a simulated version of the arm on top of the incoming video feed, which was delayed by a few seconds. The camera and the model were calibrated such that the wireframe appeared at the location the real arm would be once the video caught up. This way, if you waited at least one round-trip delay without making any new moves, the simulated wireframe and the video of the arm could be seen to coincide.</p>
+<p><img src="noyes.jpg" alt=""></p>
+<blockquote>
+<p>&quot;Noyes&#39; predictor technique for a telemanipulator: Photograph of stick-figure arm superposed on video screen.&quot; Sheridan, 1993.
+<!-- sheridan1993space figure 7 --></p>
+</blockquote>
+<h2 id="1980-1990">1980-1990</h2>
+<!-- sheridan1995teleoperation: "In 1993 the German space agency DLR successfully demonstrated the first space telerobot, the 'Rotex' experiment, on the NASA space shuttle." -->
+<!-- sheridan1995teleoperation: "a modified version of this predictor display was used in the 1993 German space telerobot experiment described earlier." -->
+<!-- niemeyer2008telerobotics: "the round trip delay was 6-7 s" -->
+<p>A modified version of Noyes and Sheridan&#39;s predictive display was used by the German space agency DLR in 1993, in a successful demonstration of the first space telerobot on board the NASA space shuttle; an impressive milestone in the history of telerobotics. The round trip delay was around 6-7 seconds, which made predictive displays absolutely crucial, and, thanks to a decade of Moore&#39;s law, the computers were now powerful enough to render both the robot arm and surrounding objects in 3D, with somewhat realistic lighting. The graphics were rendered on stereo TV monitors, and the operators had stereo glasses that could provide proper depth perception.</p>
+<p><img src="dlr1.jpg" alt=""></p>
+<blockquote>
+<p>&quot;DLR&#39;s universal telerobotic station MARCO (Modular A&amp;R Controller).&quot; Hirzinger, 2003.
+<!-- hirzinger2003space figure 13 --></p>
+</blockquote>
+<!-- hirzinger1994rotex -->
+<!-- bejczy1995teleoperators: the term "virtual reality" -->
+<p>Aside from 3D graphics, the DLR robot distinguished itself from Noyes&#39; predictive display also in that the graphical simulation was not overlaid on a video stream, but was instead presented on its own monitor. In fact, the operators did not use video streams and relied instead  on simulation and sensor data that made it back from the actual robot, all integrated in an entirely virtual scene, a technique which was called virtual reality.</p>
+<p><img src="dlr3.jpg" alt=""></p>
+<blockquote>
+<p>Niemeyer, 2008.
+<!-- niemeyer2008telerobotics figure 31.5: ROTEX, the first remotely controlled robot in space (1993). --></p>
+</blockquote>
+<!-- sutherland1968head -->
+<p>Today, looking back, virtual reality is considered to have gone through what we may call a not-so glamorous period in the late part of the century, and has only rightfully been implemented in recent years, when processors, optics and display technology have gotten &quot;ready&quot;. But I think this paints an unfair picture of what was not only a practical but also very useful technique for providing robot operators with clear and undelayed visual information. Despite being relatively crude in its visual fidelity, the technique was still largely appreciated, for example in controlling the above space robot.</p>
+<!-- sutherland1968head -->
+<!-- kim1988helmet -->
+<p>Almost every historical treatment of virtual reality, as we know it today, start with Ivan Sutherland and his 1968 computer-driven head-mounted-display. Now, head-mounted-displays were not new in 1968. Several attempts can be traced back to early investigations in enhancing the visual interfaces of aircraft systems in 1960. But Sutherland&#39;s display did not present video from cameras; its major innovation was the ability to present an image of a computer-generated 3D object, that changed in exactly the way that the image of a real object on your retina would change, if you were to move around it. Producing the right image involves a number of calculations, such as rotation and perspective projection, for which no general-purpose computer at the time were capable of performing in anything resembling a smooth experience. While Sutherland concluded that &quot;showing opaque objects with hidden lines removed is beyond our present capability&quot;, and had to resort to wireframe line drawings, the three-dimensional illusion was still appreciated by its users as being &quot;realistic&quot; and even providing a sensation of being inside the virtual space.</p>
+<p><img src="ellis3.jpg" alt=""></p>
+<blockquote>
+<p>&quot;Probably the first computer-driven head-mounted viewing device.&quot; Ellis, 1990.</p>
+</blockquote>
+<!-- the japanese professor -->
+<!-- kim1988helmet -->
+<!-- fisher1986virtual -->
+<p>This sensation of being somewhere else, virtual or otherwise, was a concept that would be rediscovered in 1980 by two scientists, Marvin Minsky at MIT and Susumu Tachi at the University of Tokyo. Independent of each other, Minsky coined the term &quot;telepresence&quot;, while Tachi referred to his concept as &quot;telexistence&quot;; the exact difference of which is somewhat philosophical and outside the scope of this article. Sheridan on his part, having tried a number of such telepresence systems by 1995, stated he &quot;believed the best to be that of Prof. Susumu Tachi of the university of Tokyo.&quot;</p>
+<p>Telepresence and telexistence, or immersion, was considered to be an important factor in providing robot operators the necessary situational awareness, as well as a way to get a handle on the ever-increasing complexity and functions of the robots. By 1986, computer power had advanced quite a bit, and rendering more complicated objects, though still in wireframe, was now achievable with simple general-purpose computers. Slowly, various systems began to emerge that collected information about the world on the &quot;other side&quot;, and presented it in a virtual environment. The NASA Ames research center devoted a research group to coming up with ways to improve the control of the Space Station and its various workstations. Their results was a rather ambitious &quot;virtual environment display system&quot;.</p>
+<p><img src="fisher5.jpg" alt=""></p>
+<blockquote>
+<p>&quot;Virtual interface environment for telerobot control&quot;. Fisher, 1986.</p>
+</blockquote>
+<!-- fisher1986virtual -->
+<p>The system would consist of a motion-tracked head mounted display, hand tracking, tactile feedback, voice-driven commands and 3D audio. The wearer could be immersed in an entirely virtual environment, or their motion could be enacted by a robot in a real location, with a pair of cameras on its &quot;head&quot; and arms mimicking the movements of the wearer. To interact with the displayed environment, the user would wear a pair of gloves that transmit the position and angle of the arms, hands and fingers to a host computer, which would then, in coordination with speech recognition, use the information to affect either the synthesized or the real remote environment.</p>
+<p><img src="fisher6.jpg" alt=""></p>
+<blockquote>
+<p>Fisher, 1986.</p>
+</blockquote>
+<!-- stark1987telerobotics -->
+<!-- billings1996 -->
+<p>It might be true that head mounted displays went out of vogue after a while, as people began to realize that the relatively poor optics and low resolution wasn&#39;t actually practical for prolonged use. Nonetheless, the idea of using computer-generated graphics to indicate objects in the real world or to augment video from TV cameras, is one that has remained with us today, as we&#39;ll get to shortly. It was particularly embraced by pilots of the Boeing 747-400, which had replaced the old electromechanical displays, which were used to derive the aircraft&#39;s direction, with an intelligent &quot;map display&quot;, that showed not only the aircraft&#39;s heading directly, but also provided its altitude, selected course and future trajectory, surrounding weather and wind data, all in one display.</p>
+<p><img src="billings6.jpg" alt=""></p>
+<blockquote>
+<p>Electromechanical navigation displays and new navigation display as used on a Boeing 747-400. Billings, 1996.</p>
+</blockquote>
+<h2 id="1990-2000">1990-2000</h2>
+<p>Meanwhile the internet happened. But let me get back to this later.</p>
+<!-- ![](taylor1.jpg) -->
+<!-- taylor2000internet -->
+<h2 id="2000-2018">2000-2018</h2>
+<!-- hirzinger1994rotex: "in our opinion is the only efficient way to cope with large signal delays." -->
+<!-- bejczy1995teleoperators: "became very useful tools for planning, previewing, and predicting robot arm motions." "can also provide high-fidelity synthetic TV camera views to the operator. (...) can make critical motion events visible that are otherwise hidden" -->
+<p>Predictive displays and virtual reality offered a solution to many problems, such as time delay, depth perception, planning, and being able to see the scene from any viewpoint. They reduce the amount of information that has to be sent back over a limited capacity channel, and also serve to amplify the details that matter and suppress those that don&#39;t, thereby easing the mental workload on the operator. Predictive displays were thought by some to be the only feasible solution to teleoperation with large delays, as it didn&#39;t look like AI would be able to replace a human-in-the-loop any time soon.</p>
+<!--
+azuma2001recent?
+augmented reality, that of enhancing real visual feedback by, for example, removing objects or changing their appearnce, or superimposing other computer-generated cues is just an extension of the early predictive displays, which superimposed a wireframe of the robot on top of the video.
+-->
+<!-- stark1987telerobotics -->
+<!-- ellis1990pictorial -->
+<!-- sheridan1995teleoperation: visual aids for depth perception, grids, floor. Early displays were black/white wireframe drawings. -->
+<p>As we start to review the last twenty years, the most profound change we can first identify is that in increased computer power. One can compare the best-selling video games before the year 2000 with those after to see how the fidelity of simulation and real-time graphics has improved. This has had a huge impact on robotics, especially as those researchers in computer vision and artificial intelligence are finally getting their hands on that much-wanted processing power which has held them back for so many decades. For example, early virtual reality displays in the 1980&#39;s, used in experimental aircraft cockpits and for robotic pick-and-place tasks, consisted only of simple wireframe drawings. They would have a grid to indicate the floor and vertical lines to indicate the height of objects. But rendering such a simple scene from any viewpoint brought the most powerful computers at the time to their knees. Perspective projection, which today&#39;s computers can do billions of times per second, was considered a majestic achievement of calculation.</p>
+<p><img src="stark2.jpg" alt=""></p>
+<blockquote>
+<p>&quot;Joystick control of viewpoint.&quot; Stark, 1987.
+<!-- stark1987telerobotics figure 2: Joystick control of viewpoint --></p>
+</blockquote>
+<p>It was now possible to render free-viewpoint virtual scenes, not just consisting of simple wireframe drawings, but textured 3D environments, obtained from running scene reconstruction algorithms on high-resolution video sent back over a high-bandwidth wireless connection and decompressed in real-time; all serving to improve the operator&#39;s sense of situational awareness and presence.</p>
+<p><img src="ferland1.jpg" alt=""></p>
+<blockquote>
+<p>&quot;Screenshots from our ego-/exocentric 3D interface.&quot; Ferland, 2009.
+<!-- ferland2009egocentric figure 2: Screenshots from our ego-/exocentric 3D interface --></p>
+</blockquote>
+<p>Underlying all these successes however, is that the system has to know more and more about the world on the other side. In order to add visual aids for depth perception, such as a floor grid, virtual drop shadows, or curves to indicate distance, the system has to know the robot&#39;s orientation and height above the floor, and what part of the image constitutes the floor. In order to present the scene around the robot from any viewpoint, the system has to have a textured 3D model of the geometry. Predictive displays and virtual reality can only be as good as the model of reality.</p>
+<!-- Due to the inevitable errors between model and reality, the simulation can only go so far before the two begin to diverge. To fix these problems, one has to obtain more knowledge about the robot and the world on the other side. -->
+<p>This is where much of the progress in computer vision and AI in the last five years are making an impact. The best example of this is perhaps a video recently released by Waymo of their self-driving cars, that illustrates how the robots perceive the world, and how much knowledge is extracted compared with what we had a few years ago. Not only is the car able to detect pedestrians and cars, but it can also tell how fast they&#39;re going, what path they&#39;re on, and detect the surrounding road signs and stop lights. And while the knowledge is used here to increase the autonomy, in a kind of supervisory control fashion, the same knowledge can be used improve the visual feedback, so that you can view a scene from any viewpoint in space, or even back-and-forward in time, with more elaborate prediction algorithms.</p>
+<p><img src="waymo-5.jpg" alt=""></p>
+<blockquote>
+<p>From <a href="https://www.youtube.com/watch?v=B8R148hFxPw">Waymo 360° Experience: A Fully Self-Driving Journey</a>
+<!-- YouTube --></p>
+</blockquote>
+<p>A good example of how deeper knowledge of the scene can help the operator can be seen in the 2015 DARPA robotics challenge. These robots are far from the level of self-capability we might expect from a robot like CASE in Interstellar, and to a large extent relied on human intervention to accomplish the tasks that were laid out before them: driving the car, walking through the door, walking over the rubble, and so on. There were many innovative user interfaces designed for this challenge, but let&#39;s look at MIT&#39;s system.
+<!-- see norton2017analysis --></p>
+<p><img src="director2.jpg" alt=""></p>
+<blockquote>
+<p>&quot;The terrain course at the DRC Finals (left). The terrain model as estimated by the perception system and represented to the planning system as a height map (right).&quot; Marion, 2016.
+<!-- marion2016director figure 9 --></p>
+</blockquote>
+<!-- marion2016director -->
+<p>It was clear from the beginning that typical joystick interfaces, such as those used to control your typical wheeled robot, would not be practical because the Atlas humanoid robot has too many &quot;degrees of freedom&quot;, like its arm, gripper, legs, feet, torso and so on. To control the robot they had to develop some level of supervisory control. But the robot itself was not capable of working out what object to reach, where to grip it, or where to place its feet to walk forward. Those &quot;high-level&quot; tasks were reserved for the team of operators, sitting behind the computer screens. It was therefore crucial to be able to see the height of the uneven terrain in front of the robot, and have the system know that these were surfaces on which a &quot;footstep plan&quot; could be placed.</p>
+<p>Although some progress in AI has been made since then, I think visualizations will still remain important, as it obviously takes a lot of engineering effort to make an autonomous system at the level of, for example, a self-driving car, which is arguably a fairly limited use case. For many of the tasks that robots are used for today, and are starting to be used for, like construction, healthcare or surgery, the need for a human operator is likely to remain and thereby motivates the need for better feedback.</p>
+<h2 id="2061">2061</h2>
+<p>As I wrap up this history, I&#39;d like to make a few predictions about its future and where these trends are taking us. No doubt will the progress in AI and the increasing self-capability of robots be exciting to follow, but what can we expect from the visual feedback side? To make my predictions, I first need to talk about video games.</p>
+<p>This comparison is not as odd as it may seem at first: consider Super Mario. The player&#39;s &quot;task&quot; is to guide Mario through a series of two-dimensional navigation problems. Using their remote control, they can steer Mario&#39;s motion, and from the TV monitor, they get visual feedback on the results of their actions. If you phrase it right, a video game is like a teleoperator system; the operator, or player, translates their intent into movements of the joysticks and buttons, which are then interpreted by the game to make Mario do his thing, and, based on its knowledge of the world, the game sends back a summary to be displayed on a TV monitor, much like a predictive or virtual reality display. In this sense, the player can be said to be manipulating a robotic entity in a different space, and thus be doing teleoperation. I think there&#39;s much that the robotics community can learn from the industry that has had decades to hone the craft of manipulating entities in a world seperated from us by a screen, in a sense, how to deliver the best possible &quot;telepresence&quot; experience. In fact, many of the problems faced in telerobotics have at some point also been faced by video game developers.</p>
+<p>Take that of time delay. In the first online multi-player games, it was found that players were upset when the round-trip time between their computer and a server, somewhere on the continent, took several hundred milliseconds. Even delays as short as 50 milliseconds made the experience unplayable to some. The solution, which is standard practice today, is strikingly similar: the player&#39;s computer performs a local prediction ahead in time, based on the player&#39;s mouse and keyboard inputs, so as to always provide an instantaneous feedback. As updates come back from the server, the predicted game state and the actual game state are smoothly blended together, much like a robot arm that sends back its actual joint angles to a predictive display.</p>
+<!-- 50 game cameras -->
+<p>Another problem is that of the 3D camera, which is not at all a trivial thing to implement. The game developer has to figure out how to present the scene, with all of its important elements, in a way that allows the player to navigate and solve the challenges they face. Many insights have been developed over years of trial and error, figuring out how to present the scene from the best angle, without breaking line of sight, and avoiding collisions between the camera and the world. As we gain more knowledge about the 3D structure at the other side, the question of how to present it in the most intuitive way, that shows the operator what they need to see, will inevitably arise.</p>
+<!-- goodrich2007ecological -->
+<p>Games are also a prime example of ecological user interfaces, which was a term that dates back to the 1950&#39;s, but bubbled back into the research terminology at the time of the internet and the wave of Java-based user interfaces in the early 2000&#39;s. As we got more sensors and computer power increased, the information we could display grew to be more and more complex. Since screens and bandwidth were becoming cheap, the easy solution was to display it all; if you ran out of space, you either grouped stuff to its own screen, or hid it in a drop-down menu.</p>
+<!-- billings1996 -->
+<p>This led to a sort of information overflow which serves to confuse the operator. A number of psychology studies, done by NASA and the airforce, discovered that operators confronted with many sources of information tended to choose one over the others and stick with it, an effect called cognitive tunneling. Ecological displays were intended to solve these problems, by integrating all the sensory feedback, telemetry, videos and 3D models, into one view, without confusing the operator. Meanwhile, games have gone through decades of trial-and-error designing intuitive user interfaces, heads-up displays, status bars, minimaps, or any other graphical enhancements that improve depth perception, emphasize objects of importance, ensures that the player knows where to go, and so on.</p>
+<p><img src="yu2.jpg" alt="">
+<img src="yu3.jpg" alt=""></p>
+<blockquote>
+<p>Semantic edge detection (ground truth). Yu, 2017.</p>
+</blockquote>
+<p>The difference is that, unlike a robotics system, a game has complete knowledge of the world, and the designer can fine-tune the presentation of the scene to be intuitive for the player. In real life, we don&#39;t have a complete structural description of the world and are therefore stuck with presenting what we can measure or extract from our measurements. However, with the progress in computer vision and ai, we are rapidly increasing our ability to extract meaningful descriptions of the world. Recent work is able to extract descriptions at the level of objects and affordances, beyond raw geometry and color, as well as the actions and relationships between entities in the scene. It&#39;s not too far-sighted to imagine being able to extract descriptions of the world with such fidelity that we can feed it straight into a standard game engine and render it in any style we like, emphasizing important stuff and hiding unecessary details.</p>
+<p><img src="im2cad.jpg" alt=""></p>
+<blockquote>
+<p>&quot;IM2CAD takes a single photo of a real scene (left), and automatically reconstructs its 3D CAD model (right).&quot; Izadinia et al., 2017.</p>
+</blockquote>
+<h2 id="3001">3001</h2>
+<!-- sheridan1993space: roseborough's dilemma -->
+<!-- sheridan1995teleoperation -->
+<p>A counter-argument to the above speculations can be made from a fundamental dilemma put forward by James B. Roseborough in 1988, saying that if the process can be perfectly modelled&mdash;which I am claiming is the future we are headed towards&mdash; and the objective function (i.e. the operator&#39;s intent) can be explicitly stated, then control can be automated. If control can be automated, there is no need for human intervention and therefore no need for feedback. This refers to a core problem in human-machine interaction regarding how much to automate. &quot;It is not a simple matter of being automated or not being automated,&quot; writes Sheridan, &quot;there is a gradual continuum in between &#39;I can&#39;t touch it&#39; and &#39;I&#39;m doing everything.&#39; In between, there is some procedure that one normally follows exactly, but if the operator is getting something back that he does not like, then he may have to break into a different system, and under some circumstances do something brand new.&quot; Researchers have proposed several ways to divide up this spectrum of shared autonomy, for example like the one below, from <em>&quot;A Model for Types and Levels of Human Interaction with Automation&quot;</em> by Raja Parasuraman, Thomas B. Sheridan and Christopher D. Wickens.</p>
+<blockquote>
+<p>10: The computer decides everything, acts autonomously, ignoring the human.<br>
+9: informs the human only if it, the computer, decides to<br>
+8: informs the human only if asked, or<br>
+7: executes automatically, then necessarily informs the human, and<br>
+6: allows the human a restricted time to veto before auto-execution, or<br>
+5: executed that suggestion if the human approves, or<br>
+4: suggests one alternative<br>
+3: narrows the selection down to a few, or<br>
+2: The computer offers a complete set of decision/action alternatives, or<br>
+1: The computer offers no assistance: human must take all decisions and actions</p>
+</blockquote>
+<p>If it helps, think of level 1 as Goertz&#39; manipulator arms from the 60&#39;s and level 9 is something like HAL 9000. What level of automation to choose is a matter of technological capability as much as trust. At the bottom level there is clearly a need for feedback, as the operator has no trust in the robot, but at the upper levels the need for feedback is assumed to be low or none at all. However, whether we want machines that report back about its progress, only if it itself decides to, is a debate I don&#39;t think we can settle anytime soon, but let me atleast end this article with a quote from 2001: A Space Odyssey.</p>
+<blockquote>
+<p>Whether Hal could actually think was a question which had been settled by the British mathematician Alan Turing back in the 1940s.  Turing had pointed out that, if one could carry out a prolonged conversation with a machine&mdash;whether by typewriter or microphone as immaterial&mdash;without being able to distinguish between its replies and those that a man might give, then the machine was thinking, by any sensible definition of the word.  Hal could pass the Turing test with ease.</p>
+<p>The time might even come when Hal would take command of the ship.  In an emergency, if no one answered his signals, he would attempt to wake the sleeping members of the crew, by electrical and chemical stimulation.  If they did not respond, he would radio Earth for further orders.</p>
+<p>And then, if there was no reply from Earth, he would take what measures he deemed necessary to safeguard the ship and to continue the mission&mdash;whose real purpose he alone knew, and which his human colleagues could never have guessed.</p>
+</blockquote>
+<p><br>
+<br></p>
+<h2 id="references-and-quoted-works">References and quoted works</h2>
+<style type="text/css">
+#reference { text-align:left; margin-bottom: 16px; }
+</style>
+
+<ol>
+<li><p><!-- tesla1898patent --> Nikola, Tesla. &quot;Method of and apparatus for controlling mechanism of moving vessels or vehicles.&quot; U.S. Patent No. 613,809. 8 Nov. 1898.</p>
+</li>
+<li><p>Interview with Tom Sheridan. MIT, Cambridge, Mass., April 9, 2003.</p>
+</li>
+<li><p><!-- niemeyer2008telerobotics --> Niemeyer, Günter, Carsten Preusche, and Gerd Hirzinger. &quot;Telerobotics.&quot; Springer handbook of robotics. Springer Berlin Heidelberg, 2008. 741-757.</p>
+</li>
+<li><p><!-- basanez2009teleoperation --> Basañez, Luis, and Raúl Suárez. &quot;Teleoperation.&quot; Springer Handbook of Automation. Springer, Berlin, Heidelberg, 2009. 449-468.</p>
+</li>
+<li><p><!-- hirzinger1994rotex --> Hirzinger, Gerd, et al. &quot;ROTEX-the first remotely controlled robot in space.&quot; Robotics and Automation, 1994. Proceedings., 1994 IEEE International Conference on. IEEE, 1994.</p>
+</li>
+<li><p><!-- sheridan1987telerobotics --> Sheridan, T. B. &quot;Telerobotics.&quot; IFAC Proceedings Volumes 20.5 (1987): 67-81.</p>
+</li>
+<li><p><!-- sheridan1995teleoperation --> Sheridan, Thomas B. &quot;Teleoperation, telerobotics and telepresence: A progress report.&quot; Control Engineering Practice 3.2 (1995): 205-214.</p>
+</li>
+<li><p><!-- bejczy1995teleoperators --> Bejczy, A. D. &quot;Teleoperators.&quot; (1995).</p>
+</li>
+<li><p><!-- chen2007human --> Chen, Jessie YC, Ellen C. Haas, and Michael J. Barnes. &quot;Human performance issues and user interface design for teleoperated robots.&quot; IEEE Transactions on Systems, Man, and Cybernetics, Part C (Applications and Reviews) 37.6 (2007): 1231-1245.</p>
+</li>
+<li><p><!-- sheridan1993space --> Sheridan, Thomas B. &quot;Space teleoperation through time delay: Review and prognosis.&quot; IEEE Transactions on robotics and Automation 9.5 (1993): 592-606.</p>
+</li>
+<li><p><!-- sheridan1978human --> Sheridan, Thomas B., and William L. Verplank. Human and computer control of undersea teleoperators. MASSACHUSETTS INST OF TECH CAMBRIDGE MAN-MACHINE SYSTEMS LAB, 1978.</p>
+</li>
+<li><p><!-- kassel1971lunokhod --> Kassel, Simon. Lunokhod-1 Soviet lunar surface vehicle. Vol. 802. No. ARPA. RAND CORP SANTA MONICA CA, 1971.</p>
+</li>
+<li><p><!-- sutherland1968head --> Sutherland, Ivan E. &quot;A head-mounted three dimensional display.&quot; Proceedings of the December 9-11, 1968, fall joint computer conference, part I. ACM, 1968.</p>
+</li>
+<li><p><!-- kim1988helmet --> Kim, Won S., et al. &quot;A helmet mounted display for telerobotics.&quot; Compcon Spring&#39;88. Thirty-Third IEEE Computer Society International Conference, Digest of Papers. IEEE, 1988.</p>
+</li>
+<li><p><!-- fisher1986virtual --> Fisher, Scott S., et al. &quot;Virtual environment display system.&quot; Proceedings of the 1986 workshop on Interactive 3D graphics. ACM, 1987.</p>
+</li>
+<li><p><!-- stark1987telerobotics --> Stark, Lawrence, et al. &quot;Telerobotics: Display, control, and communication problems.&quot; IEEE Journal on Robotics and Automation 3.1 (1987): 67-75.</p>
+</li>
+<li><p><!-- billings1996human --> Billings, Charles E. &quot;Human-centered aviation automation: Principles and guidelines.&quot; (1996).</p>
+</li>
+<li><p><!-- taylor2000internet --> Taylor, Kenneth, and Barney Dalton. &quot;Internet robots: A new robotics niche.&quot; IEEE Robotics &amp; Automation Magazine 7.1 (2000): 27-34.</p>
+</li>
+<li><p><!-- ellis1990pictorial --> Ellis, Stephen R. &quot;Pictorial communication: pictures and the synthetic universe.&quot; Leonardo (1990): 81-86.</p>
+</li>
+<li><p><!-- goodrich2007ecological --> Nielsen, Curtis W., Michael A. Goodrich, and Robert W. Ricks. &quot;Ecological interfaces for improving mobile robot teleoperation.&quot; IEEE Transactions on Robotics 23.5 (2007): 927-941.</p>
+</li>
+<li><p><!-- ferland2009egocentric --> Ferland, François, et al. &quot;Egocentric and exocentric teleoperation interface using real-time, 3D video projection.&quot; Human-Robot Interaction (HRI), 2009 4th ACM/IEEE International Conference on. IEEE, 2009.</p>
+</li>
+<li><p><!-- marion2016director --> Marion, Pat, et al. &quot;Director: A user interface designed for robot operation with shared autonomy.&quot; Journal of Field Robotics 34.2 (2017): 262-280.</p>
+</li>
+<li><p><!-- yu2017casenet --> Yu, Zhiding, et al. &quot;CASENet: Deep Category-Aware Semantic Edge Detection.&quot; arXiv preprint arXiv:1705.09759 (2017).</p>
+</li>
+<li><p><!-- izadinia2017im2cad --> Izadinia, Hamid et al. &quot;IM2CAD.&quot; In Computer Vision and Pattern Recognition (CVPR), 2017.</p>
+</li>
+</ol>
+
+<div class="footer">
+<a href="https://lightbits.github.io/">Archive</a>
+<a href="https://twitter.com/uint9">Twitter</a>
+<a href="https://github.com/lightbits">Github</a>
+</div>
+
+<p class="attrib">
+    Simen Haugo © 2018<br>
+    <a style="text-decoration:none;" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">BY-NC-SA</a> 4.0
+</p>
+
+</body>
+</html>
