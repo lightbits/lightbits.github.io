@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Better Research Practice</title>
+<link rel="stylesheet" href="../style.css" type="text/css">
+<script src="../analytics.js"></script>
+</head>
+<body>
+
+<h1 id="better-research-practice">Better Research Practice</h1>
+<p>Leslie Lamport&#39;s &quot;State the Problem Before Describing the Solution&quot; <a href="https://www.microsoft.com/en-us/research/publication/state-problem-describing-solution/">*</a> is often prescribed as a must-read for the budding (or perhaps even the well-established) researcher, and also one that should be re-read on a regular basis. I certainly agree with this, but I prefer A.E. Eiben and J.E. Smith&#39;s Introduction to Evolutionary Computing, chapter 9: &quot;Working with Evolutionary Algorithms&quot;, which gives a practical example of how one actually goes about <em>stating the problem</em>.</p>
+<p>To give a bit of context, evolutionary computing or EC is a field centered around using evolution, or evolution-inspired algorithms, to solve problems. The field may be slightly disorienting to the newcomer as, to ones surprise, there appears to be <em>very many</em> evolutionary algorithms, instead of just <em>the one that nature uses</em>. It turns out that defining, exactly, what nature does is rather difficult.</p>
+<p>As a consequence, we have things like the Evolutionary Computation Bestiary <a href="https://github.com/fcampelo/EC-Bestiary">*</a>, acronyms like GP, GA, ES, NES, NEAT, CMA, CMA-ES, as well as a bunch of extensions like coevolution, novelty search or quality diversity, that lead to a combinatorial explosion of possible algorithms.</p>
+<p>Many of these are tested on the same type of problem, like optimizing the Rosenbrock function, or solving a maze, and they all more-or-less manage to solve the problem. So it&#39;s unclear what one algorithm actually allows you to do, that another doesn&#39;t.</p>
+<p>Here&#39;s what the authors suggest, in chapter <strong>9.4.2 Better Practice</strong>:</p>
+<p>A better example of how to evaluate the behaviour of a new algorithm takes into account questions such as:</p>
+<ol>
+<li><p>What type of problem am I trying to solve?</p>
+</li>
+<li><p>What would be a desirable property of an algorithm for this type of problem, for example: speed of finding good solutions, reliably locating good solutions, or occasional brilliance?</p>
+</li>
+<li><p>What methods currently exist for this problem, and why am I trying to make a new one, i.e., when do they not perform well?</p>
+</li>
+</ol>
+<p>After considering these issues, a particular problem type can be chosen, a careful set of experiments can be designed, and the necessary data to collect can be identified.</p>
+
+<div class="footer">
+<a href="https://lightbits.github.io/">Archive</a>
+<a href="https://twitter.com/uint9">Twitter</a>
+<a href="https://github.com/lightbits">Github</a>
+</div>
+
+<p class="attrib">Simen Haugo © 2018<br><a style="text-decoration:none;" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">BY-NC-SA</a> 4.0</p>
+
+</body>
+</html>
