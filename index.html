@@ -64,7 +64,7 @@
 
 <div id="project_sensors" class="project" style="min-height: 270px; margin-bottom: 0px;">
     <h3>30 dubious ways to find your robot without GPS</h3>
-    <img src="./gallery/sensors.png"/>
+    <img src="./gallery/sensors.webp"/>
     <p>A book about figuring out where your robot is and what's around it. Current table of contents:</p>
     <ul>
         <li>Camera</li>
@@ -92,7 +92,9 @@
 
 <div class="project" style="min-height: 270px; margin-bottom: 0px;">
     <h3>Fitting 3D models to 3D reconstructions</h3>
-    <img src="gallery/fitshape.gif"/>
+    <video controls loop poster="gallery/fitshape.webp" width="300">
+        <source src="gallery/fitshape.webm" type="video/mp4">
+    </video>
     <p>The above paper looked at how to model objects, but that is only part of the job. To make use of those models, we need to recognize them in the data (like color or depth images). In my master thesis below I have a more detailed discussion and experiments on ways to detect and localize objects modelled with signed distance functions. It's a bit longer, but in return it might be easier to read than the above paper.</p>
     <a href="papers/csdf-thesis.pdf"><img style="float:none;display:inline-block;height:128px;width:inherit;vertical-align:middle;" src="papers/csdf-thesis-icon.png"/>csdf-thesis.pdf</a>
 </div>
@@ -129,7 +131,7 @@
 
 <div class="project" id="ascendntnu">
     <h3>Ascend NTNU</h3>
-    <img src="gallery/ascend.png"/>
+    <img src="gallery/ascend.webp"/>
     <p>I helped start a robotics team at my university (NTNU) in 2015, with the hope of participating in the International Aerial Robotics Competition, where students from universities around the globe make "autonomous" drones that do cool stuff without a pilot - e.g. flying through an office complex, snatching a USB thumbdrive and replacing it with a fake one.</p>
 
     <p>Somewhat miraculously, we did compete and we did pretty well in the seventh mission, where the challenge is to herd robot vacuum cleaners (Roombas) from one side to another in a 20x20 meter arena. Everything must be done with the push of a single button.</p>
@@ -141,7 +143,7 @@
 
 <div class="project">
     <h3>Tracking robot vacuum cleaners</h3>
-    <img src="gallery/roomba.jpg"/>
+    <img src="gallery/roomba.webp"/>
     <p>As part of my work at Ascend, I worked on the vacuum cleaner tracking problem. The competition challenge is to build a drone to herd 10 iRoombas across a 20m x 20m arena. The robots have sensors that the drone can physically touch to steer their motion path.</p>
 
     <p>But physically touching it or landing on it means you need to know its position. With external sensing, like beacons or wall cameras, being banned, your only option is to see them from the drone itself.</p>
@@ -154,25 +156,27 @@
 
 <div class="project" style="min-height: 350px;">
     <h3>Inside-out position tracking</h3>
-    <img src="gallery/grid.jpg"/>
+    <img src="gallery/grid.webp"/>
     <p>As part of my work at Ascend I also worked on the inside-out position tracking problem. A key step in overcoming the seventh IARC mission hinges on your drone's ability to know where it is in the arena - knowing that you're above a roomba is not useful, unless you also know where you are. The arena is patterned with a white grid of 1x1m tiles, that you can use for navigation, and a green edge indicating the herding line. Unfortunately, the arena is otherwise free to vary, and can have all sorts of distractions both inside and outside the grid, like sports markings, people or protection nets.</p>
 </div>
 
 <div class="project">
     <h3>AI simulation and debugging tool for IARC</h3>
-    <img src="gallery/iarcsim.gif"/>
+    <video controls loop poster="gallery/iarcsim.webp" width="300">
+        <source src="gallery/iarcsim.webm" type="video/mp4">
+    </video>
     <p>This is one of my favorite projects, because I got to make a tool that was actually useful to many people. The members of the AI group at Ascend had requested a simulator that would let them test and debug their algorithms; so I built this tool that simulated only what was needed - no fancy physics or drone dynamics. I also added debugging tools like scrubbing back and forward in history, seeing a list of sent commands, robot status, recording video.</p>
 </div>
 
 <div class="project">
     <h3>Mission status viewer</h3>
-    <img src="gallery/mission.jpg"/>
+    <img src="gallery/mission.webp"/>
     <p>Our robotics team built an autonomous drone that can fly along paths inside, without GPS or any external tracking system - only inside-out tracking. With all the things that can go wrong, it's important to have their status available in one place. This GUI tool gives us a live video feed from on-board cameras, lets us draw flight paths, see position state estimates, see commanded velocity and detected obstacles, reset the Kalman filter, and even see CPU load and temperatures. (But the best feature is the drone's tiny animated propellers.)</p>
 </div>
 
 <div class="project">
     <h3>VDB</h3>
-    <img src="gallery/vdb.png"/>
+    <img src="gallery/vdb.webp"/>
     <p>In his '86 paper <i>No Silver Bullet</i>, Fred Brooks suggested there is no single development in software engineering that promises even one tenfold productivity increase within a decade. Even today, doubts remain as to whether such a solution will ever come.</p>
     <p>Hacked together on a sunday morning in january 2016, this visualization and prototyping tool has been my personal silver bullet.</p>
     <a href="https://github.com/lightbits/vdb">readme (github)</a>
@@ -182,17 +186,11 @@
 
 <div class="project" style="min-height: 430px;">
     <h3>FRAKTAL</h3>
-    <img src="gallery/fraktal.jpg"/>
+    <img src="gallery/fraktal.webp"/>
     <p>I built this tool to render signed distance function scenes under my favorite type of diffuse lighting. The scene is defined in a shader file that can be reloaded on the fly. Rendering is done with path tracing on the GPU, and can be refined by letting it run longer. Despite being a hobby project, I got a chance to use it heavily for my master thesis, three years after initially building it.</p>
     <p>You can grab the source at github and try it out if you can figure it out. You can also read my dev log, where you can see the early, embarrassingly noisy, renders.</p>
     <a href="https://github.com/lightbits/fraktal">github</a>
     <a href="https://github.com/lightbits/fraktal/blob/master/devlog/devlog.md">devlog</a>
-</div>
-
-<div class="project">
-    <h3>Portal rendering</h3>
-    <img src="gallery/portals.png"/>
-    <p>I made this program to learn how portals can be rendered using OpenGL. This was a brilliant way to apply the theory I learned about rotation matrices from my robotics classes, into something visual; since figuring out where to render the scene from, behind the portal, is essentially a coordinate system transform! I also made a simple 3D test scene in Blender, and baked the lighting into a texture map using Cycles.</p>
 </div>
 
 <p class="attrib">
