@@ -134,9 +134,7 @@
     <img src="gallery/ascend.webp"/>
     <p>I helped start a robotics team at my university (NTNU) in 2015, with the hope of participating in the International Aerial Robotics Competition, where students from universities around the globe make "autonomous" drones that do cool stuff without a pilot - e.g. flying through an office complex, snatching a USB thumbdrive and replacing it with a fake one.</p>
 
-    <p>Somewhat miraculously, we did compete and we did pretty well in the seventh mission, where the challenge is to herd robot vacuum cleaners (Roombas) from one side to another in a 20x20 meter arena. Everything must be done with the push of a single button.</p>
-
-    <p>Ascend is still very active, and recruits new members each year. Still with the shared goal of competing in IARC where, at the time of writing (2017), the seventh IARC mission has yet to be solved. You can follow the team's progress at our homepage.</p>
+    <p>You can follow our team's progress at our homepage.</p>
 
     <a href="https://ascendntnu.no/">homepage</a>
 </div>
@@ -144,20 +142,16 @@
 <div class="project">
     <h3>Tracking robot vacuum cleaners</h3>
     <img src="gallery/roomba.webp"/>
-    <p>As part of my work at Ascend, I worked on the vacuum cleaner tracking problem. The competition challenge is to build a drone to herd 10 iRoombas across a 20m x 20m arena. The robots have sensors that the drone can physically touch to steer their motion path.</p>
+    <p>At Ascend I worked on tracking robotic vacuum cleaners from a camera. One method I tried was to render a 3D model of the robot and wiggle the pose parameters to match the image. It didn't work very well. A far better approach was to use classical connected components, color space transformation and thresholding.</p>
 
-    <p>But physically touching it or landing on it means you need to know its position. With external sensing, like beacons or wall cameras, being banned, your only option is to see them from the drone itself.</p>
-
-    <p>This project was an interesting learning lesson. I spent six months, as part of my pre-master project on a method that worked by rendering a 3D model of the robot and adjusting the pose estimate to make the render appear identical with the camera image. While insanely cool, it was also insanely complicated, was not predictable, and ran way too slowly. The better approach only took an evening to implement and works by just finding colored blobs.</p>
-
-    <p>You can check out my project report at the link below. I go into detail about computer vision basics, like how to estimate 3D poses, how to work with fisheye cameras, and different ways to detect objects. I also describe the fancy 3D rendering method that ultimately wasn't useful.</p>
+    <p>The methods and failures are described in my project report.</p>
     <a href="papers/roomba.pdf"><img style="float:none;display:inline-block;height:128px;width:inherit;vertical-align:middle;" src="papers/roomba-icon.png"/>roomba.pdf</a>
 </div>
 
 <div class="project" style="min-height: 350px;">
     <h3>Inside-out position tracking</h3>
     <img src="gallery/grid.webp"/>
-    <p>As part of my work at Ascend I also worked on the inside-out position tracking problem. A key step in overcoming the seventh IARC mission hinges on your drone's ability to know where it is in the arena - knowing that you're above a roomba is not useful, unless you also know where you are. The arena is patterned with a white grid of 1x1m tiles, that you can use for navigation, and a green edge indicating the herding line. Unfortunately, the arena is otherwise free to vary, and can have all sorts of distractions both inside and outside the grid, like sports markings, people or protection nets.</p>
+    <p>At Ascend I worked on inside-out position tracking from a drone. A key step in overcoming the seventh IARC mission hinges on your drone's ability to know where it is in the arena - knowing that you're above a roomba is not useful, unless you also know where you are. The arena is patterned with a white grid of 1x1m tiles, that you can use for navigation, and a green edge indicating the herding line. Unfortunately, the arena is otherwise free to vary, and can have all sorts of distractions both inside and outside the grid, like sports markings, people or protection nets.</p>
 </div>
 
 <div class="project">
@@ -187,8 +181,8 @@
 <div class="project" style="min-height: 430px;">
     <h3>FRAKTAL</h3>
     <img src="gallery/fraktal.webp"/>
-    <p>I built this tool to render signed distance function scenes under my favorite type of diffuse lighting. The scene is defined in a shader file that can be reloaded on the fly. Rendering is done with path tracing on the GPU, and can be refined by letting it run longer. Despite being a hobby project, I got a chance to use it heavily for my master thesis, three years after initially building it.</p>
-    <p>You can grab the source at github and try it out if you can figure it out. You can also read my dev log, where you can see the early, embarrassingly noisy, renders.</p>
+    <p>I built a tool to render signed distance function scenes under my favorite type of diffuse lighting. The scene is defined in a shader file that can be reloaded on the fly. Rendering is done with path tracing on the GPU, and can be refined by letting it run longer. I used the tool to generate the video and images in my master thesis.</p>
+    <p>The source is on github along with a development diary.</p>
     <a href="https://github.com/lightbits/fraktal">github</a>
     <a href="https://github.com/lightbits/fraktal/blob/master/devlog/devlog.md">devlog</a>
 </div>
