@@ -1,4 +1,4 @@
-# Better Research Practice
+# Better research practice
 
 Leslie Lamport's "State the Problem Before Describing the Solution" [*](https://www.microsoft.com/en-us/research/publication/state-problem-describing-solution/) is often prescribed as a must-read for the budding (or perhaps even the well-established) researcher, and also one that should be re-read on a regular basis. I certainly agree with this, but I prefer A.E. Eiben and J.E. Smith's Introduction to Evolutionary Computing, chapter 9: "Working with Evolutionary Algorithms", which gives a practical example of how one actually goes about *stating the problem*.
 

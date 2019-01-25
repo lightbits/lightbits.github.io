@@ -35,7 +35,7 @@
 <h3>Writing</h3>
 <p>My favorites are highlighted in yellow.</p>
 
-<div class="post"><div class="date">Aug 2018</div><a href="./betterpractice/">Better Research Practice</a></div>
+<div class="post"><div class="date">Aug 2018</div><a href="./betterpractice/">Better research practice</a></div>
 
 <div class="post good"><div class="date">May 2018</div><a href="./telerobot/">Working from home: A history of telerobot displays</a></div>
 
@@ -67,7 +67,7 @@
 
 <div id="project_sensors" class="project" style="min-height: 270px; margin-bottom: 0px;">
     <h3>30 dubious ways to find your robot without GPS</h3>
-    <img src="./gallery/sensors.webp"/>
+    <img src="./gallery/sensors.png"/>
     <p>A book about figuring out where your robot is and what's around it. Current table of contents:</p>
     <ul>
         <li>Camera</li>
@@ -95,7 +95,7 @@
 
 <div class="project" style="min-height: 270px; margin-bottom: 0px;">
     <h3>Fitting 3D models to 3D reconstructions</h3>
-    <video controls loop poster="gallery/fitshape.webp" width="300">
+    <video controls loop poster="gallery/fitshape.png" width="300">
         <source src="gallery/fitshape.webm" type="video/mp4">
     </video>
     <p>The above paper looked at how to model objects, but that is only part of the job. To make use of those models, we need to recognize them in the data (like color or depth images). In my master thesis below I have a more detailed discussion and experiments on ways to detect and localize objects modelled with signed distance functions. It's a bit longer, but in return it might be easier to read than the above paper.</p>
@@ -106,35 +106,9 @@
 <br>
 <br>
 
-<!--
-<div class="project">
-    <h3>Recipes</h3>
-    <img src="./recipes/strawberries/IMG_6932.JPG">
-    <p>I sometimes find myself with an ingredient but no clue how to use it.</p>
-    <span><a href="./recipes/strawberries/">Sourdough &amp; Strawberries</a>. . . .</span>
-    <span class="date">Feb 2018</span>
-    <br>
-    <span><a href="">Oats</a> . . . . . . . . . . . . . . . . . . . . .</span>
-    <span class="date">Jun 2017</span>
-    <br>
-    <span><a href="">Balsamico</a> . . . . . . . . . . . . . . . .</span>
-    <span class="date">Dec 2017</span>
-    <br>
-    <span><a href="">Hummus</a> . . . . . . . . . . . . . . . . .</span>
-    <span class="date">Dec 2017</span>
-    <br>
-    <span><a href="">Spaghetti &amp; Linseeds</a> . . . . . . .</span>
-    <span class="date">Dec 2017</span>
-    <br>
-    <span><a href="">Lentils</a> . . . . . . . . . . . . . . . . . . .</span>
-    <span class="date">Dec 2017</span>
-    <br>
-</div>
--->
-
 <div class="project" id="ascendntnu">
     <h3>Ascend NTNU</h3>
-    <img src="gallery/ascend.webp"/>
+    <img src="gallery/ascend.png"/>
     <p>I helped start a robotics team at my university (NTNU) in 2015, with the hope of participating in the International Aerial Robotics Competition, where students from universities around the globe make "autonomous" drones that do cool stuff without a pilot - e.g. flying through an office complex, snatching a USB thumbdrive and replacing it with a fake one.</p>
 
     <p>You can follow our team's progress at our homepage.</p>
@@ -144,7 +118,7 @@
 
 <div class="project">
     <h3>Tracking robot vacuum cleaners</h3>
-    <img src="gallery/roomba.webp"/>
+    <img src="gallery/roomba.jpg"/>
     <p>At Ascend I worked on tracking robotic vacuum cleaners from a camera. One method I tried was to render a 3D model of the robot and wiggle the pose parameters to match the image. It didn't work very well. A far better approach was to use classical connected components, color space transformation and thresholding.</p>
 
     <p>The methods and failures are described in my project report.</p>
@@ -153,13 +127,13 @@
 
 <div class="project" style="min-height: 350px;">
     <h3>Inside-out position tracking</h3>
-    <img src="gallery/grid.webp"/>
+    <img src="gallery/grid.jpg"/>
     <p>At Ascend I worked on inside-out position tracking from a drone. A key step in overcoming the seventh IARC mission hinges on your drone's ability to know where it is in the arena - knowing that you're above a roomba is not useful, unless you also know where you are. The arena is patterned with a white grid of 1x1m tiles, that you can use for navigation, and a green edge indicating the herding line. Unfortunately, the arena is otherwise free to vary, and can have all sorts of distractions both inside and outside the grid, like sports markings, people or protection nets.</p>
 </div>
 
 <div class="project">
     <h3>AI simulation and debugging tool for IARC</h3>
-    <video controls loop poster="gallery/iarcsim.webp" width="300">
+    <video controls loop poster="gallery/iarcsim.png" width="300">
         <source src="gallery/iarcsim.webm" type="video/mp4">
     </video>
     <p>This is one of my favorite projects, because I got to make a tool that was actually useful to many people. The members of the AI group at Ascend had requested a simulator that would let them test and debug their algorithms; so I built this tool that simulated only what was needed - no fancy physics or drone dynamics. I also added debugging tools like scrubbing back and forward in history, seeing a list of sent commands, robot status, recording video.</p>
@@ -167,13 +141,13 @@
 
 <div class="project">
     <h3>Mission status viewer</h3>
-    <img src="gallery/mission.webp"/>
+    <img src="gallery/mission.jpg"/>
     <p>Our robotics team built an autonomous drone that can fly along paths inside, without GPS or any external tracking system - only inside-out tracking. With all the things that can go wrong, it's important to have their status available in one place. This GUI tool gives us a live video feed from on-board cameras, lets us draw flight paths, see position state estimates, see commanded velocity and detected obstacles, reset the Kalman filter, and even see CPU load and temperatures. (But the best feature is the drone's tiny animated propellers.)</p>
 </div>
 
 <div class="project">
     <h3>VDB</h3>
-    <img src="gallery/vdb.webp"/>
+    <img src="gallery/vdb.png"/>
     <p>In his '86 paper <i>No Silver Bullet</i>, Fred Brooks suggested there is no single development in software engineering that promises even one tenfold productivity increase within a decade. Even today, doubts remain as to whether such a solution will ever come.</p>
     <p>Hacked together on a sunday morning in january 2016, this visualization and prototyping tool has been my personal silver bullet.</p>
     <a href="https://github.com/lightbits/vdb">readme (github)</a>
@@ -183,7 +157,7 @@
 
 <div class="project" style="min-height: 430px;">
     <h3>FRAKTAL</h3>
-    <img src="gallery/fraktal.webp"/>
+    <img src="gallery/fraktal.jpg"/>
     <p>I built a tool to render signed distance function scenes under my favorite type of diffuse lighting. The scene is defined in a shader file that can be reloaded on the fly. Rendering is done with path tracing on the GPU, and can be refined by letting it run longer. I used the tool to generate the video and images in my master thesis.</p>
     <p>The source is on github along with a development diary.</p>
     <a href="https://github.com/lightbits/fraktal">github</a>
@@ -191,7 +165,7 @@
 </div>
 
 <p class="attrib">
-    Simen Haugo © 2018<br>
+    Simen Haugo © 2019<br>
     <a style="text-decoration:none;" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">BY-NC-SA</a> 4.0
 </p>
 
