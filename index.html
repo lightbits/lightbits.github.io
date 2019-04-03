@@ -72,7 +72,7 @@ body { font-family: Lato, 'Segoe UI', Tahoma, sans-serif; font-size:14px;}
 <div id="project_sensors" class="project" style="min-height: 270px; margin-bottom: 0px;">
     <h3>30 dubious ways to find your robot without GPS</h3>
     <img src="./gallery/sensors.png"/>
-    <p>A book about figuring out where your robot is and what's around it. Current table of contents:</p>
+    <p>A booklet about figuring out where your robot is and what's around it. Current table of contents:</p>
     <ul>
         <li>Camera</li>
         <li>Spectral camera</li>
@@ -85,28 +85,6 @@ body { font-family: Lato, 'Segoe UI', Tahoma, sans-serif; font-size:14px;}
     </ul>
     <p><a href="./papers/sensors.pdf">sensors.pdf</a> (last updated July 2018)</p>
 </div>
-<br>
-<br>
-
-<div class="project">
-    <h3>Continuous signed distance functions for 3D vision</h3>
-    <video controls loop poster="gallery/csdf.png" width="300">
-        <source src="gallery/csdf.mp4" type="video/mp4">
-    </video>
-    <p>In my master thesis I looked at how to add real-life objects to 3D reconstruction algorithms (like SLAM or SfM). The motivation being that a point cloud (or a mesh) is not very useful from a programmer perspective: to make a robot do something interesting, it needs to know stuff like 'this is is a door' or 'this is a hammer'. But we can only get that information by modelling our knowledge of the world, which leads to a dilemma of how to represent all these objects and concepts in a computer program. I eventually compressed my 50 page master thesis into an 8 page two-column paper that I submitted to <a href="http://3dv.org/">3DV</a>, a conference for 3D computer vision.</p>
-    <p><a href="papers/haugo2017continuous.pdf">Continuous signed distance functions for 3D vision</a><br>Simen Haugo, Annette Stahl, Edmund Brekke.</p>
-</div>
-
-<div class="project" style="min-height: 270px; margin-bottom: 0px;">
-    <h3>Fitting 3D models to 3D reconstructions</h3>
-    <video controls loop poster="gallery/fitshape.png" width="300">
-        <source src="gallery/fitshape.webm" type="video/mp4">
-    </video>
-    <p>The above paper looked at how to model objects, but that is only part of the job. To make use of those models, we need to recognize them in the data (like color or depth images). In my master thesis below I have a more detailed discussion and experiments on ways to detect and localize objects modelled with signed distance functions. It's a bit longer, but in return it might be easier to read than the above paper.</p>
-    <a href="papers/csdf-thesis.pdf"><img style="float:none;display:inline-block;height:128px;width:inherit;vertical-align:middle;" src="papers/csdf-thesis-icon.png"/>csdf-thesis.pdf</a>
-</div>
-
-<br>
 <br>
 <br>
 
@@ -141,6 +119,28 @@ body { font-family: Lato, 'Segoe UI', Tahoma, sans-serif; font-size:14px;}
 
     <a href="https://ascendntnu.no/">homepage</a>
 </div>
+
+<div class="project">
+    <h3>Continuous signed distance functions for 3D vision</h3>
+    <video controls loop poster="gallery/csdf.png" width="300">
+        <source src="gallery/csdf.mp4" type="video/mp4">
+    </video>
+    <p>In my master thesis I looked at how to add real-life objects to 3D reconstruction algorithms (like SLAM or SfM). The motivation being that a point cloud (or a mesh) is not very useful from a programmer perspective: to make a robot do something interesting, it needs to know stuff like 'this is is a door' or 'this is a hammer'. But we can only get that information by modelling our knowledge of the world, which leads to a dilemma of how to represent all these objects and concepts in a computer program. I eventually compressed my 50 page master thesis into an 8 page two-column paper that I submitted to <a href="http://3dv.org/">3DV</a>, a conference for 3D computer vision.</p>
+    <p><a href="papers/haugo2017continuous.pdf">Continuous signed distance functions for 3D vision</a><br>Simen Haugo, Annette Stahl, Edmund Brekke.</p>
+</div>
+
+<div class="project" style="min-height: 270px; margin-bottom: 0px;">
+    <h3>Fitting 3D models to 3D reconstructions</h3>
+    <video controls loop poster="gallery/fitshape.png" width="300">
+        <source src="gallery/fitshape.webm" type="video/mp4">
+    </video>
+    <p>The above paper looked at how to model objects, but that is only part of the job. To make use of those models, we need to recognize them in the data (like color or depth images). In my master thesis below I have a more detailed discussion and experiments on ways to detect and localize objects modelled with signed distance functions. It's a bit longer, but in return it might be easier to read than the above paper.</p>
+    <a href="papers/csdf-thesis.pdf"><img style="float:none;display:inline-block;height:128px;width:inherit;vertical-align:middle;" src="papers/csdf-thesis-icon.png"/>csdf-thesis.pdf</a>
+</div>
+
+<br>
+<br>
+<br>
 
 <div class="project">
     <h3>Tracking robot vacuum cleaners</h3>
