@@ -72,7 +72,7 @@ body { font-family: Lato, 'Segoe UI', Tahoma, sans-serif; font-size:14px;}
 <div id="project_sensors" class="project" style="min-height: 270px; margin-bottom: 0px;">
     <h3>30 dubious ways to find your robot without GPS</h3>
     <img src="./gallery/sensors.png"/>
-    <p>A booklet about figuring out where your robot is and what's around it. Current table of contents:</p>
+    <p><b>A booklet</b> about figuring out where your robot is and what's around it. Current table of contents:</p>
     <ul>
         <li>Camera</li>
         <li>Spectral camera</li>
@@ -90,8 +90,8 @@ body { font-family: Lato, 'Segoe UI', Tahoma, sans-serif; font-size:14px;}
 
 <div class="project">
     <h3>vdb</h3>
-    <img src="gallery/vdb.png"/>
-    <p>A C++ library for making interactive, real-time debug visualizations and dashboards. Features:</p>
+    <img src="gallery/vdb-logo.svg"/>
+    <p><b>A C++ library</b> for making interactive, real-time debug visualizations and dashboards. Features:</p>
     <ul>
         <li>Set breakpoints in source code</li>
         <li>Stepping to next breakpoint</li>
@@ -108,6 +108,27 @@ body { font-family: Lato, 'Segoe UI', Tahoma, sans-serif; font-size:14px;}
     <a href="gallery/vdb1.png"><img style="float:none;display:inline-block;width:30%;" src="gallery/vdb1.png"/></a>
     <a href="gallery/vdb2.png"><img style="float:none;display:inline-block;width:30%" src="gallery/vdb2.png"/></a>
     <a href="gallery/vdb3.png"><img style="float:none;display:inline-block;width:30%" src="gallery/vdb3.png"/></a>
+</div>
+
+<div class="project" style="min-height: 430px;">
+    <h3>Fraktal</h3>
+    <img src="gallery/fraktal-logo.svg"/>
+    <p><b>A tool for computer vision researchers</b> working with procedural implicit function-based representations. It is available as a Python/C/C++ library and supports:</p>
+    <ul>
+        <li>GPU-accelerated function evaluation.</li>
+        <li>Fast, physically-based rendering.</li>
+        <li>Multi-channel output: shading, depth, normal, material.</li>
+        <li>Export model as mesh, point cloud or voxel grid.</li>
+    </ul>
+
+    <p>It also comes with a GUI for easy scene manipulation and visualization. Some <b>applications include:</b></p>
+    <ul>
+        <li>Creating publication-quality figures.</li>
+        <li>Generating synthetic ground-truth data sets.</li>
+        <li>3D reconstruction and inverse rendering.</li>
+    </ul>
+
+    <p>The tool is <b>open source</b>: <a href="https://github.com/lightbits/fraktal">latest release (github)</a></p>
 </div>
 
 <div class="project" id="ascendntnu">
@@ -167,15 +188,6 @@ body { font-family: Lato, 'Segoe UI', Tahoma, sans-serif; font-size:14px;}
     <h3>Mission status viewer</h3>
     <img src="gallery/mission.jpg"/>
     <p>Our robotics team built an autonomous drone that can fly along paths inside, without GPS or any external tracking system - only inside-out tracking. With all the things that can go wrong, it's important to have their status available in one place. This GUI tool gives us a live video feed from on-board cameras, lets us draw flight paths, see position state estimates, see commanded velocity and detected obstacles, reset the Kalman filter, and even see CPU load and temperatures. (But the best feature is the drone's tiny animated propellers.)</p>
-</div>
-
-<div class="project" style="min-height: 430px;">
-    <h3>FRAKTAL</h3>
-    <img src="gallery/fraktal.jpg"/>
-    <p>I built a tool to render signed distance function scenes under my favorite type of diffuse lighting. The scene is defined in a shader file that can be reloaded on the fly. Rendering is done with path tracing on the GPU, and can be refined by letting it run longer. I used the tool to generate the video and images in my master thesis.</p>
-    <p>The source is on github along with a development diary.</p>
-    <a href="https://github.com/lightbits/fraktal">github</a>
-    <a href="https://github.com/lightbits/fraktal/blob/master/devlog/devlog.md">devlog</a>
 </div>
 
 <p class="attrib">
