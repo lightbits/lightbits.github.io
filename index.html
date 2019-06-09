@@ -4,31 +4,30 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <title>Simen Haugo</title>
-<link rel="stylesheet" href="style.css" type="text/css">
 <style type="text/css">
-body { font-family: Lato, 'Segoe UI', Tahoma, sans-serif; font-size:14px;}
+body { max-width:640px; margin:0 auto; padding:8px; color: #222; }
+p { line-height:1.35em; }
+h1 { font-size: 150%; text-align: center; font-weight: normal; }
+h2 { font-size: 125%; }
+.footer { display:flex; flex-direction:row; justify-content:space-between; }
+.attrib { text-align: center; font-size: 90%; }
 li { line-height: 1.5em; }
 .post { display:flex; padding-bottom:.5em;}
 .good a { background-color: #FFE6A4; }
-/*.date { font-style:italic; width:5em; text-align:center; padding-right:.5em;}*/
 .date { display: none; }
 .type { font-style:italic; width:5em; text-align:center; padding-right:.5em; }
-.project img { float: right; width: 250px; padding-left: 12px; }
-.project video { float: right; width: 250px; padding-left: 12px; }
-.project { max-width: 640px; min-height: 350px; margin-bottom: 100px; }
-.project h3 { border-top:1px solid #000; border-bottom:1px solid #000;font-weight: normal; text-align: center; padding: 8px 0; }
-/*.project li { font-weight:bold;color:#719430; }*/
+.proj { max-width: 640px; min-height: 350px; margin-bottom: 100px; }
+.proj h3 { border-top:1px solid #000; border-bottom:1px solid #000;font-weight: normal; text-align: center; padding: 8px 0; }
+.pimg { float: right; width: 250px; padding-left: 12px; }
 @media screen and (max-width: 600px){
-.date { display: none; }
 .type { display: none; }
-.project img { width: 100%; margin-bottom: 12px; }
-.project video { width: 100%; margin-bottom: 12px; }
+.pimg { float:none; padding: 0; width:100%; margin-bottom:12px; }
 }
 </style>
 </head>
 <body>
 <h1>Simen Haugo</h1>
-<p>Currently: Doing a Ph.D at the Norwegian University of Science and Technology!</p>
+<p align="center">Currently doing a PhD in robotics at the Norwegian University of Science and Technology</p>
 <div class="footer">
 <a href="https://twitter.com/uint9">Twitter</a>
 <a href="https://github.com/lightbits">Github</a>
@@ -37,7 +36,7 @@ li { line-height: 1.5em; }
 
 <br>
 
-<div class="project">
+<div class="proj">
 <h3>Writing</h3>
 <p>My favorites are highlighted in yellow.</p>
 
@@ -45,7 +44,7 @@ li { line-height: 1.5em; }
 
 <div class="post good"><div class="type">Article</div><div class="date">May 2018</div><a href="./telerobot/">Working from home: A history of telerobot displays</a></div>
 
-<div class="post good"><div class="type">Booklet</div><div class="date">Apr 2018</div><a href="#project_sensors">30 dubious ways to find your robot without GPS</a></div>
+<div class="post good"><div class="type">Booklet</div><div class="date">Apr 2018</div><a href="#proj_sensors">30 dubious ways to find your robot without GPS</a></div>
 
 <div class="post"><div class="type">Short</div><div class="date">Mar 2018</div><a href="./opengl/">A life of OpenGL programming</a></div>
 
@@ -71,9 +70,9 @@ li { line-height: 1.5em; }
 
 </div>
 
-<div id="project_sensors" class="project" style="min-height: 270px; margin-bottom: 0px;">
+<div id="proj_sensors" class="proj" style="min-height: 270px; margin-bottom: 0px;">
     <h3>30 dubious ways to find your robot without GPS</h3>
-    <img src="./gallery/sensors.png"/>
+    <img class="pimg" src="./gallery/sensors.png"/>
     <p><b>A booklet</b> about figuring out where your robot is and what's around it. Current table of contents:</p>
     <ul>
         <li>Camera</li>
@@ -90,28 +89,29 @@ li { line-height: 1.5em; }
 <br>
 <br>
 
-<div id="project_vdb" class="project">
+<div id="proj_vdb" class="proj">
     <h3>vdb</h3>
-    <img src="gallery/vdb-logo.svg"/>
-    <p><b>A C++ library</b> for making interactive, real-time debug visualizations and dashboards. Features:</p>
+    <img class="pimg" src="gallery/vdb-logo.svg"/>
+    <p><b>A C++ library</b> for making interactive, real-time visualizations and dashboards.</p>
     <ul>
-        <li>Set breakpoints in source code</li>
-        <li>Stepping to next breakpoint</li>
+        <li>Programmable breakpoints</li>
         <li>Immediate mode 2D/3D API</li>
         <li>Immediate mode GUI API (Dear ImGui)</li>
         <li>Built-in cameras: trackball, turntable and planar</li>
         <li>Logging and plotting</li>
-        <li>Pipe output to ffmpeg to create videos</li>
+        <li>Take screenshots, record videos and animated gifs directly</li>
     </ul>
     <a href="https://github.com/lightbits/vdb">latest release (github)</a><br>
     <a href="./vdb/">A talk I gave in 2017 (transcript)</a>
-    <p>Screenshots:</p>
-    <a href="gallery/vdb-1.jpg"><img style="float:none;display:inline-block;width:30%;" src="gallery/vdb-1.jpg"/></a>
-    <a href="gallery/vdb-2.jpg"><img style="float:none;display:inline-block;width:30%;" src="gallery/vdb-2.jpg"/></a>
-    <a href="gallery/vdb-3.jpg"><img style="float:none;display:inline-block;width:30%;" src="gallery/vdb-3.jpg"/></a>
+    <br>
+    <br>
+    <a href="gallery/vdb-1.jpg"><img style="width:24%;border-radius:6px;" src="gallery/vdb-1-small.jpg"/></a>
+    <a href="gallery/vdb-2.jpg"><img style="width:24%;border-radius:6px;" src="gallery/vdb-2-small.jpg"/></a>
+    <a href="gallery/vdb-3.jpg"><img style="width:24%;border-radius:6px;" src="gallery/vdb-3-small.jpg"/></a>
+    <a href="gallery/vdb-4.jpg"><img style="width:24%;border-radius:6px;" src="gallery/vdb-4-small.jpg"/></a>
 </div>
 
-<!-- <div id="project_fraktal" class="project" style="min-height: 430px;">
+<!-- <div id="proj_fraktal" class="proj" style="min-height: 430px;">
     <h3>fraktal</h3>
     <img src="gallery/fraktal-logo.svg"/>
     <p><b>A tool for computer vision researchers</b> working with procedural implicit function-based representations. It is available as a Python/C/C++ library and supports:</p>
@@ -132,9 +132,9 @@ li { line-height: 1.5em; }
     <p>The tool is <b>open source</b>: <a href="https://github.com/lightbits/fraktal">latest release (github)</a></p>
 </div> -->
 
-<div class="project" id="ascendntnu">
+<div class="proj" id="ascendntnu">
     <h3>Ascend NTNU</h3>
-    <img src="gallery/ascend.png"/>
+    <img class="pimg" src="gallery/ascend.png"/>
     <p>I co-founded a robotics team at my university (NTNU) in 2015, with a focus on building autonomous drones. We have participated several times in the International Aerial Robotics Competition.</p>
 
     <p>You can follow our team's progress at our homepage.</p>
@@ -142,18 +142,18 @@ li { line-height: 1.5em; }
     <a href="https://ascendntnu.no/">homepage</a>
 </div>
 
-<div class="project">
+<div class="proj">
     <h3>Continuous signed distance functions for 3D vision</h3>
-    <video controls loop poster="gallery/csdf.png" width="300">
+    <video controls loop class="pimg" poster="gallery/csdf.png" width="300">
         <source src="gallery/csdf.mp4" type="video/mp4">
     </video>
     <p>In my master thesis I looked at how to add real-life objects to 3D reconstruction algorithms (like SLAM or SfM). The motivation being that a point cloud (or a mesh) is not very useful from a programmer perspective: to make a robot do something interesting, it needs to know stuff like 'this is is a door' or 'this is a hammer'. But we can only get that information by modelling our knowledge of the world, which leads to a dilemma of how to represent all these objects and concepts in a computer program. I eventually compressed my 50 page master thesis into an 8 page two-column paper that I submitted to <a href="http://3dv.org/">3DV</a>, a conference for 3D computer vision.</p>
     <p><a href="papers/haugo2017continuous.pdf">Continuous signed distance functions for 3D vision</a><br>Simen Haugo, Annette Stahl, Edmund Brekke.</p>
 </div>
 
-<div class="project" style="min-height: 270px; margin-bottom: 0px;">
+<div class="proj" style="min-height: 270px; margin-bottom: 0px;">
     <h3>Fitting 3D models to 3D reconstructions</h3>
-    <video controls loop poster="gallery/fitshape.png" width="300">
+    <video controls loop class="pimg" poster="gallery/fitshape.png" width="300">
         <source src="gallery/fitshape.webm" type="video/mp4">
     </video>
     <p>The above paper looked at how to model objects, but that is only part of the job. To make use of those models, we need to recognize them in the data (like color or depth images). In my master thesis below I have a more detailed discussion and experiments on ways to detect and localize objects modelled with signed distance functions. It's a bit longer, but in return it might be easier to read than the above paper.</p>
@@ -164,30 +164,30 @@ li { line-height: 1.5em; }
 <br>
 <br>
 
-<div class="project">
+<div class="proj">
     <h3>Tracking robot vacuum cleaners</h3>
-    <img src="gallery/roomba.jpg"/>
+    <img class="pimg" src="gallery/roomba.jpg"/>
     <p>At Ascend I worked on tracking robotic vacuum cleaners from a camera. The methods and failures are described in this report:</p>
     <a href="papers/roomba.pdf"><img style="float:none;display:inline-block;height:128px;width:inherit;vertical-align:middle;" src="papers/roomba-icon.png"/>roomba.pdf</a>
 </div>
 
-<div class="project" style="min-height: 350px;">
+<div class="proj" style="min-height: 350px;">
     <h3>Inside-out position tracking</h3>
-    <img src="gallery/grid.jpg"/>
+    <img class="pimg" src="gallery/grid.jpg"/>
     <p>At Ascend I worked on inside-out position tracking from a drone. A key step in overcoming the seventh IARC mission hinges on your drone's ability to know where it is in the arena - knowing that you're above a roomba is not useful, unless you also know where you are. The arena is patterned with a white grid of 1x1m tiles, that you can use for navigation, and a green edge indicating the herding line. Unfortunately, the arena is otherwise free to vary, and can have all sorts of distractions both inside and outside the grid, like sports markings, people or protection nets.</p>
 </div>
 
-<div class="project">
+<div class="proj">
     <h3>AI simulation and debugging tool for IARC</h3>
-    <video controls loop poster="gallery/iarcsim.png" width="300">
+    <video controls loop class="pimg" poster="gallery/iarcsim.png" width="300">
         <source src="gallery/iarcsim.webm" type="video/mp4">
     </video>
     <p>At Ascend I made a simulator for members of the AI group, that would let them test and debug their algorithms. It had extensive debugging functionality, like history scrubbing, command history, status displays, and the ability to record runs.</p>
 </div>
 
-<div class="project">
+<div class="proj">
     <h3>Mission status viewer</h3>
-    <img src="gallery/mission.jpg"/>
+    <img class="pimg" src="gallery/mission.jpg"/>
     <p>Our robotics team built an autonomous drone that can fly along paths inside, without GPS or any external tracking system - only inside-out tracking. With all the things that can go wrong, it's important to have their status available in one place. This GUI tool gives us a live video feed from on-board cameras, lets us draw flight paths, see position state estimates, see commanded velocity and detected obstacles, reset the Kalman filter, and even see CPU load and temperatures. (But the best feature is the drone's tiny animated propellers.)</p>
 </div>
 
