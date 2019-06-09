@@ -9,7 +9,8 @@ body { max-width:640px; margin:0 auto; padding:8px; color: #222; }
 p { line-height:1.35em; }
 h1 { font-size: 150%; text-align: center; font-weight: normal; }
 h2 { font-size: 125%; }
-.footer { display:flex; flex-direction:row; justify-content:space-between; }
+.footer { text-align:center; }
+.footer li { margin: 0 24px 0 0; list-style:none; display:inline-block; }
 .attrib { text-align: center; font-size: 90%; }
 li { line-height: 1.5em; }
 .post { display:flex; padding-bottom:.5em;}
@@ -28,12 +29,11 @@ li { line-height: 1.5em; }
 <body>
 <h1>Simen Haugo</h1>
 <p align="center">Currently doing a PhD in robotics at the Norwegian University of Science and Technology</p>
-<div class="footer">
-<a href="https://twitter.com/uint9">Twitter</a>
-<a href="https://github.com/lightbits">Github</a>
-<span>Contact: (first name).(last name)@ntnu.no</span>
-</div>
-
+<ul class="footer">
+<li><a href="https://twitter.com/uint9">Twitter</a></li>
+<li><a href="https://github.com/lightbits">Github</a></li>
+<li><span >Contact: (first name).(last name)@ntnu.no</span></li>
+</ul>
 <br>
 
 <div class="proj">
@@ -105,10 +105,10 @@ li { line-height: 1.5em; }
     <a href="./vdb/">A talk I gave in 2017 (transcript)</a>
     <br>
     <br>
-    <a href="gallery/vdb-1.jpg"><img style="width:24%;border-radius:6px;" src="gallery/vdb-1-small.jpg"/></a>
-    <a href="gallery/vdb-2.jpg"><img style="width:24%;border-radius:6px;" src="gallery/vdb-2-small.jpg"/></a>
-    <a href="gallery/vdb-3.jpg"><img style="width:24%;border-radius:6px;" src="gallery/vdb-3-small.jpg"/></a>
-    <a href="gallery/vdb-4.jpg"><img style="width:24%;border-radius:6px;" src="gallery/vdb-4-small.jpg"/></a>
+    <div style="width:24%;display:inline-block;"><p align="center">Prototype GUIs</p><a href="gallery/vdb-1.jpg"><img style="width:100%;border-radius:6px;" src="gallery/vdb-1-small.jpg"/></a></div>
+    <div style="width:24%;display:inline-block;"><p align="center">Visualize 3D data</p><a href="gallery/vdb-2.jpg"><img style="width:100%;border-radius:6px;" src="gallery/vdb-2-small.jpg"/></a></div>
+    <div style="width:24%;display:inline-block;"><p align="center">Make annotation tools</p><a href="gallery/vdb-3.jpg"><img style="width:100%;border-radius:6px;" src="gallery/vdb-3-small.jpg"/></a></div>
+    <div style="width:24%;display:inline-block;"><p align="center">Tweak parameters live</p><a href="gallery/vdb-4.jpg"><img style="width:100%;border-radius:6px;" src="gallery/vdb-4-small.jpg"/></a></div>
 </div>
 
 <!-- <div id="proj_fraktal" class="proj" style="min-height: 430px;">
