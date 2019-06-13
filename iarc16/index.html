@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>IARC 2016 Technical Report</title>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+<style>
+body {
+    font: 14px helvetica,arial,sans-serif;
+    line-height: 1.5em;
+    background-color: #fff;
+    max-width: 600px;
+    margin: 10px auto;
+    margin-top: 0px;
+    padding: 60px;
+}
+img{border:0;max-width:100%;display:block;margin:0 auto;}
+a{color:#000;text-decoration:none;border-bottom:2px solid #A1A7BB;}
+a:hover{border-bottom:2px solid #000;}
+h1{color:#000;font-size:220%;font-weight:normal;margin-top:2em;margin-bottom:1em;}
+h2{color:#333;font-size:120%;font-weight:bold;border-bottom:2px solid #B23021;line-height:150%;margin-top:2em;}
+h3{color:#333;font-size:100%;}
+ul li,ol li{margin-top:.5em;margin-bottom:.5em;}
+</style>
+</head>
+<body>
+
+<p style="margin-bottom:-1em;letter-spacing:-1px;">
+    <b>Ascend NTNU Technical Memo</b>
+</p>
+<p style="line-height:100%;letter-spacing:-1px;font-size:200%;">
+    IARC 2016 Postmortem
+</p>
+<p style="margin-top:-1em;">
+    Simen Haugo (simen.haugo@ascendntnu.no)
+</p>
+<p style="margin-top:-1em;">
+    September 4, 2016
+</p>
+<br>
+
+
+<p>Ascend NTNU competed in the seventh mission of the International Aerial Robotics Competition (IARC), after one year of operation. The team began as six and almost tripled in members, over half of whom worked at Kongsberg’s Innovation Lab during the summer. We participated in the competition at the American venue in Atlanta, Georgia, and received third place, along with the best T-shirt design award.</p>
+
+<p>In this report, we describe our team’s approach to the scenario posed by the mission. First, we present a short summary of our goals and our results, followed by detailed descriptions of our system and issues therein.</p>
+
+
+
+<h2 id="starting-goals">Starting goals</h2>
+
+<p>At the outset of the summer at Kongsberg, we set up the following goals that we hoped to accomplish. A few of these were labelled <em>must-haves</em>, some were <em>nice-to-have</em>, while the rest were left in the <em>don’t sweat it</em> category.</p>
+
+<ol>
+<li>Track the absolute position of the drone in the arena</li>
+<li>Follow paths while avoiding obstacles</li>
+<li>Autonomous take-off and landing on flat surface</li>
+<li>Detect and track ground robots</li>
+<li>Land on top of ground robots</li>
+<li>Follow a strategy to accomplish the mission</li>
+</ol>
+
+<p>The highest priority this year was to build a navigation system that would be robust against occlusions, unknown floor textures, and changing flight altitude. Following that priority was the ability to follow paths in the arena, while detecting and avoiding obstacles. We also wanted the ability to detect ground robots located directly beneath the drone. At the same priority, we wanted to acheive autonomous take-off and landing on a static surface. Finally, at the lowest priority, we wanted to integrate a high-level strategic planner, which would provide waypoints for a path following controller.</p>
+
+
+
+<h2 id="summary-of-our-results">Summary of our results</h2>
+
+<p>Our localization system detects the grid in a downward facing wide-angle camera, and fuses these measurements in an extended Kalman filter. It is able to track the drone’s position in the arena, and has been used successfully at full-scale tests and at the competition venue. It is unable to measure the global position, which means that the tracker must be initialized with the correct position at startup, and also that the drone is unable to automatically recover from drift.</p>
+
+<p>We implemented a straight-line path following velocity controller, where the path waypoints are specified by an operator through a graphical user interface. The drone was able to follow paths accurately and robustly, whilst avoiding obstacles, during several full-scale tests, but less reliably at the competition venue, likely due to bad height estimates.</p>
+
+<p>The collision avoidance algorithm uses raw LIDAR scan measurements of nearby obstacles to modify the desired velocity, from the path controller, as needed. The downsides of our current implementation is that it is memory-less; i.e. it forgets about obstacles once they enter the LIDAR blindzone. Furthermore, it ignores obstacles that are either completely above or below the scanned plane.</p>
+
+<p>We can detect ground robots in the near vicinity of the drone using a fisheye camera. However, the detector suffers from many false positives and relies on uniform lighting conditions. It also does not perform any filtering, meaning that detections only spuriously appear each frame without any form of consistent tracking.</p>
+
+<p>We were unable to perform any form of interaction with the ground robots, as we did not find the time to focus on this. I.e. we were unable to land on top, or in front, of a ground robot. As such, the high-level planners that we developed have yet to be integrated or tested on real-life scenarios.</p>
+
+
+
+<h2 id="summary-of-other-teams-results">Summary of other teams’ results</h2>
+
+<p>The team papers for this year will be published at the <a href="http://www.aerialroboticscompetition.org/symposia.php">symposium</a> website later this year. Until then, some videos of team presentations are available on YouTube, including</p>
+
+<ul>
+<li><a href="https://www.youtube.com/watch?v=YuCvVam0zRM">Georgia Tech Aerial Robotics</a></li>
+<li><a href="https://www.youtube.com/watch?v=gKgSu0YumW4">Embry Riddle</a></li>
+<li><a href="https://www.youtube.com/watch?v=ilcBVviiBVA">And us</a></li>
+</ul>
+
+<p>There were 22 teams signed up for the competition at the American venue, but less than half met up at the competition. The teams we got to observe were</p>
+
+<ul>
+<li>Alexandria Institute of Engineering &amp; Technology</li>
+<li>École Polytechnique de Montréal</li>
+<li>Embry-Riddle Aeronautical University</li>
+<li>Georgia Institute of Technology</li>
+<li>Istanbul Technical University</li>
+<li>Kennesaw State University - Southern Polytechnic</li>
+<li>Massachusetts Institute of Technology</li>
+<li>Norwegian University of Science &amp; Technology</li>
+<li>University of Michigan</li>
+<li>University of Pennsylvania</li>
+</ul>
+
+<p>None of the teams were able to successfully execute the entire mission, but we saw promising results for parts of the mission, one of those being navigation. The most common position estimation method used was based on combining optical flow, i.e. using the commercial PX4Flow sensor, and tracking keypoints, i.e. the intersections between the grid lines.</p>
+
+<p>None of the teams successfully demonstrated collision avoidance. Pennsylvania have shown lab results of autonomously tracking a moving ground robot, as well as touching a stationary ground robot. <a href="https://www.youtube.com/watch?v=_gSpkFBMsh0">During the competition</a> they had problems hitting the robots precisely.</p>
+
+<p>In other words, we did not see any herding taking place this year. However, there may still be hope. At the time of writing, the Chinese venue have not yet held their competition, as it was delayed until the 22nd through 25th of september.</p>
+
+
+
+<h2 id="summary-of-remaining-problems-and-potential-future-directions">Summary of remaining problems and potential future directions</h2>
+
+<p>Below is a summary of the main issues with our current system, along with some thoughts on where focus should be directed next year.</p>
+
+
+
+<h3 id="position-estimation-based-on-grid-detection">Position estimation based on grid detection</h3>
+
+<p>This system — our only source for position estimation — is not robust enough for low-altitude flight. This may become a bigger problem once we begin to interact with ground robots, especially if we expect to perform position-based control all the way, as opposed to switching to an image-based approach whenever we try to land on a robot. Although it might work to do position-based control in local coordinates, as opposed to global coordinates, during interactions. I.e. you consider the interaction target and the drone relative to each other, instead of relative to the grid origin.</p>
+
+<p>We could consider complementing the filter with optical flow measurements, as done by other teams (though to not-specified degrees of success), or simplify some assumptions we made. For example, we assumed that the grid may be overlaid on top of a pre-existing pattern of lines or circles, and developed a system that could still identify the correct grid. If we make more specific assumptions about the floor texture, we can get away with a simpler and more reliable system.</p>
+
+<p>We have a plan for implementing bias removal through detecting the arena edges. This may be used in conjunction with an autonomous initialization phase, as opposed to a manual initialization, where the drone determines its absolute position by searching for edges.</p>
+
+
+
+<h3 id="streaming-of-video-with-gstreamer">Streaming of video with GStreamer</h3>
+
+<p>In its current setup, the library we use for streaming video wirelessly, is not reliable. It will often crash during flight, thus disabling any components that rely on video streams, and appears to crash more frequently at spectrally cluttered environments such as the venue. We have not yet determined the causes for crashing.</p>
+
+<p>The positioning system, collision avoidance plugin and parts of the ground robot detector can run completely on-board simultaneously with the Intel NUC. If we switch to a smaller drone with a weaker on-board computer, we need to debug GStreamer or search for alternative streaming methods.</p>
+
+
+
+<h3 id="autonomous-take-off-and-landing">Autonomous take-off and landing</h3>
+
+<p>Take-off (from propellers turned off to flight) was deemed as being unsafe, as it appeared to require an unnaturally large proportional gain in the velocity controller. Due to time constraints we were unable to determine the cause for this, and should be investigated further.</p>
+
+<p>Landing on the floor works some of the time, but can fail by bad landing detection. We can likely improve this by tuning some thresholds in the detection.</p>
+
+<p>We also need a way for the drone to verify that it is actually safe to land or take off, which brings us to the next point.</p>
+
+
+
+<h3 id="collision-avoidance-based-on-lidar">Collision avoidance based on LIDAR</h3>
+
+<p>Works well, as long as all obstacles are in the plane scanned by the LIDAR, which is not necessarily the case. Firstly, we misread the minimum height of the obstacles that would be present at the venue, and would need to fly impractically low to keep all obstacles in the scanned plane. Secondly, it would probably be quite difficult to detect the other team’s drone — during mission 7b — with the LIDAR.</p>
+
+<p>We would like something that is more general, that can verify that it is safe to descend and perform a landing, that can avoid an incoming drone of the opposing team, and avoid obstacles that are not always in the sensor’s field of view. We are therefore considering moving away from a planar LIDAR, and over to some 3D sensor.</p>
+
+
+
+<h3 id="autonomous-flight-and-path-following">Autonomous flight and path following</h3>
+
+<p>Autonomous flight was fairly robust at heights between 1 and 2 meters. Lower or higher altitudes causes problems for the grid detector, but that may be improved. The velocity controller used for path following could use some gain tuning to acheive less overshoot.</p>
+
+<p>Height estimation turned out to be very difficult. Reflective surfaces induced all sorts of weird behaviour in the LIDAR-Lite range sensor, such as spikes over 9 meters or down to zero. This was especially bad at the venue, and caused problems for the grid detector which depends on good height estimates.</p>
+
+
+
+<h3 id="camera-based-detection-of-ground-robots">Camera-based detection of ground robots</h3>
+
+<p>We tried a mix of approaches, one based on filtering out the color of the top plates (red and green) and doing simple checks on the scale, and another approach based on matching templates.</p>
+
+<p>The color-based method is very dependent on the lighting in the room, but this can likely be improved. The template matching method is too slow to run on-board together with everything else, and therefore needs video streams. It needs further work to be more robust and give less false positives.</p>
+
+<p>Initially, we attempted to create a detector that would work on the side cameras as well as the downward facing camera. We should have restricted our focus on the downward facing camera, as this will be needed anyway to do interactions. For the coming year, we should revisit some ideas we tried out, and have a closer look at the related work by other teams from previous years.</p>
+
+
+
+<h3 id="interacting-with-ground-robots">Interacting with ground robots</h3>
+
+<p>Landing on top of, or in front of, ground robots has not been in focus this year. Many interesting problems begin to surface once we consider this topic. For instance</p>
+
+<ul>
+<li><p>Should the controller work with 3D positions of the drone and the target in a global frame? A local frame?</p></li>
+<li><p>Should it be an image-based visual servoing controller that works in image-space?</p></li>
+<li><p>How can we estimate the center point of the robot such that the landing point remains consistent during descent?</p></li>
+<li><p>How do we land in front of a ground robot? To accomplish this we need to estimate the path of a ground robot and plan our landing ahead of time.</p></li>
+</ul>
+
+<video controls style="max-width:100%;" src="manual_venue.mp4">
+    Your browser does not support the video tag.
+</video>
+<p align="center" style="font-size:80%;">Manually interacting with ground robots</p>
+
+<p>Finally, how do we decide which robot to interact with? Looking forward, a big bottleneck will likely be the lack of a meaningful map of the drone’s surroundings. In order to actually accomplish the mission, we need something that will let us make decisions based on what targets are nearby and their direction of motion. It would be nice if this map generalized to other nearby robots, such as obstacles or other drones.</p>
+
+
+
+<h3 id="high-level-planner">High-level planner</h3>
+
+<p>We developed two algorithms, one fancy and one simple. The fancy algorithm depends on full knowledge of the position and velocity of each robot, and computes an optimal set of waypoints and associated actions. The simple algorithm only requires knowledge of the robots directly beneath the drone, and switches between herding one robot at a time, and searching the arena in a predefined pattern.</p>
+
+<p>Something we have not taken into consideration, is what we should do if a ground robot stops moving permanently, while inside the arena, which happened once during the competition. Other edge cases, such as recovering from a bad interaction — another thing that happened during the competition — have not been considered. Naturally, none of them have been tested in a real-life scenario, since we can’t interact with anything yet.</p>
+
+
+
+<h1 id="system-description">System Description</h1>
+
+<p>The seventh IARC mission seeked solutions on the following topics.</p>
+
+<ul>
+<li>Systems for Flight in Confined Areas</li>
+<li>Autonomous Flight Control in Micro Air Vehicles</li>
+<li>Close Quarters Obstacle Detection and Avoidance</li>
+<li>Indoor Navigation Apart from GPS</li>
+<li>Low Power Communication in Spectrally-Cluttered Environments</li>
+<li>Survivable Airframes and Propulsors in Obstacle-Rich Environments</li>
+</ul>
+
+<p>In the following subsections, we describe the system in closer detail, and provide a more precise description of the problems that we have met.</p>
+
+
+
+<h2 id="sensors-and-payload">Sensors and payload</h2>
+
+<p>The components that made up our drone for this year were the following.</p>
+
+<ul>
+<li>Four sidefacing cameras</li>
+<li>One downward facing wide-angle camera</li>
+<li>A Pixhawk flight controller</li>
+<li>A 2D scanning LIDAR</li>
+<li>A 1D range LIDAR mounted downwards</li>
+<li>A stripped Intel NUC on-board</li>
+<li>A custom designed frame</li>
+<li>A beefy ground-station computer</li>
+</ul>
+
+<p>For a complete overview, including names for all the parts, see our team paper for the 2016 symposium.</p>
+
+
+
+<h2 id="wireless-streaming-of-multiple-video-cameras">Wireless streaming of multiple video cameras</h2>
+
+<p>Video streaming was one of the things that we decided we wanted to have from early on, but ended up not using during the competition for a variety of reasons.</p>
+
+<p>Our intention was to connect all five cameras (the side cameras and the downward camera) to the Intel NUC, and stream all of these to the ground station. Since the downward camera stream is also used on-board, by our positioning system, whatever streaming system we go for would need to support storing video frames from this camera on-board. And this all needs to occur with low latency.</p>
+
+<p>An attractive option, at the time, was the GStreamer library. It supports sending and receiving streams over UDP, thus allowing for a uniform interface across all applications, regardless of whether they run on the drone or the ground station. It also supports splitting streams, whereby we could send the downward camera frames both to an on-board application and to the ground station.</p>
+
+<p>In the receiving application, one can use the GStreamer library API to capture each frame in order as they arrive. You can optionally specify any scale or color conversions that should occur in the decoding of the frame, before receiving the resulting raw bitmap of pixels.</p>
+
+<p>In hindsight, we realize that GStreamer introduced several issues, primarily falling in the category of <em>runtime ambiguity</em>. GStreamer does offer alot of functionality in a highly abstracted interface. While easy to use, this does incur a cost of being hard to understand. Decoding, encoding and conversions are hidden inside the black box, and it is unclear how much latency is involved between when the camera stores a frame, and when the frame is accessible in a local application. It is also unclear what capture options are used. For example, did the library detect that a Logitech C920 camera has built in H264 hardware compression?</p>
+
+<p>The ambiguity made it difficult to debug the system when things went wrong — and things did go wrong. GStreamer had a tendency to abruptly crash on the transmitting side, with an undescriptive error code. This happened both in controlled environments at Kongsberg, and at the competition venue, at which we had no control over the Wifi spectrum.</p>
+
+<p>At the competition, GStreamer crashed much more frequently, to the point where we could not even run for a full minute. No significant changes had been made to the on-board applications, aside from tuning of parameters, from when we last tested the system at Kongsberg — where we could have full 10 minute runs without crashing. This may indicate that the fault may be caused by spectral clutter in the environment.</p>
+
+<p>This was deemed as too unsafe for flight, so we disabled streaming across the network, and fell back to only streaming to localhost, thereby cutting all ground station applications that relied on video feeds.</p>
+
+
+
+<h2 id="local-positioning-based-on-grid-detection">Local positioning based on grid detection</h2>
+
+<p>The grid detector uses estimates of the drone’s height, pitch and roll, and provides an absolute measurement of the drone’s yaw angle and its planar displacement, modulo the grid tile. This measurement is used in an Extended Kalman Filter that estimates the drone velocity, position and yaw angle, in addition to bias states for the accelerometer and gyro.</p>
+
+<p>This is different from flow-like methods that track features across video frames, and integrate velocity to yield position. Instead, we can produce global measurements of the position, by adding the tile-relative position — measured by the grid detector — to the previous estimate of the global position — tracked by the filter.</p>
+
+<video controls style="max-width:100%;" src="grid_lab.mp4">
+    Your browser does not support the video tag.
+</video>
+<p align="center" style="font-size:80%;">Grid detection at Innovation Lab.</p>
+
+<p>We detect the grid per frame by the following process:</p>
+
+<ol>
+<li><p><strong>Segment pixels</strong>: We roughly segment pixels, henceforth called features, that are likely part of the grid. We use a color filter, followed by a sobel edge detection filter. The idea being that grid lines are characterized by a sharp jump in image intensity — if not, i.e. if the floor has a high-frequency texture, then we try to seperate the grid from the texture through a color filter.</p></li>
+<li><p><strong>Fisheye correction</strong>: We efficiently correct for the fisheye distortion by applying a calibrated fisheye-to-pinhole model on the list of segmented features. The number of features (10k-40k) is typically atleast an order of magnitude less than the number of pixels (640x360=230400), so this is much faster than correcting the entire image.</p></li>
+<li><p><strong>Extract lines</strong>: The segmented and undistorted features are used to estimate lines present in the image using the Hough transform, known to be robust against occlusions and small errors.</p></li>
+<li><p><strong>Fit a grid model to the observed lines</strong>: Finally, we search for a set of four lines that most likely form a grid tile. We use the height, pitch and roll of the drone to transform the lines into a partial world coordinate frame, such that a grid tile will be characterized by four lines, forming 90 degree angles, pairwise seperated by 1 meter. The best tile minimizes two error metrics on angles and scale.</p></li>
+</ol>
+
+<p>The video above shows how the grid detector performs using attitude estimates directly from the Pixhawk flight controller, and height measurements from the LIDAR. You might spot the grid zooming out at the 0:16 second mark. That was caused by a spike in the LIDAR sensor, due to the reflective surface on the tape we were using.</p>
+
+<p>The detector runs completely on-board at video-rate (60 fps). It is robust against occlusions, such as moving targets or debris, and can be tuned to work with different surfaces if the color of the grid lines are sufficiently distinguishable from the floor. It is, however, very case-specific, and will naturally not work if the grid is removed in a future mission.</p>
+
+<p>Once we have identified the grid in the image, we can compute the camera’s offset relative to it. To see this, let <script type="math/tex" id="MathJax-Element-17">w</script> denote the world-space frame, which is placed with the x-axis going along the red line at the bottom, the y-axis going from the red line towards the green line at the top, and the z-axis going upwards, forming a right-handed coordinate system.</p>
+
+<p>Let <script type="math/tex" id="MathJax-Element-18">x, y</script> be the 2D coordinate of the camera in world-space coordinates relative to the grid origin. We can write this as the sum of an integral multiple of the tile size, and an offset relative to the tile’s lower-left corner.</p>
+
+
+
+<p><script type="math/tex; mode=display" id="MathJax-Element-19"> x = i T + r_x </script></p>
+
+
+
+<p><script type="math/tex; mode=display" id="MathJax-Element-20"> y = j T + r_y </script></p>
+
+<p>Since <script type="math/tex" id="MathJax-Element-21">i</script> and <script type="math/tex" id="MathJax-Element-22">j</script> are unknown integers, we cannot actually compute <script type="math/tex" id="MathJax-Element-23">x</script> and <script type="math/tex" id="MathJax-Element-24">y</script>. However, taking the modulo of <script type="math/tex" id="MathJax-Element-25">T</script> on both sides, we get</p>
+
+
+
+<p><script type="math/tex; mode=display" id="MathJax-Element-26"> x \text{ mod } T = r_x \text{ mod } T </script></p>
+
+
+
+<p><script type="math/tex; mode=display" id="MathJax-Element-33"> y \text{ mod } T = r_y \text{ mod } T </script></p>
+
+<p>The idea is that we measure the angle of the grid (which is the negative of the drone’s yaw) and the tile offset using the detected tile lines. We rotate the tile offset vector by the grid angle to get it into the actual world frame, and then we can compute the camera position modulo the tile size.</p>
+
+<p>Unfortunately, we cannot determine from a single image which point is the true lower-left of a tile. Thus, there will be four choices for this point, and followingly four possible solutions for the camera position and yaw angle, that all agree with the image.</p>
+
+<p>The grid detector outputs all four of these. In each case, we measure the grid angle from the two lines that make up that case’s corner, and compute the associated offset vector. The result is a set of four yaw angles, each seperated by 90 degrees (since the grid tile has 90 degree corners), and four associated tile-relative positions.</p>
+
+<p>All four measurements are used in the EKF, which produces a global measurement by first choosing the yaw angle closest to the previous estimate; then, combining the associated offset with the previously estimated global position. The latter is done by rounding the global estimate to the nearest tile multiple, giving an estimate of which tile we are in (<script type="math/tex" id="MathJax-Element-34">iT</script> and <script type="math/tex" id="MathJax-Element-35">jT</script>), and then adding the offset vector to get</p>
+
+<p><script type="math/tex; mode=display" id="MathJax-Element-31"> \hat{x}_{n+1} = \text{floor}(\hat{x}_n, T) + \hat{r}_x </script></p>
+
+
+
+<p><script type="math/tex; mode=display" id="MathJax-Element-32"> \hat{y}_{n+1} = \text{floor}(\hat{y}_n, T) + \hat{r}_y </script></p>
+
+<p>During our test flights, and the competition, we would manually initialize the position estimate to the true position, since we had no system for bias removal, nor any search behaviour that would actively try to identify unique landmarks.</p>
+
+<p>Another problem that probably deserves more attention is extrinsic and intrinsic calibration of the camera. Extrinsic calibration involves quantifying how the camera is mounted on the drone, in terms of rotation and translation, with respect to the pose estimated by our filter. Intrinsic calibration, on the other hand, involves finding the fisheye model parameters that we use for rectification.</p>
+
+<p>Both of these have an effect on the estimated grid, as seen in the image below where the grid is reprojected back into the original video. We did some rudimentary extrinsic calibration by dragging some sliders until the reprojected grid looked good, which is not ok, and it shows in the image below. If both calibrations were perfect, the reprojected grid would overlap with the observed grid much better.</p>
+
+<p><img src="calibration.png" alt="" title=""></p>
+
+<p>Granted, the roll and pitch estimates we receive from Pixhawk are not always spot on either. So maybe we should also slap on a 6 degree-of-freedom pose refinement, after we have identified the grid, for an even better fit.</p>
+
+<p>However, the actual effect of calibration on the estimated position is likely not too bad, considering that we have flown with the system for 5-10 minutes, performing complex maneuvers, and only drifting one or two tiles.</p>
+
+
+
+<h2 id="absolute-positioning-based-on-corners">Absolute positioning based on corners</h2>
+
+<p>We realized we needed redundance in the position estimation, since it is such a critical component (atleast with our current strategy; we have visited the idea of building a drone that only knows the direction towards the green line, but not necessarily where it is on the map). To this end we developed an absolute positioning scheme based on identifying the corners of the arena, where a white line intersects either a green or a red line. Each corner is unique, and can therefore be used to estimate the absolute pose of the camera.</p>
+
+<p>Pose estimation is performed by matching four observed intersection points near a corner, with four corresponding points in a world-scale grid model, and computing the camera rotation and translation that minimizes reprojection error, that is, the sum of squared distances between the observed points and the model points projected by a calibrated pinhole camera model.</p>
+
+<p>We did not envision this system to be used for position-based control of the drone, but instead as a very reliable measure of absolute position, that can correct for drift accumulated by the line-based position. Since our implementation was quite demanding in terms of runtime, it would need to run on the ground station.</p>
+
+<p>The system did not end up being used during any of our full-scale flight tests at Kongsberg, nor during the competition. One of the reasons being that the system was not robust against different ground patterns. During our first test, where the grid was mixed with pre-existing lines, we found it very difficult to reliably identify corners based on color filtering alone, particularly at long distances.</p>
+
+<p>During the second full-scale test and during the competition, the grid pattern was not mixed with pre-existing lines, which means that the system may have been able to run, atleast if we get close enough to a corner. Nevertheless, the system was cut due to streaming problems.</p>
+
+<p>The system requires all four side camera videos to be streamed to the ground station. During our second full-scale test, we found that enabling these streams correlated with a higher frequency of GStreamer crashes, and we decided to not use this positioning system for the competition. This was a good decision considering that GStreamer was even more unreliable during the competition, meaning that we would not have been able to use the system anyway.</p>
+
+
+
+<h2 id="obstacle-avoidance-using-2d-lidar">Obstacle avoidance using 2D LIDAR</h2>
+
+<p>Obstacle avoidance was a late addition to the system, and was used extensively during our full-scale tests. Our obstacle avoidance algorithm is based on the work of Jackson et al. [1], which was newly published <em>during</em> our work at Kongsberg.</p>
+
+<p>As described in their paper, obstacle avoidance can usually be dichotomized into two classes: Map-based or reactive. Map-based techniques are usually tied into whatever high-level planner is used to execute the mission, and</p>
+
+<p>Jackson et al. proposes an implementation of a reactive obstacle avoidance plugin (ROAP), that can be combined with a high-level planner. Their algorithm foregoes the usage of a global map to perform avoidance, and instead works directly with body-frame measurements. The properties of a reactive algorithm, as opposed to a map-based algorithm, should be</p>
+
+<ol>
+<li>Fast response, i.e. low latency and high bandwidth.</li>
+<li>Independent of a priori or outdated information.</li>
+<li>Limited memory and computation requirements</li>
+<li>No motion assumptions (e.g., constant motion, only forward motion)</li>
+<li>Safe commands despite erroneous, outdated or absent high-level goals.</li>
+</ol>
+
+<p>We had to make several modifications to the proposed algorithm, such as relaxing the assumption of a full 360 degree laser scan down to a 270 degree scan, as well as improving the behaviour in cases where multiple obstacles approach the drone from opposing sides, where the original algorithm could potentially fail to avoid either obstacle.</p>
+
+<p>Our implementation uses the raw laser scan from the planar scanning LIDAR and modifies a reference velocity signal, generated by the path following controller, to avoid obstacles while attempting to move in the same direction.</p>
+
+<p>In our current implementation it does not have any memory or perform any inter-scan filtering. The effect of this was witnessed during one of our full-scale tests, where the drone successfully avoided an obstacle, located on top of a waypoint. Once it passed the obstacle — placing it in the LIDAR blindzone — the drone began to fly backward towards the waypoint, ignoring the obstacle.</p>
+
+<p>This motivated us to implement a yaw controller that rotates the drone to never fly with the LIDAR blindzone in the direction of motion.</p>
+
+
+
+<h2 id="autonomous-take-off-and-landing-1">Autonomous take-off and landing</h2>
+
+<p>This was not worked on until a few weeks before the competition. We had problems with autonomous take-off, in that the velocity controller required an unreasonably high gain to actually take off. Oddly enough, we could freely adjust the height setpoint after taking off, with a much lower gain.</p>
+
+<p>We did not feel comfortable about this — our drone already has a track record of hitting ceilings — so we decided to cut it and come back to the problem later.</p>
+
+<p>Autonomous landing was done by setting a negative height setpoint and using the same velocity controller. The motors were disarmed once the drone was close enough to the ground. To absorb impacts we fitted a layer of cushioning beneath the drone.</p>
+
+<p>However, the drone would occasionally be floating above the floor instead of disarming, possibly due to bad height measurements. The noise in the range sensor is already in the order of magnitude of centimeters, and reflective surfaces can cause large spikes.</p>
+
+<p>We got more reliable height measurements by calibrating the barometer bias whenever we got good lidar measurements, and using the barometer whenever the lidar gets spiky. But we should probably take a look at different height sensors next year that are not as affected by reflective surfaces.</p>
+
+
+
+<h2 id="ground-robot-detection">Ground robot detection</h2>
+
+<p>Detection of ground robots received attention from three team members this year, as well as some non-team members in a student project for the TDT4265 computer vision course.</p>
+
+<p>Object detection is a gigantic field, and there are many approaches that may seem like a good idea. We tried several things, including matching SURF features, matching templates, filtering color, detecting circles, various morphological operations.</p>
+
+<p>At the competition, the approaches we had actually tried to integrate were circle detection, color filtering and template matching. The idea being that the slow, but hopefully very accurate, template matcher would provide initial seeds for tracking, while high speed tracking could assisted with color or circle detections.</p>
+
+<p>Unfortunately, all of the above approaches have their downsides, and don’t actually work in real conditions out of the box. For example, lighting conditions cause problems for color filtering approaches that depend on the top plate having a constant color. Furthermore, the top plates are not ideal diffuse reflectors, so you also get specular highlights that are especially strong when directly above robots.</p>
+
+<p>Lighting conditions is also problematic for template matching approaches, where you provide a reference image of a ground robot, and try to recognize it in the image. Additionally, the fisheye distortion drastically affects the appearance near the edges of the image.</p>
+
+
+
+<h2 id="ground-robot-interaction">Ground robot interaction</h2>
+
+<p>We did not find the time this year to work on the tremendous problems involved in actually interacting with a ground robot, moving or stationary. Of course, we could have tried the simplest thing and just turn off the motors anytime we detect a robot below us, but that is not very controllable nor reliable.</p>
+
+<p>Firstly, the drone is too large (and expensive) to simply be dropped and hope that it lands safely and correctly.</p>
+
+<p>Secondly, with our current detectors, we have no measure of the likelihood of a detection being a false positive or not. This is because we only run the detectors on each frame independently, without performing any filtering or tracking.</p>
+
+<p>We foresee detecting, tracking and interacting with ground robots will be a major focus the coming year, and will need attention from both the control group and computer vision group.</p>
+
+
+
+<h2 id="strategic-planner">Strategic planner</h2>
+
+<video controls style="max-width:100%;" src="optw_run.mp4">
+    Your browser does not support the video tag.
+</video>
+<p align="center" style="font-size:80%;">Fancy planning algorithm in action (4x speed)</p>
+
+<p>The AI took a backseat during the summer, since there were just so many other problems that needed to be solved. However, prior to the summer, we had two master students who made a very fancy algorithm, that tries to optimally solve the mission, and we also made a much simpler algorithm that tries to not-necessarily-optimally solve the mission with much lower demands on information.</p>
+
+<p>The fancy algorithm can successfully herd all ten robots across in less than 10 minutes — averaging at about 8-9 minutes. It does this by modelling the herding problem mathematically and formulating it as an optimization problem called Time-Dependent Orienteering Problem with Time Windows. The goal in the optimization is to find a sequence of waypoints and actions that maximize expected reward. Metrics such as time-of-travel, likelihood of a successful interaction, or a target’s distance to an obstacle or the edges of the arena, can be used in the design of the reward function.</p>
+
+<p>Unfortunately, it depends on full state knowledge — i.e. it assumes we know position, velocity and time until next turn for all robots — something we do not have, and which remains an elusive goal.</p>
+
+<p>The simple algorithm tries to circumvent this by relaxing the assumption. Instead of knowing the state of every robot, we can only measure the state of those directly below us. Instead of aiming for optimality, this strategy aims for runtime predictability and ease of integration. The motivation for this being that when you have an uncertain and fragile system, you don’t want the planner to make sudden or unintuitive decisions that make it difficult to track down the source for errors.</p>
+
+
+
+<h2 id="point-and-click-path-generation-and-following">Point-and-click path generation and following</h2>
+
+<p><img src="pathfollowing.png" alt="" title=""></p>
+
+<p>Since integrating our AI strategies was not feasible in the remaining time before the competition, we tried to come up with other ways to showcase our system — localization, collision avoidance and autonomous take-off.</p>
+
+<p>We made a simple graphical user interface, where the drone, a view of the downward camera and obstacle detections were overlaid on a 20x20 grid pattern, representing the arena. The user could click on a tile to mark up paths, both single lines and closed loops, and the drone would try to follow them.</p>
+
+<p>This worked fairly well. The application keeps track of the next location to go, and advances the location along the path once the drone gets close enough.</p>
+
+<p>We compute a desired velocity based on where we think we are, and where we want to go. The velocity may be modified by the collision avoidance algorithm, if there are things in the way. The velocity is used by an internal controller in the Pixhawk firmware. We also control the yaw angle to orient the drone along the path and keep the visible LIDAR region towards our next location.</p>
+
+
+
+<h2 id="the-drone-design">The drone design</h2>
+
+<p>We ended up building a large drone. While that meant we could pack a lot of good gear on it, it also made it more difficult to do testing. A drone this big can cause a lot of damage to itself and to nearby people, if things go wrong. In hindsight, it would have been beneficial with a smaller drone — atleast for testing — as we wouldn’t need to evacuate the room and have everyone on guard as it flies around.</p>
+
+
+
+<h2 id="using-ros">Using ROS</h2>
+
+<p>ROS is intended to solve the inter-process communication problem, meaning, sharing data between processes. Despite most operating systems already having several methods for doing this, there is no cross-platform solution in the standard C++ library.</p>
+
+<p>For various reasons, we decided to use ROS, a third-party library, for this. Unfortunately, using ROS means you make several costly sacrifices. One of those is due to the build system.</p>
+
+<p>The build system used by ROS dramatically worsened the ease of iteration for our programmers. Not only does it spam the terminal with unhelpful information each time, but it forces you to use a specific directory structure for all projects — and to invoke the compiler from a specific root in that directory tree — and last, but not least, it bloats your compile time.</p>
+
+<p>In the final project, with all our programs, recompiling a single one of the programs took well above one minute on some laptops, and on our very powerful ground station, it still took about 30 seconds to one minute.</p>
+
+<p>Long compile times makes development less enjoyable. And, contrary to popular belief, <a href="http://jlelliotton.blogspot.no/p/the-economic-value-of-rapid-response.html">it appears</a> that people <em>don’t</em> spend that spare time to plan their next action; instead, longer system response time appears to only ever worsen the response time of the programmer.</p>
+
+<h2 id="references">References</h2>
+
+<p>[1] <a href="http://ieeexplore.ieee.org/xpls/abs_all.jsp?arnumber=7502597&amp;tag=1">Cushioned extended-periphery avoidance: A reactive obstacle avoidance plugin</a>. James Jackson ; Department of Mechanical Engineering, Brigham Young University ; David Wheeler ; Tim McLain.</p>
+
+</body>
+</html>
