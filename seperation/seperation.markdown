@@ -1,4 +1,4 @@
-# Does it generalize?
+# Providing Guarantees in Robotic Vision Systems with the Seperation Principle
 
 <style type="text/css">
 body { font-size: 16px; text-align:justify; color: #000; }
@@ -13,7 +13,13 @@ h3 { font-size:100%; line-height:250%;}
 > *From "Analysis of Nonlinear Control Systems" by Dustan Graham and Duane McRuer, 1964, p. 436.*
 
 <span style="font-size:250%;font-weight:bold;float:left;margin-bottom:-6px;padding:0 12px 0 0;line-height:1.1;">
-A</span> friend of mine recently told me about a neat paper. On the first page was a photograph of a street occupied by a cyclist, anxiously waiting on the light to turn green, and in the foreground a quadcopter, with an abundance of colorful LEDs. The caption said: "Fig. 1: DroNet is a convolutional neural network, whose purpose is to reliably drive an autonomous drone through the streets of a city. Trained with data collected by cars and bicycles, our system learns from them to follow basic traffic rules, *e.g*, do not go off the road, and to safely avoid other pedestrians or obstacles. Surprisingly, the policy learned by DroNet is highly generalizable, and even allows to fly a drone in indoor corridors and parking lots." Like most first-pagers, it was clearly meant to impress... and it worked! A drone that can follow traffic rules and safely avoid obstacles, how can I not continue reading? But before I had a chance to proceed, the final sentence caught my eye: "*Surprisingly*, the policy learned by DroNet is highly generalizable, and even allows to fly a drone in indoor corridors and parking lots."
+A</span> friend recently sent me a neat paper. The first-page figure showed a street occupied by a cyclist, obediently waiting on the light to turn green, foregrounded by a quadcopter, with an abundance of colorful lights indicating battery, flight controller status, and possibly even a hint of consciousness.
+
+The figure caption was a concise summary: "Trained with data collected by cars and bicycles, the quadcopter has learned to follow basic traffic rules. Surprisingly, the policy learned is highly generalizable, and even allows for flight in indoor corridors and parking lots".
+
+What made me worried as I read this is not that the system works (and end-to-end learning threatening to invalidate all the time I spent learning mathematical modeling)
+
+... If you read the rest of the paper, they actually address this, and explain why it worked, when it works.
 
 Is it unfair of me to say that our discipline has a major problem if the designer of a system is surprised when the system works? Strictly speaking, they didn't intend for the system to work indoors or in parking lots anyway; from their point of view, those were just happy accidents. But, as I had the dissatisfaction of coming to know in my overly ambituous time as an artist-in-training, eagerly following Bob Ross' scruffy hair and his pencil move decisively across the canvas, not all accidents are happy. In fact, most of my accidents were definitely not happy, and although my boyhood sketches could harm no one with their lack of taste, the same cannot be said for systems that can affect or damage people's lives; the most important quality of these systems is that they do not offer any surprises. If we want to apply machine learning, or even more "classical" computer vision algorithms, outside the lab, there cannot be any surprises.
 
