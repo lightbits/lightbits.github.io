@@ -194,9 +194,11 @@ li { line-height: 1.5em; }
 <div class="proj" style="min-height: 350px;" id="proj_position_tracking">
     <h3>Inside-out position tracking</h3>
     <img class="pimg" src="gallery/grid.jpg"/>
-    <p>At Ascend I worked on inside-out position tracking from a drone. A key step in overcoming the seventh IARC mission hinges on your drone's ability to know where it is in the arena - knowing that you're above a roomba is not useful, unless you also know where you are. The arena is patterned with a white grid of 1x1m tiles, that you can use for navigation, and a green edge indicating the herding line. Unfortunately, the arena is otherwise free to vary, and can have all sorts of distractions both inside and outside the grid, like sports markings, people or protection nets.</p>
+    <p>At Ascend I worked on a visual position tracking system for a drone. The goal was to track its global position within a 20x20 meter arena, aided by a grid pattern. The problem was confounded by additional sports markings and unrelated patterns, moving bystanders, variable lighting, and objects moving on the arena.</p>
+    <p>Solving this problem robustly involved a variety of computer vision techniques, including a novel Hough transform, hypothesis verification-in-the-loop, and a clever trick for rectifying fisheye images in real-time.</p>
+    <p>I optimized the algorithm with SIMD instructions, and digged into <a href="./v4l2_real_time">video capture and frame decoding</a>, in order to run at 60 fps on an embedded platform.</p>
 
-    <p>You can see more in the <a href="./iarc16/">IARC 2016 'post mortem'.</a></p>
+    <p>You can see it in action in the <a href="./iarc16/">IARC 2016 'post mortem'.</a></p>
 </div>
 
 <div style="page-break-after: always;"></div>
