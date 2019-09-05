@@ -1,6 +1,6 @@
 # 3DVision 2017
 
-In October, I went to China for the International Conference on 3D Vision, lugging along an inconventiently large poster and a small backpack.
+In October, I went to China for the International Conference on 3D Vision, lugging along an inconveniently large poster and a small backpack.
 
 ![](title.jpg)
 <p style="color:#777;width:80%;margin:0 auto;">The calm and spacious terminal 3 in Beijing airport was much appreciated after 20 hours of travel, although it would be another 6 hours until I got to the hotel.</p>
